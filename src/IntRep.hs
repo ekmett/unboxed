@@ -17,6 +17,16 @@ import Prelude (otherwise)
 
 import Classes.IntRep
 
+instance Eq Int# where
+  x == y = isTrue# (x ==# y)
+  x /= y = isTrue# (x /=# y)
+
+instance Ord Int# where
+  x <= y = isTrue# (x <=# y)
+  x >= y = isTrue# (x >=# y)
+  x < y = isTrue# (x <# y)
+  x > y = isTrue# (x ># y)
+
 instance Num Int# where
   (+) = (+#)
   (-) = (-#)

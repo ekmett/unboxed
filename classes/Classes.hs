@@ -5,17 +5,21 @@
 {-# Language RebindableSyntax #-}
 {-# Language StandaloneKindSignatures #-}
 
-module Classes 
+module Classes
   ( Num(..)
   , Fractional(..)
+  , Eq(..)
+  , Ord(..)
   , Rep
   , ifThenElse
   ) where
 
 import Data.Kind (Constraint)
 import Data.Ratio
+import GHC.Base (otherwise)
 import GHC.Integer
-import GHC.Types (TYPE, Bool(..))
+import GHC.Classes (not)
+import GHC.Types (TYPE, Bool(..), Ordering(..))
 
 import Rep
 
@@ -27,6 +31,39 @@ ifThenElse True _ a = a
 
 infixl 6 +, -
 infixl 7 *, /
+infix 4 ==, /=
+
+type Eq :: TYPE Rep -> Constraint
+class Eq a where
+  (==), (/=) :: a -> a -> Bool
+  x == y = not (x /= y)
+  x /= y = not (x == y)
+  {-# MINIMAL (/=) | (==) #-}
+
+type Ord :: TYPE Rep -> Constraint
+class Eq a => Ord a where
+  (<), (>), (<=), (>=) :: a -> a -> Bool
+  compare :: a -> a -> Ordering
+  max, min :: a -> a -> a
+
+  compare x y
+    | x == y = EQ
+    | x <= y = LT
+    | otherwise = GT
+
+  x <  y = case compare x y of { LT -> True;  _ -> False }
+  x <= y = case compare x y of { GT -> False; _ -> True }
+  x >  y = case compare x y of { GT -> True;  _ -> False }
+  x >= y = case compare x y of { LT -> False; _ -> True }
+
+  max x y
+    | x <= y = y
+    | otherwise = x
+
+  min x y
+    | x <= y = x
+    | otherwise = y
+  {-# MINIMAL compare | (<=) #-}
 
 type Num :: TYPE Rep -> Constraint
 class Num a where
@@ -47,7 +84,7 @@ class Num a => Fractional a where
   (/) :: a -> a -> a
   recip :: a -> a
   fromRational :: Rational -> a
-  
+
   x / y = x * recip y
   recip x = 1 / x
   {-# MINIMAL fromRational, (recip | (/)) #-}
