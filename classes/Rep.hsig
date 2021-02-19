@@ -3,8 +3,4 @@
 signature Rep where
 import GHC.Types (RuntimeRep)
 
-data REP :: RuntimeRep
-
--- type Rep :: RuntimeRep
-type Rep :: RuntimeRep
-type Rep = REP
+data Rep :: RuntimeRep
