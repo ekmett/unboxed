@@ -1,4 +1,10 @@
 {-# Language KindSignatures #-}
+{-# Language StandaloneKindSignatures #-}
 signature Rep where
 import GHC.Types (RuntimeRep)
-data Rep :: RuntimeRep
+
+data REP :: RuntimeRep
+
+-- type Rep :: RuntimeRep
+type Rep :: RuntimeRep
+type Rep = REP

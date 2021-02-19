@@ -3,15 +3,15 @@
 {-# Language MagicHash #-}
 {-# Language KindSignatures #-}
 {-# Language DataKinds #-}
+{-# Language TypeSynonymInstances #-}
 
 module IntRep.Instances where
 
 import GHC.Prim
 import GHC.Integer
-import GHC.Types
-import IntRep.Rep
+import GHC.Types 
 import IntRep.Classes
-import IntRep.Syntax
+import Prelude (otherwise)
 
 instance Num Int# where
   (+) = (+#)
