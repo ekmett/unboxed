@@ -1,6 +1,7 @@
 {-# Language DataKinds #-}
 {-# Language KindSignatures #-}
 {-# Language MagicHash #-}
+{-# Language FlexibleInstances #-}
 {-# Language NoImplicitPrelude #-}
 {-# Language RebindableSyntax #-}
 {-# Language TypeApplications #-}
@@ -8,6 +9,7 @@
 {-# Language PolyKinds #-}
 {-# Language DefaultSignatures #-}
 {-# Language RankNTypes #-}
+{-# Language ImportQualifiedPost #-}
 
 module Poly where
 
@@ -17,6 +19,7 @@ import GHC.Integer
 import GHC.Prim
 import GHC.Types (TYPE, RuntimeRep(..), isTrue#)
 import Prelude (otherwise)
+import Prelude qualified
 
 infixl 6 +, -
 infixl 7 *
@@ -42,7 +45,7 @@ instance Prelude.Num a => Num (a :: TYPE 'LiftedRep) where
   negate = Prelude.negate
   abs = Prelude.abs
   signum = Prelude.signum
-  fromIngeger = Prelude.fromInteger
+  fromInteger = Prelude.fromInteger
 
 -- default definitions, these can't be written levity polymorphically, but here we're monomorphic
 class NumRep rep where
