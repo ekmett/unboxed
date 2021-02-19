@@ -9,7 +9,7 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module IntRep
-  ( module Unlifted.IntRep
+  ( module Types.IntRep
   ) where
 
 import GHC.Prim
@@ -18,7 +18,7 @@ import GHC.Types
 import GHC.Enum qualified as G
 import Prelude (otherwise)
 
-import Unlifted.IntRep
+import Types.IntRep
 
 instance Eq Int# where
   x == y = isTrue# (x ==# y)

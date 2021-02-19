@@ -8,7 +8,7 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module Int8Rep 
-  ( module Unlifted.Int8Rep
+  ( module Types.Int8Rep
   ) where
 
 import GHC.Prim
@@ -16,7 +16,7 @@ import GHC.Integer
 import GHC.Types 
 import Prelude (otherwise)
 
-import Unlifted.Int8Rep
+import Types.Int8Rep
 
 instance Eq Int8# where
   x == y = isTrue# (extendInt8# x ==# extendInt8# y)

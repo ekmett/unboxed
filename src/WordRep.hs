@@ -9,7 +9,7 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module WordRep 
-  ( module Unlifted.WordRep
+  ( module Types.WordRep
   ) where
 
 import GHC.Prim
@@ -17,7 +17,7 @@ import GHC.Integer
 import GHC.Types 
 import GHC.Enum qualified as G
 
-import Unlifted.WordRep
+import Types.WordRep
 
 instance Eq Word# where
   x == y = isTrue# (x `eqWord#` y)
