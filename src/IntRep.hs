@@ -40,11 +40,11 @@ instance Num Int# where
   (*) = (*#)
   negate = negateInt#
   abs n
-    | isTrue# (n >=# 0) = n
+    | n >= 0 = n
     | otherwise = negate n
   signum n
-    | isTrue# (n <# 0) = negate 1
-    | isTrue# (n ==# 0) = 0
+    | n < 0 = negate 1
+    | n == 0 = 0
     | otherwise = 1
   fromInteger = integerToInt
   {-# INLINE fromInteger #-}

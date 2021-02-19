@@ -33,11 +33,11 @@ instance Num Float# where
   (*) = timesFloat#
   negate = negateFloat#
   abs n
-    | isTrue# (n `geFloat#` 0) = n
+    | n >= 0 = n
     | otherwise = negate n
   signum n
-    | isTrue# (n `ltFloat#` 0) = negate 1
-    | isTrue# (n `eqFloat#` 0) = 0
+    | n < 0 = negate 1
+    | n == 0 = 0
     | otherwise = 1
   fromInteger = floatFromInteger
   {-# INLINE fromInteger #-}
