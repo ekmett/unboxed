@@ -32,6 +32,19 @@ common base
     -Wredundant-constraints -Widentities
     -Wno-simplifiable-class-constraints
 
+library common
+  import: base
+  hs-source-dirs: common
+  exposed-modules:
+    Common
+
+library classes
+  import: base
+  build-depends: unlifted:{common}
+  hs-source-dirs: classes
+  signatures: Rep
+  exposed-modules: Classes
+
 library reps
   import: base
   hs-source-dirs: reps
@@ -40,12 +53,6 @@ library reps
     Rep.IntRep,
     Rep.Int8Rep,
     Rep.WordRep
-
-library classes
-  import: base
-  hs-source-dirs: classes
-  signatures: Rep
-  exposed-modules: Classes
 
 library
   import: base
