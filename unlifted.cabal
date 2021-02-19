@@ -36,9 +36,10 @@ library reps
   import: base
   hs-source-dirs: reps
   exposed-modules:
+    Rep.FloatRep,
     Rep.IntRep,
     Rep.Int8Rep,
-    Rep.FloatRep
+    Rep.WordRep
 
 library classes
   import: base
@@ -53,6 +54,7 @@ library
   mixins: unlifted:classes (Classes as Classes.IntRep) requires (Rep as Rep.IntRep)
   mixins: unlifted:classes (Classes as Classes.Int8Rep) requires (Rep as Rep.Int8Rep)
   mixins: unlifted:classes (Classes as Classes.FloatRep) requires (Rep as Rep.FloatRep)
+  mixins: unlifted:classes (Classes as Classes.WordRep) requires (Rep as Rep.WordRep)
   exposed-modules:
     IntRep,
     Int8Rep,
