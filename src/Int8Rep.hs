@@ -4,6 +4,7 @@
 {-# Language KindSignatures #-}
 {-# Language DataKinds #-}
 {-# Language TypeSynonymInstances #-}
+{-# Language ImportQualifiedPost #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module Int8Rep 
@@ -26,6 +27,10 @@ instance Ord Int8# where
   x > y  = isTrue# (extendInt8# x ># extendInt8# y)
   x <= y = isTrue# (extendInt8# x <=# extendInt8# y)
   x >= y = isTrue# (extendInt8# x >=# extendInt8# y)
+
+instance Bounded Int8# where
+  minBound = 127
+  maxBound = -128
 
 instance Num Int8# where
   x + y = narrowInt8# (extendInt8# x +# extendInt8# y)

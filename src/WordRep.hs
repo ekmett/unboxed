@@ -4,6 +4,7 @@
 {-# Language KindSignatures #-}
 {-# Language DataKinds #-}
 {-# Language TypeSynonymInstances #-}
+{-# Language BangPatterns #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module WordRep 
@@ -27,6 +28,10 @@ instance Ord Word# where
   x < y = isTrue# (x `ltWord#` y)
   x > y = isTrue# (x `gtWord#` y)
 
+instance Bounded Word# where
+  minBound = 0
+  maxBound = w where !(W# w) = maxBound
+
 instance Num Word# where
   (+) = plusWord#
   (-) = minusWord#
@@ -41,3 +46,17 @@ instance Num Word# where
     | otherwise = 1
   fromInteger = integerToWord
   {-# INLINE fromInteger #-}
+
+instance Eq Char# where
+  x == y = isTrue# (x `eqChar#` y)
+  x /= y = isTrue# (x `neChar#` y)
+
+instance Ord Char# where
+  x <= y = isTrue# (x `leChar#` y)
+  x >= y = isTrue# (x `geChar#` y)
+  x < y = isTrue# (x `ltChar#` y)
+  x > y = isTrue# (x `gtChar#` y)
+
+instance Bounded Char# where
+  minBound = '\0'
+  maxBound = '\x10FFFF'

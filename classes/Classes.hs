@@ -4,14 +4,18 @@
 {-# Language RankNTypes #-}
 {-# Language RebindableSyntax #-}
 {-# Language StandaloneKindSignatures #-}
+{-# Language MultiParamTypeClasses #-}
+{-# OPTIONS_GHC -Wno-redundant-constraints #-}
 
 module Classes
   ( Num(..)
   , Fractional(..)
   , Eq(..)
   , Ord(..)
+  , Bounded(..)
   , Rep
   , ifThenElse
+  , Nullary
   ) where
 
 import Data.Kind (Constraint)
@@ -64,6 +68,14 @@ class Eq a => Ord a where
     | x <= y = x
     | otherwise = y
   {-# MINIMAL compare | (<=) #-}
+
+class Nullary
+instance Nullary
+
+type Bounded :: TYPE Rep -> Constraint
+class Bounded a where
+  minBound, maxBound :: Nullary => a
+  {-# MINIMAL minBound, maxBound #-}
 
 type Num :: TYPE Rep -> Constraint
 class Num a where
