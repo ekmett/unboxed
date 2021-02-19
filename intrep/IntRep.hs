@@ -4,14 +4,18 @@
 {-# Language KindSignatures #-}
 {-# Language DataKinds #-}
 {-# Language TypeSynonymInstances #-}
+{-# OPTIONS_GHC -Wno-orphans #-}
 
-module IntRep.Instances where
+module IntRep 
+  ( module Classes
+  ) where
 
 import GHC.Prim
 import GHC.Integer
 import GHC.Types 
-import IntRep.Classes
 import Prelude (otherwise)
+
+import Classes
 
 instance Num Int# where
   (+) = (+#)

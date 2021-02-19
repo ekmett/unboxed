@@ -39,7 +39,7 @@ common classes-client
 library reps
   import: base
   hs-source-dirs: reps
-  exposed-modules: IntRep
+  exposed-modules: Internal.IntRep
 
 library classes
   import: base
@@ -50,12 +50,5 @@ library classes
 library intrep
   import: classes-client
   hs-source-dirs: intrep
-  mixins: unlifted:classes 
-    ( Classes as IntRep.Classes
-    , Syntax as IntRep.Syntax
-    ) requires (Rep as IntRep)
-  exposed-modules: IntRep.Instances
-  reexported-modules:
-    IntRep as IntRep.Rep,
-    IntRep.Classes,
-    IntRep.Syntax
+  mixins: unlifted:classes requires (Rep as Internal.IntRep)
+  exposed-modules: IntRep

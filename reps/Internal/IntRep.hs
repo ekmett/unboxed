@@ -1,7 +1,7 @@
 {-# Language DataKinds #-}
 {-# Language StandaloneKindSignatures #-}
 {-# Language MagicHash #-}
-module IntRep where
+module Internal.IntRep where
 
 import GHC.Types
 
