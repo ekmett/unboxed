@@ -7,7 +7,7 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module FloatRep
-  ( module Classes.FloatRep
+  ( module Unlifted.FloatRep
   ) where
 
 import GHC.Prim
@@ -15,7 +15,7 @@ import GHC.Integer
 import GHC.Types
 import Prelude (otherwise)
 
-import Classes.FloatRep
+import Unlifted.FloatRep
 
 instance Eq Float# where
   x == y = isTrue# (eqFloat# x y)

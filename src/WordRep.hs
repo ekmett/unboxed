@@ -4,19 +4,20 @@
 {-# Language KindSignatures #-}
 {-# Language DataKinds #-}
 {-# Language TypeSynonymInstances #-}
+{-# Language ImportQualifiedPost #-}
 {-# Language BangPatterns #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module WordRep 
-  ( module Classes.WordRep
+  ( module Unlifted.WordRep
   ) where
 
 import GHC.Prim
-import GHC.Wordeger
+import GHC.Integer
 import GHC.Types 
-import Prelude (otherwise)
+import GHC.Enum qualified as G
 
-import Classes.WordRep
+import Unlifted.WordRep
 
 instance Eq Word# where
   x == y = isTrue# (x `eqWord#` y)
@@ -30,20 +31,16 @@ instance Ord Word# where
 
 instance Bounded Word# where
   minBound = 0
-  maxBound = w where !(W# w) = maxBound
+  maxBound = w where !(W# w) = G.maxBound
 
 instance Num Word# where
   (+) = plusWord#
   (-) = minusWord#
   (*) = timesWord#
-  negate = negateWord#
-  abs n
-    | n >= 0 = n
-    | otherwise = negate n
-  signum n
-    | n < 0 = negate 1
-    | n == 0 = 0
-    | otherwise = 1
+  negate x = int2Word# (negateInt# (word2Int# x))
+  abs x = x 
+  signum 0 = 0
+  signum _ = 1
   fromInteger = integerToWord
   {-# INLINE fromInteger #-}
 
@@ -58,5 +55,5 @@ instance Ord Char# where
   x > y = isTrue# (x `gtChar#` y)
 
 instance Bounded Char# where
-  minBound = '\0'
-  maxBound = '\x10FFFF'
+  minBound = '\0'#
+  maxBound = '\x10FFFF'#

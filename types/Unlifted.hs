@@ -15,7 +15,7 @@
 
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 
-module Classes
+module Unlifted
   ( Num(..)
   , Fractional(..)
   , Real(..)

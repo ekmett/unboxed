@@ -38,12 +38,12 @@ library common
   exposed-modules:
     Common
 
-library classes
+library types
   import: base
   build-depends: unlifted:{common}
-  hs-source-dirs: classes
+  hs-source-dirs: types
   signatures: Rep
-  exposed-modules: Classes
+  exposed-modules: Unlifted
 
 library reps
   import: base
@@ -56,13 +56,15 @@ library reps
 
 library
   import: base
-  build-depends: unlifted:{classes, reps}
+  build-depends: unlifted:{types, reps}
   hs-source-dirs: src
-  mixins: unlifted:classes (Classes as Classes.IntRep) requires (Rep as Rep.IntRep)
-  mixins: unlifted:classes (Classes as Classes.Int8Rep) requires (Rep as Rep.Int8Rep)
-  mixins: unlifted:classes (Classes as Classes.FloatRep) requires (Rep as Rep.FloatRep)
-  mixins: unlifted:classes (Classes as Classes.WordRep) requires (Rep as Rep.WordRep)
+  mixins:
+    unlifted:types (Unlifted as Unlifted.IntRep) requires (Rep as Rep.IntRep),
+    unlifted:types (Unlifted as Unlifted.Int8Rep) requires (Rep as Rep.Int8Rep),
+    unlifted:types (Unlifted as Unlifted.FloatRep) requires (Rep as Rep.FloatRep),
+    unlifted:types (Unlifted as Unlifted.WordRep) requires (Rep as Rep.WordRep)
   exposed-modules:
+    FloatRep,
     IntRep,
     Int8Rep,
-    FloatRep
+    WordRep
