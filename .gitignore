@@ -1,0 +1,7 @@
+old
+wip
+dist-newstyle
+dist
+tags
+.ghc.*
+cabal.project.local

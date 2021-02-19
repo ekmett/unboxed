@@ -1,0 +1,4 @@
+{-# Language KindSignatures #-}
+signature Rep where
+import GHC.Types (RuntimeRep)
+data Rep :: RuntimeRep

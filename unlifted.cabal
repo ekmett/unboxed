@@ -1,0 +1,58 @@
+cabal-version: 3.4
+name: unlifted
+version: 0
+synopsis: unlifted classes
+description: unlifted classes
+homepage: https://github.com/ekmett/haskell
+license: BSD-2-Clause OR Apache-2.0
+license-file: LICENSE.md
+author: Edward Kmett
+maintainer: Edward Kmett <ekmett@gmail.com>
+copyright: Copyright (c) 2021 Edward Kmett
+stability: experimental
+category: Data Structures
+build-type: Simple
+extra-doc-files:
+  README.md,
+  CHANGELOG.md
+tested-with: GHC == 9.0.1
+
+source-repository head
+  type: git
+  location: https://github.com/ekmett/linear-haskell
+  subdir: unlifted
+
+common base
+  default-language: Haskell2010
+  build-depends:
+    base >= 4.15 && < 5,
+    ghc-prim
+  ghc-options:
+    -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates
+    -Wredundant-constraints -Widentities
+    -Wno-simplifiable-class-constraints
+
+common classes-client
+  import: base
+  build-depends: unlifted:{classes, reps}
+
+library reps
+  import: base
+  hs-source-dirs: reps
+  exposed-modules: IntRep
+
+library classes
+  import: base
+  hs-source-dirs: classes
+  exposed-modules: Classes, Syntax
+  signatures: Rep
+
+library intrep
+  import: classes-client
+  hs-source-dirs: intrep
+  mixins: unlifted:classes 
+    ( Classes as IntRep.Classes
+    , Syntax as IntRep.Syntax
+    ) requires (Rep as IntRep.Rep)
+  exposed-modules: IntRep.Instances
+  reexported-modules: IntRep, IntRep.Classes, IntRep.Syntax
