@@ -27,10 +27,15 @@ common base
   build-depends:
     base >= 4.15 && < 5,
     ghc-prim
+
+  -- enable warnings
   ghc-options:
     -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates
-    -Wredundant-constraints -Widentities
-    -Wno-simplifiable-class-constraints
+    -Wredundant-constraints -Widentities -Wprepositive-qualified-module 
+
+  -- disable warnings
+  ghc-options:
+    -Wno-simplifiable-class-constraints -Wno-orphans
 
 library common
   import: base

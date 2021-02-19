@@ -1,14 +1,16 @@
 {-# Language DataKinds #-}
 {-# Language KindSignatures #-}
 {-# Language RankNTypes #-}
-{-# Language RebindableSyntax #-}
 {-# Language StandaloneKindSignatures #-}
 {-# Language MultiParamTypeClasses #-}
 {-# Language ImportQualifiedPost #-}
 {-# Language MagicHash #-}
 {-# Language UnboxedTuples #-}
 {-# Language PatternSynonyms #-}
+{-# Language NoStarIsType #-}
+{-# Language ViewPatterns #-}
 {-# Language BangPatterns #-}
+{-# Language DefaultSignatures #-}
 
 {-# Language UnboxedSums #-}
 {-# Language UnliftedNewtypes #-}
@@ -16,7 +18,15 @@
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 
 module Types
-  ( Num(..)
+  ( Liftable(..)
+  , pattern Lifted
+  , pattern Lowered
+  , Lifted#(..)
+  , List#(..)
+  , IsList(..)
+  , Maybe(..)
+  , Maybe#(Maybe#, Nothing#, Just#)
+  , Num(..)
   , Fractional(..)
   , Floating(..)
   , Real(..)
@@ -30,7 +40,6 @@ module Types
   , Rep
   , ifThenElse
   , Nullary
-  , Maybe#(Nothing#, Just#)
   ) where
 
 import Data.Kind (Constraint)
@@ -50,8 +59,45 @@ import Common
 import Rep
 
 --------------------------------------------------------------------------------
--- * Maybe#
+-- * Lifted
 --------------------------------------------------------------------------------
+
+-- useful for DerivingVia
+
+type Lifted# :: TYPE Rep -> Type
+data Lifted# a = Lifted# { lowered# :: a }
+
+instance Eq a => P.Eq (Lifted# a) where
+  Lifted# a == Lifted# b = a == b
+  Lifted# a /= Lifted# b = a /= b
+
+instance Ord a => P.Ord (Lifted# a) where
+  compare (Lifted# a) (Lifted# b) = compare a b
+
+type Liftable :: TYPE Rep -> Constraint
+class Liftable a where
+  type Lifted :: TYPE Rep -> Type
+  type Lifted a = Lifted# a
+
+  lift :: a -> Lifted a 
+  default lift :: (Lifted a ~ Lifted# a) => a -> Lifted a
+  lift = Lifted#
+  
+  lower :: Lifted a -> a
+  default lower :: (Lifted a ~ Lifted# a) => Lifted a -> a
+  lower = lower#
+
+pattern Lifted :: Liftable a => a -> Lifted a
+pattern Lifted{lowered} <- (lower -> lowered) where
+  Lifted a = lift a
+{-# COMPLETE Lifted #-}
+
+pattern Lowered :: Liftable a => Lifted a -> a
+pattern Lowered{lifted} <- (lift -> lifted) where
+  Lowered a = lower a
+{-# COMPLETE Lowered #-}
+
+-- ** Maybe#
 
 newtype Maybe# (a :: TYPE Rep) = Maybe# (# (##) | a #)
 
@@ -63,14 +109,10 @@ pattern Nothing# = Maybe# (# (##) | #)
 
 {-# complete Just#, Nothing# #-}
 
---------------------------------------------------------------------------------
--- * Maybe
---------------------------------------------------------------------------------
+-- ** Maybe
 
 type Maybe :: TYPE Rep -> Type
 data Maybe a = Nothing | Just a
-
-
 
 instance Eq a => P.Eq (Maybe a) where
   Just a  == Just b  = a == b
@@ -83,6 +125,36 @@ instance Ord a => P.Ord (Maybe a) where
   compare Just{}   Nothing  = GT
   compare (Just a) (Just b) = compare a b
 
+-- ** List
+
+type List# :: TYPE Rep -> Type
+data List# a = Nil# | a :# List a
+
+infixr 5 :#
+
+instance Eq a => P.Eq (List a) where
+  Nil# == Nil# = True
+  a :# as == b :# bs = a == b && as P.== bs
+  _ == _ = False
+
+  Nil# /= Nil# = False
+  a :# as /= b :# bs = a /= b || as P./= bs
+  _ /= _ = False
+
+instance Ord a => P.Ord (List a) where
+  compare Nil# Nil# = EQ
+  compare Nil# (:#){} = LT
+  compare (:#){} Nil# = GT
+  compare (a :# as) (b :# bs) = compare a b P.<> compare as bs
+
+liftList :: Liftable a => List a -> [Lifted a]
+liftList (a :# as) = Lifted a : liftList as
+liftList Nil# = []
+
+lowerList :: Liftable a => [Lifted a] -> List a
+lowerList (Lifted a : as) = a : lowerList as
+lowerList [] = Nil#
+
 --------------------------------------------------------------------------------
 -- * RebindableSyntax
 --------------------------------------------------------------------------------
@@ -93,9 +165,36 @@ ifThenElse :: forall (a :: TYPE Rep). Bool -> a -> a -> a
 ifThenElse False a _ = a
 ifThenElse True _ a = a
 
+-- ** IsList
+
+-- rebindable syntax uses the lifted versions?
+type IsList :: Type -> Constraint
+class IsList a where
+  type Item# :: Type -> TYPE Rep 
+  fromList#  :: List (Item# a) -> a
+  fromListN# :: Int -> List (Item# a) -> a
+  toList#    :: a -> List (Item# a)
+
+  type Item :: Type -> Type
+  type Item a = Lifted (Item# a) 
+  fromListN :: IsList a => Int -> [Item a] -> a
+  fromList  :: IsList a => [Item a] -> a
+  toList    :: IsList a => a -> [Item a]
+
+  fromList xs = fromList# (lowerList xs)
+  fromList# x = fromList (liftList x)
+  fromListN n xs = fromListN# n (lowerList xs)
+  fromListN# _ = fromList#
+  toList x = liftList (toList# x)
+  toList# x = lowerList (toList x)
+
+  {-# MINIMAL (fromList# | fromList), (toList# | toList) -}
+
 --------------------------------------------------------------------------------
--- * Eq
+-- * Classes
 --------------------------------------------------------------------------------
+
+-- ** Eq
 
 infixr 8 **
 infixl 7 *, /, `quot`, `rem`, `div`, `mod`
@@ -109,9 +208,7 @@ class Eq a where
   x /= y = not (x == y)
   {-# MINIMAL (/=) | (==) #-}
 
---------------------------------------------------------------------------------
--- * Ord
---------------------------------------------------------------------------------
+-- ** Ord
 
 type Ord :: TYPE Rep -> Constraint
 class Eq a => Ord a where
