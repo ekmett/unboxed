@@ -32,23 +32,21 @@ common base
     -Wredundant-constraints -Widentities
     -Wno-simplifiable-class-constraints
 
-common classes-client
-  import: base
-  build-depends: unlifted:{classes, reps}
-
 library reps
   import: base
   hs-source-dirs: reps
-  exposed-modules: Internal.IntRep
+  exposed-modules: IntRep.Rep, FloatRep.Rep
 
 library classes
   import: base
   hs-source-dirs: classes
-  exposed-modules: Classes, Syntax
   signatures: Rep
+  exposed-modules: Classes, Syntax
 
-library intrep
-  import: classes-client
-  hs-source-dirs: intrep
-  mixins: unlifted:classes requires (Rep as Internal.IntRep)
-  exposed-modules: IntRep
+library
+  import: base
+  build-depends: unlifted:{classes, reps}
+  hs-source-dirs: src
+  mixins: unlifted:classes (Classes as IntRep.Classes, Syntax as IntRep.Syntax) requires (Rep as IntRep.Rep)
+  mixins: unlifted:classes (Classes as FloatRep.Classes, Syntax as FloatRep.Syntax) requires (Rep as FloatRep.Rep)
+  exposed-modules: IntRep, FloatRep
