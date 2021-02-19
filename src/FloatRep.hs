@@ -7,9 +7,7 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module FloatRep 
-  ( module FloatRep.Classes
-  , module FloatRep.Rep
-  , module FloatRep.Syntax
+  ( module Classes.FloatRep
   ) where
 
 import GHC.Prim
@@ -17,9 +15,7 @@ import GHC.Integer
 import GHC.Types 
 import Prelude (otherwise)
 
-import FloatRep.Rep
-import FloatRep.Classes
-import FloatRep.Syntax
+import Classes.FloatRep
 
 instance Num Float# where
   (+) = plusFloat#

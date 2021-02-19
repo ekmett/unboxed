@@ -35,18 +35,18 @@ common base
 library reps
   import: base
   hs-source-dirs: reps
-  exposed-modules: IntRep.Rep, FloatRep.Rep
+  exposed-modules: Rep.IntRep, Rep.FloatRep
 
 library classes
   import: base
   hs-source-dirs: classes
   signatures: Rep
-  exposed-modules: Classes, Syntax
+  exposed-modules: Classes
 
 library
   import: base
   build-depends: unlifted:{classes, reps}
   hs-source-dirs: src
-  mixins: unlifted:classes (Classes as IntRep.Classes, Syntax as IntRep.Syntax) requires (Rep as IntRep.Rep)
-  mixins: unlifted:classes (Classes as FloatRep.Classes, Syntax as FloatRep.Syntax) requires (Rep as FloatRep.Rep)
+  mixins: unlifted:classes (Classes as Classes.IntRep) requires (Rep as Rep.IntRep)
+  mixins: unlifted:classes (Classes as Classes.FloatRep) requires (Rep as Rep.FloatRep)
   exposed-modules: IntRep, FloatRep

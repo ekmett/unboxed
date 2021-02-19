@@ -1,20 +1,29 @@
+{-# Language DataKinds #-}
+{-# Language KindSignatures #-}
 {-# Language NoImplicitPrelude #-}
+{-# Language RankNTypes #-}
 {-# Language RebindableSyntax #-}
 {-# Language StandaloneKindSignatures #-}
-{-# Language DataKinds #-}
 
 module Classes 
   ( Num(..)
   , Fractional(..)
   , Rep
+  , ifThenElse
   ) where
 
 import Data.Kind (Constraint)
 import Data.Ratio
 import GHC.Integer
-import GHC.Types (TYPE)
+import GHC.Types (TYPE, Bool(..))
 
 import Rep
+
+-- for rebindable syntax, the "real" ifThenElse works over all kinds
+-- but we can't have pretty numbers without this
+ifThenElse :: forall (a :: TYPE Rep). Bool -> a -> a -> a
+ifThenElse False a _ = a
+ifThenElse True _ a = a
 
 infixl 6 +, -
 infixl 7 *, /

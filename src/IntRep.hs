@@ -7,9 +7,7 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module IntRep 
-  ( module IntRep.Classes
-  , module IntRep.Rep
-  , module IntRep.Syntax
+  ( module Classes.IntRep
   ) where
 
 import GHC.Prim
@@ -17,9 +15,7 @@ import GHC.Integer
 import GHC.Types 
 import Prelude (otherwise)
 
-import IntRep.Rep
-import IntRep.Classes
-import IntRep.Syntax
+import Classes.IntRep
 
 instance Num Int# where
   (+) = (+#)
