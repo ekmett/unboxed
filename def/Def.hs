@@ -80,6 +80,88 @@ instance IntegralRep Rep where
     | otherwise = qr
     where !qr@(# q, r #) = quotRem n d
 
+instance RealFracRep Rep where
+  truncateDef x = fromInteger m where
+    !(# m, _ #) = properFraction x
+  {-# INLINE truncateDef #-}
+
+  roundDef x =
+    let !(# n, r #) = properFraction x
+        m | r < 0     = n - 1
+          | otherwise = n + 1
+    in case signum (abs r - 0.5) of
+      -1 -> fromInteger n
+      0 | Prelude.even n -> fromInteger n
+        | otherwise -> fromInteger m
+      1 -> fromInteger m
+      _ -> Prelude.error "round default defn: Bad value"
+
+  ceilingDef x
+    | r > 0 = fromInteger (n + 1)
+    | otherwise = fromInteger n
+    where !(# n, r #) = properFraction x
+
+  floorDef x 
+    | r < 0 = fromInteger (n - 1)
+    | otherwise = fromInteger n
+    where !(# n, r #) = properFraction x
+
+instance FloatingRep Rep where
+  {-# INLINE powDef #-}
+  {-# INLINE logBaseDef #-}
+  {-# INLINE sqrtDef #-}
+  {-# INLINE tanDef #-}
+  {-# INLINE tanhDef #-}
+  powDef x y = exp (log x * y)
+  logBaseDef x y = log y / log x
+  sqrtDef x = x ** 0.5
+  tanDef x = sin x / cos x
+  tanhDef x = sinh x / cosh x
+
+  {-# INLINE log1pDef #-}
+  {-# INLINE expm1Def #-}
+  {-# INLINE log1pexpDef #-}
+  {-# INLINE log1mexpDef #-}
+  log1pDef x = log (1 + x)
+  expm1Def x = exp x - 1
+  log1pexpDef x = log1p (exp x)
+  log1mexpDef x = log1p (negate (exp x))
+
+instance RealFloatRep Rep where
+  exponentDef x
+    | m == 0 = 0
+    | otherwise = n + floatDigits x
+    where !(# m, n #) = decodeFloat x
+
+  significandDef x = encodeFloat m (negate (floatDigits x))
+    where !(# m, _ #) = decodeFloat x
+
+  scaleFloatDef 0 x =  x
+  scaleFloatDef k x
+    | isFix =  x
+    | otherwise =  encodeFloat m (n + clamp b k)
+    where
+      !(# m, n #) = decodeFloat x
+      !(# l, h #) = floatRange x
+      d = floatDigits x
+      b = h - l + 4 * d
+      isFix = x == 0 || isNaN x || isInfinite x
+      clamp :: Int -> Int -> Int
+      clamp bd k' = max (-bd) (min bd k')
+
+  atan2Def y x
+    | x > 0            =  atan (y/x)
+    | x == 0 && y > 0  =  pi/2
+    | x <  0 && y > 0  =  pi + atan (y/x)
+    |(x <= 0 && y < 0)            ||
+     (x <  0 && isNegativeZero y) ||
+     (isNegativeZero x && isNegativeZero y)
+                       = -atan2 (-y) x
+    | y == 0 && (x < 0 || isNegativeZero x)
+                       =  pi    -- must be after the previous test on zero y
+    | x==0 && y==0     =  y     -- must be after the other double zero tests
+    | otherwise        =  x + y -- x or y is a NaN, return a NaN (via +)
+
 data ListDef (a :: TYPE Rep)
   = Nil
   | a :# ListDef a

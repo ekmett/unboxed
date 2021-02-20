@@ -9,6 +9,9 @@ module Unlifted.Class
   , Real(..)
   , Enum(..)
   , Integral(..)
+  , RealFrac(..)
+  , Floating(..)
+  , RealFloat(..)
   , Show(..), ShowList(..), shows
   , Semigroup(..)
   , Monoid(..)

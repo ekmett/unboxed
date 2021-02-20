@@ -21,8 +21,10 @@ module Unlifted.Internal.Class
   , Real(..), RealRep(..)
   , Enum(..), EnumRep(..)
   , Integral(..), IntegralRep(..)
+  , Floating(..), FloatingRep(..)
+  , RealFrac(..), RealFracRep(..)
+  , RealFloat(..), RealFloatRep(..)
   , Bounded(..)
-  -- , Enum(..)
   -- * Show
   , Show(..), ShowList(..), ShowRep(..), ShowListRep(..), shows
   -- * Semigroup
@@ -40,6 +42,7 @@ import Data.Ratio (Rational)
 import GHC.Integer
 import GHC.Prim
 import GHC.Types (Type, RuntimeRep(..))
+import Numeric qualified
 import Prelude (Ordering(..), Bool(..), Int, ShowS, String, IO)
 import Prelude qualified
 import Unlifted.Levitation
@@ -333,6 +336,182 @@ instance Prelude.Integral a => Integral (a :: Type) where
 class IntegralRep (r :: RuntimeRep) where
   quotDef, remDef, divDef, modDef :: forall (a :: TYPE r). Integral a => a -> a -> a
   divModDef :: forall (a :: TYPE r). Integral a => a -> a -> (# a, a #)
+
+
+class (Real a, Fractional a) => RealFrac (a :: TYPE r) where
+  -- | As a technical wibble you'll have to convert from the
+  -- Prelude fractional type yourself, to avoid n^2 work
+  -- making these instances.
+  properFraction :: Integral b => a -> (# b, a #)
+
+  truncate, round, ceiling, floor :: Integral b => a -> b
+  {-# MINIMAL properFraction #-}
+
+  default truncate :: (RealFracRep r, Integral b) => a -> b
+  truncate = truncateDef
+
+  default round :: (RealFracRep r, Integral b) => a -> b
+  round = roundDef
+
+  default ceiling :: (RealFracRep r, Integral b) => a -> b
+  ceiling = ceilingDef
+
+  default floor :: (RealFracRep r, Integral b) => a -> b
+  floor = floorDef
+
+instance Prelude.RealFrac a => RealFrac (a :: Type) where
+  properFraction a = case Prelude.properFraction a of
+    (b, c) -> (# fromInteger b, c #)
+
+  truncate x = fromInteger (Prelude.truncate x)
+  round x = fromInteger (Prelude.round x)
+  ceiling x = fromInteger (Prelude.ceiling x)
+  floor x = fromInteger (Prelude.floor x)
+
+
+class RealFracRep (r :: RuntimeRep) where
+  truncateDef, roundDef, ceilingDef, floorDef
+    :: forall (a :: TYPE r) r' (b :: TYPE r'). (RealFrac a, Integral b)
+    => a -> b
+--------------------------------------------------------------------------------
+-- * Floating
+--------------------------------------------------------------------------------
+
+class Fractional a => Floating (a :: TYPE r) where
+  pi                  :: Lev a
+  exp, log, sqrt      :: a -> a
+  (**), logBase       :: a -> a -> a
+  sin, cos, tan       :: a -> a
+  asin, acos, atan    :: a -> a
+  sinh, cosh, tanh    :: a -> a
+  asinh, acosh, atanh :: a -> a
+  log1p               :: a -> a
+  expm1               :: a -> a
+  log1pexp            :: a -> a
+  log1mexp            :: a -> a
+
+  default (**) :: FloatingRep r => a -> a -> a
+  (**) = powDef
+  {-# INLINE (**) #-}
+
+  default logBase :: FloatingRep r => a -> a -> a
+  logBase = logBaseDef
+  {-# INLINE logBase #-}
+
+  default sqrt :: FloatingRep r => a -> a
+  sqrt = sqrtDef
+  {-# INLINE sqrt #-}
+
+  default tan :: FloatingRep r => a -> a
+  tan = tanDef
+  {-# INLINE tan #-}
+
+  default tanh :: FloatingRep r => a -> a
+  tanh = tanhDef
+  {-# INLINE tanh #-}
+
+  default log1p :: FloatingRep r => a -> a
+  log1p = log1pDef
+  {-# INLINE log1p #-}
+
+  default expm1 :: FloatingRep r => a -> a
+  expm1 = expm1Def
+  {-# INLINE expm1 #-}
+
+  default log1pexp :: FloatingRep r => a -> a
+  log1pexp = log1pexpDef
+  {-# INLINE log1pexp #-}
+
+  default log1mexp :: FloatingRep r => a -> a
+  log1mexp = log1mexpDef
+  {-# INLINE log1mexp #-}
+
+instance Prelude.Floating a => Floating a where
+  pi = Prelude.pi
+  exp = Prelude.exp
+  log = Prelude.log
+  sqrt = Prelude.sqrt
+  (**) = (Prelude.**)
+  logBase = Prelude.logBase
+  sin = Prelude.sin
+  cos = Prelude.cos
+  tan = Prelude.tan
+  asin = Prelude.asin
+  acos = Prelude.acos
+  atan = Prelude.atan
+  sinh = Prelude.sinh
+  cosh = Prelude.cosh
+  tanh = Prelude.tanh
+  asinh = Prelude.asinh
+  acosh = Prelude.acosh
+  atanh = Prelude.atanh
+  log1p = Numeric.log1p
+  expm1 = Numeric.expm1
+  log1pexp = Numeric.log1pexp
+  log1mexp = Numeric.log1mexp
+
+class FloatingRep (r :: RuntimeRep) where
+  powDef, logBaseDef
+    :: forall (a :: TYPE r). Floating a => a -> a -> a
+
+  sqrtDef, tanDef, tanhDef, log1pDef, expm1Def, log1pexpDef, log1mexpDef
+    :: forall (a :: TYPE r). Floating a => a -> a
+
+--------------------------------------------------------------------------------
+-- * RealFloat
+--------------------------------------------------------------------------------
+
+-- | Efficient, machine-independent access to the components of a
+-- floating-point number.
+class (RealFrac a, Floating a) => RealFloat (a :: TYPE r) where
+  floatRadix :: a -> Integer
+  floatDigits, exponent :: a -> Int
+  floatRange :: a -> (# Int, Int #)
+  decodeFloat :: a -> (# Integer, Int #)
+  encodeFloat :: Integer -> Int -> a
+  significand :: a -> a
+  scaleFloat :: Int -> a -> a
+  isNaN, isInfinite, isDenormalized, isNegativeZero, isIEEE :: a -> Bool
+  atan2 :: a -> a -> a
+
+  default exponent :: RealFloatRep r => a -> Int
+  exponent = exponentDef
+
+  default significand :: RealFloatRep r => a -> a
+  significand = significandDef
+
+  default scaleFloat :: RealFloatRep r => Int -> a -> a
+  scaleFloat = scaleFloatDef
+
+  default atan2 :: RealFloatRep r => a -> a -> a
+  atan2 = atan2Def
+
+  {-# MINIMAL
+     floatRadix, floatDigits, floatRange, decodeFloat,
+     encodeFloat, isNaN, isInfinite, isDenormalized,
+     isNegativeZero, isIEEE #-}
+
+instance Prelude.RealFloat a => RealFloat (a :: Type) where
+  floatRadix = Prelude.floatRadix
+  floatDigits = Prelude.floatDigits
+  exponent = Prelude.exponent
+  floatRange a = case Prelude.floatRange a of (b, c) -> (# b, c #)
+  decodeFloat a = case Prelude.decodeFloat a of (m, e) ->  (# m, e#)
+  encodeFloat = Prelude.encodeFloat
+  significand = Prelude.significand
+  scaleFloat = Prelude.scaleFloat
+  isNaN = Prelude.isNaN
+  isInfinite = Prelude.isInfinite
+  isDenormalized = Prelude.isDenormalized
+  isNegativeZero = Prelude.isNegativeZero
+  isIEEE = Prelude.isIEEE
+  atan2 = Prelude.atan2
+
+class RealFloatRep r where
+  exponentDef :: forall (a :: TYPE r). RealFloat a => a -> Int
+  significandDef :: forall (a :: TYPE r). RealFloat a => a -> a
+  scaleFloatDef :: forall (a :: TYPE r). RealFloat a => Int -> a -> a
+  atan2Def :: forall (a :: TYPE r). RealFloat a => a -> a -> a
 
 -- ** Semigroup
 
