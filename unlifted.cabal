@@ -65,8 +65,16 @@ library reps
     Rep.Float
     Rep.Int
     Rep.Int8
+    Rep.Int16
+    Rep.Int32
+    Rep.Int64
     Rep.Word
+    Rep.Word8
+    Rep.Word16
+    Rep.Word32
+    Rep.Word64
     Rep.Unlifted
+    Rep.Tuple
 
 library
   import: base
