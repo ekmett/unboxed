@@ -1,0 +1,67 @@
+diff --git a/.github/workflows/haskell-ci.yml b/.github/workflows/haskell-ci.yml
+index 3ba62e3..25f1b91 100644
+--- a/.github/workflows/haskell-ci.yml
++++ b/.github/workflows/haskell-ci.yml
+@@ -51,17 +51,25 @@ jobs:
+     strategy:
+       matrix:
+         include:
+-          - ghc: 8.10.3
++          - ghc: 9.0.1
++            ghc-source: ghcup
+             allow-failure: false
+       fail-fast: false
+     steps:
+       - name: apt
+         run: |
+           apt-get update
+-          apt-get install -y --no-install-recommends gnupg ca-certificates dirmngr curl git
+-          apt-add-repository -y 'ppa:hvr/ghc'
+-          apt-get update
+-          apt-get install -y ghc-$GHC_VERSION cabal-install-3.2
++          apt-get install -y --no-install-recommends gnupg ca-certificates dirmngr curl git
++          if [ "${{ matrix.ghc-source }}" = "ghcup" ]; then
++            curl -sL https://downloads.haskell.org/ghcup/0.1.12/x86_64-linux-ghcup-0.1.12 >
++            chmod a+x ghcup
++            ./ghcup install ghc $GHC_VERSION
++            ./ghcup install cabal 3.2.0.0
++          else
++            apt-add-repository -y 'ppa:hvr/ghc'
++            apt-get update
++            apt-get install -y ghc-$GHC_VERSION cabal-install-3.2
++          fi
+         env:
+           GHC_VERSION: ${{ matrix.ghc }}
+       - name: Set PATH and environment variables
+@@ -70,17 +78,25 @@ jobs:
+           echo "LANG=C.UTF-8" >> $GITHUB_ENV
+           echo "CABAL_DIR=$HOME/.cabal" >> $GITHUB_ENV
+           echo "CABAL_CONFIG=$HOME/.cabal/config" >> $GITHUB_ENV
+-          HC=/opt/ghc/$GHC_VERSION/bin/ghc
+-          echo "HC=$HC" >> $GITHUB_ENV
+-          echo "HCPKG=/opt/ghc/$GHC_VERSION/bin/ghc-pkg" >> $GITHUB_ENV
+-          echo "HADDOCK=/opt/ghc/$GHC_VERSION/bin/haddock" >> $GITHUB_ENV
+-          echo "CABAL=/opt/cabal/3.2/bin/cabal -vnormal+nowrap" >> $GITHUB_ENV
++          if [ "${{ matrix.ghc-source }}" = "ghcup" ]; then
++            HC=$HOME/.ghcup/bin/ghc-$GHC_VERSION
++            echo "HC=$HC" >> $GITHUB_ENV
++            echo "HCPKG=$HOME/.ghcup/bin/ghc-pkg-$GHC_VERSION" >> $GITHUB_ENV
++            echo "HADDOCK=$HOME/.ghcup/bin/haddock-$GHC_VERSION" >> $GITHUB_ENV
++            echo "CABAL=$HOME/.ghcup/bin/cabal-3.2.0.0 -vnormal+nowrap" >> $GITHUB_ENV
++          else
++            HC=/opt/ghc/$GHC_VERSION/bin/ghc
++            echo "HC=$HC" >> $GITHUB_ENV
++            echo "HCPKG=/opt/ghc/$GHC_VERSION/bin/ghc-pkg" >> $GITHUB_ENV
++            echo "HADDOCK=/opt/ghc/$GHC_VERSION/bin/haddock" >> $GITHUB_ENV
++            echo "CABAL=/opt/cabal/3.2/bin/cabal -vnormal+nowrap" >> $GITHUB_ENV
++          fi
+           HCNUMVER=$(${HC} --numeric-version|perl -ne '/^(\d+)\.(\d+)\.(\d+)(\.(\d+))?$/; p
+           echo "HCNUMVER=$HCNUMVER" >> $GITHUB_ENV
+           echo "ARG_TESTS=--enable-tests" >> $GITHUB_ENV
+           echo "ARG_BENCH=--enable-benchmarks" >> $GITHUB_ENV
+           echo "HEADHACKAGE=false" >> $GITHUB_ENV
+-          echo "ARG_COMPILER=--ghc --with-compiler=/opt/ghc/$GHC_VERSION/bin/ghc" >> $GITHU
++          echo "ARG_COMPILER=--ghc --with-compiler=$HC" >> $GITHUB_ENV
+           echo "GHCJSARITH=0" >> $GITHUB_ENV
+         env:
+           GHC_VERSION: ${{ matrix.ghc }}
