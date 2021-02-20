@@ -64,7 +64,7 @@ jobs:
             curl -sL https://downloads.haskell.org/ghcup/0.1.12/x86_64-linux-ghcup-0.1.12 > ghcup
             chmod a+x ghcup
             ./ghcup install ghc $GHC_VERSION
-            ./ghcup install cabal 3.2.0.0
+            ./ghcup install cabal 3.4.0.0-rc4
           else
             apt-add-repository -y 'ppa:hvr/ghc'
             apt-get update
@@ -83,7 +83,7 @@ jobs:
             echo "HC=$HC" >> $GITHUB_ENV
             echo "HCPKG=$HOME/.ghcup/bin/ghc-pkg-$GHC_VERSION" >> $GITHUB_ENV
             echo "HADDOCK=$HOME/.ghcup/bin/haddock-$GHC_VERSION" >> $GITHUB_ENV
-            echo "CABAL=$HOME/.ghcup/bin/cabal-3.2.0.0 -vnormal+nowrap" >> $GITHUB_ENV
+            echo "CABAL=$HOME/.ghcup/bin/cabal-3.4.0.0-rc4 -vnormal+nowrap" >> $GITHUB_ENV
           else
             HC=/opt/ghc/$GHC_VERSION/bin/ghc
             echo "HC=$HC" >> $GITHUB_ENV
