@@ -5,8 +5,7 @@ module Unlifted.Class
   ( Eq(..)
   , Ord(..)
   , Num(..)
-  , Show(..)
-  , shows
+  , Show(..), ShowList(..), shows
   , Semigroup(..)
   , Monoid(..)
   , print, hPrint

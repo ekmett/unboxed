@@ -79,7 +79,7 @@ instance Ord a => Prelude.Ord (ListDef a) where
   compare (:#){} Nil = GT
   compare (a:#as) (b:#bs) = compare a b <> compare as bs
 
-instance Show a => Prelude.Show (ListDef a) where
+instance ShowList a => Prelude.Show (ListDef a) where
   showsPrec _ = showList
 
 data MaybeDef (a :: TYPE Rep)
@@ -120,12 +120,15 @@ pattern Nothing# = Maybe# (# (##) | #)
 pattern Just# :: forall (a :: TYPE Rep). a -> Maybe# a
 pattern Just# a = Maybe# (# | a #)
 
--- this instance will probably not fire without a lot of help, because that body condition is harsh
--- TODO: split ShowList into a separate class, even if this breaks compat with base
-instance (ListRep ('SumRep '[ 'TupleRep '[], Rep ]), Show a) => Show (Maybe# (a :: TYPE Rep)) where
+instance Show a => Show (Maybe# (a :: TYPE Rep)) where
   showsPrec _ Nothing# = showString "Nothing#"
   showsPrec d (Just# a) = showParen (d < 11) $ showString "Just# " . showsPrec d a
   show x = shows x ""
+
+-- this instance will probably not fire without a lot of help, because that body condition is harsh
+-- We split ShowList into a separate class, even if this breaks compat with base because of this
+-- instance
+instance (ListRep ('SumRep '[ 'TupleRep '[], Rep ]), Show a) => ShowList (Maybe# (a :: TYPE Rep)) where
   showList = go shows where
     go :: forall (a :: TYPE Rep). (Maybe# a -> ShowS) -> List (Maybe# a) -> ShowS
     go showx l s = case uncons# l of
@@ -141,7 +144,9 @@ instance (ListRep ('SumRep '[ 'TupleRep '[], Rep ]), Show a) => Show (Maybe# (a 
 instance ShowRep Rep where
   showsPrecDef _ x s = show x ++ s
   showDef x          = shows x ""
-  showListDef ls   s = showList__ shows ls s
+
+instance ShowListRep Rep where
+  showListDef = showList__ shows
 
 showList__ :: forall (a :: TYPE Rep). (a -> ShowS) -> List a -> ShowS
 showList__ _     Nil       s = "[]" ++ s

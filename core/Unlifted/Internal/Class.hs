@@ -16,7 +16,7 @@ module Unlifted.Internal.Class
   , Ord(..), OrdRep(..)
   , Num(..), NumRep(..)
   -- * Show
-  , Show(..), ShowRep(..), shows
+  , Show(..), ShowList(..), ShowRep(..), ShowListRep(..), shows
   -- * Semigroup
   , Semigroup(..)
   -- * Monoid
@@ -45,24 +45,30 @@ class Show (a :: TYPE r) where
   show :: a -> String
   default show :: ShowRep r => a -> String
   show = showDef
-
-  showList :: List a -> ShowS
-  default showList :: ShowRep r => List a -> ShowS
-  showList = showListDef
   {-# MINIMAL showsPrec | show #-}
+
+-- this is split off from Show so we can Show (Maybe# a)
+class Show a => ShowList (a :: TYPE r) where
+  showList :: List a -> ShowS
+  default showList :: ShowListRep r => List a -> ShowS
+  showList = showListDef
 
 instance Prelude.Show a => Show (a :: Type) where
   showsPrec = Prelude.showsPrec
   show = Prelude.show
+
+instance Prelude.Show a => ShowList (a :: Type) where
   showList = Prelude.showList
 
 shows :: forall r (a :: TYPE r). Show a => a -> ShowS
 shows = showsPrec 0
 
-class ListRep r => ShowRep (r :: RuntimeRep) where
+class ShowRep (r :: RuntimeRep) where
   showsPrecDef :: forall (a :: TYPE r). Show a => Int -> a -> ShowS
   showDef :: forall (a :: TYPE r). Show a => a -> String
-  showListDef :: forall (a :: TYPE r). Show a => List a -> ShowS
+
+class ListRep r => ShowListRep (r :: RuntimeRep) where
+  showListDef :: forall (a :: TYPE r). ShowList a => List a -> ShowS
 
 -- ** Eq
 

@@ -3,6 +3,7 @@ module Unlifted.Rep
   , OrdRep(..)
   , NumRep(..)
   , ShowRep(..)
+  , ShowListRep(..)
   , PrintRep(..)
   ) where
 
