@@ -5,7 +5,6 @@
 {-# Language DataKinds #-}
 {-# Language TypeSynonymInstances #-}
 {-# Language ImportQualifiedPost #-}
-{-# Language BangPatterns #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module Unlifted.Rep.Internal.Tuple where
