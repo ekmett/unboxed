@@ -56,6 +56,9 @@ instance FractionalRep Rep where
   fractionalDef x y = x * recip y
   recipDef x = 1 / x
 
+instance RealRep Rep where
+  realToFracDef x = fromRational (toRational x)
+
 data ListDef (a :: TYPE Rep)
   = Nil
   | a :# ListDef a

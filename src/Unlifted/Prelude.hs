@@ -21,6 +21,7 @@ module Unlifted.Prelude
   , ($) -- has a magic rule we can't beat
   ) where
 
+
 import Unlifted.Class
 import Unlifted.Combinators
 import Unlifted.List

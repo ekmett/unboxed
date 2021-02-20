@@ -1,3 +1,0 @@
-:set -fno-it -interactive-print print
-:set -XRebindableSyntax -XMagicHash -XUnboxedTuples -XUnboxedSums -XUnliftedNewtypes -XNoImplicitPrelude
-:set -Wno-type-defaults -Wno-prepositive-qualified-module

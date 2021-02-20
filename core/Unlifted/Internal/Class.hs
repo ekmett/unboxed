@@ -3,6 +3,7 @@
 {-# Language NoImplicitPrelude #-}
 {-# Language RebindableSyntax #-}
 {-# Language StandaloneKindSignatures #-}
+{-# Language ConstrainedClassMethods #-}
 {-# Language PolyKinds #-}
 {-# Language TypeFamilies #-}
 {-# Language DefaultSignatures #-}
@@ -16,6 +17,7 @@ module Unlifted.Internal.Class
   , Ord(..), OrdRep(..)
   , Num(..), NumRep(..)
   , Fractional(..), FractionalRep(..)
+  , Real(..), RealRep(..)
   , Bounded(..)
   -- , Enum(..)
   -- * Show
@@ -183,6 +185,10 @@ class NumRep (r :: RuntimeRep) where
   negateDef :: forall (a :: TYPE r). Num a => a -> a
   minusDef :: forall (a :: TYPE r). Num a => a -> a -> a
 
+-- ** Fractional
+
+infixl 7 /
+
 class Num a => Fractional (a :: TYPE r) where
   (/) :: a -> a -> a
   recip :: a -> a
@@ -204,6 +210,26 @@ instance Prelude.Fractional a => Fractional (a :: Type) where
   (/) = (Prelude./)
   recip = Prelude.recip
   fromRational = Prelude.fromRational
+
+-- ** Real
+
+class (Num a, Ord a) => Real (a :: TYPE r) where
+  toRational :: a -> Rational
+
+  -- bolted on to class to allow both Real and Frac to be polymorphic in rep
+  realToFrac :: Fractional b => a -> b
+  default realToFrac :: (RealRep r, Fractional b) => a -> b
+  realToFrac = realToFracDef
+
+  {-# MINIMAL toRational #-}
+
+instance Prelude.Real a => Real (a :: Type) where
+  toRational = Prelude.toRational
+  realToFrac x = fromRational (toRational x)
+
+class RealRep (r :: RuntimeRep) where
+  realToFracDef :: forall (a :: TYPE r) s (b :: TYPE s). (Real a, Fractional b) => a -> b
+
 
 -- ** Semigroup
 

@@ -56,3 +56,12 @@ instance Num Double# where
     | otherwise = 1
   fromInteger = doubleFromInteger
   {-# INLINE fromInteger #-}
+
+instance Fractional Double# where
+  (/) = (/##)
+  recip = (/) 1.0##
+  fromRational r = case fromRational r of
+    D# f -> f
+
+instance Real Double# where
+  toRational f = toRational (D# f)
