@@ -17,7 +17,8 @@ import Unlifted.Internal.Class
 import Unlifted.Internal.List
 import Unlifted.Internal.Maybe
 import GHC.Types
-import Prelude (otherwise, not)
+import Prelude (otherwise, not, (++), ShowS)
+import System.IO qualified as IO
 
 import Rep
 
@@ -85,3 +86,18 @@ pattern Just# :: forall (a :: TYPE Rep). a -> Maybe# a
 pattern Just# a = Maybe# (# | a #)
 
 {-# complete Nothing#, Just# :: Maybe# #-}
+
+instance ShowRep Rep where
+  showsPrecDef _ x s = show x ++ s
+  showDef x          = shows x ""
+  showListDef ls   s = showList__ shows ls s
+
+showList__ :: forall (a :: TYPE Rep). (a -> ShowS) -> List a -> ShowS
+showList__ _     Nil       s = "[]" ++ s
+showList__ showx (x :# xs) s = '[' : showx x (showl xs)
+  where
+    showl Nil       = ']' : s
+    showl (y :# ys) = ',' : showx y (showl ys)
+
+instance PrintRep Rep where
+  hPrint h x = IO.hPutStrLn h (show x)

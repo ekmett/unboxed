@@ -11,23 +11,59 @@
 {-# Language UnboxedSums #-}
 {-# OPTIONS_HADDOCK not-home #-}
 
-module Unlifted.Internal.Class 
+module Unlifted.Internal.Class
   ( Eq(..), EqRep(..)
   , Ord(..), OrdRep(..)
   , Num(..), NumRep(..)
+  -- * Show
+  , Show(..), ShowRep(..), shows
+  -- * Semigroup
   , Semigroup(..)
+  -- * Monoid
   , Monoid(..)
+  -- * polykinded @hPrint@, @print@
+  , PrintRep(hPrint)
+  , print
   ) where
 
 import Data.Kind (Constraint)
 import GHC.Integer
 import GHC.Prim
 import GHC.Types (Type, RuntimeRep(..))
-import Prelude (Ordering(..), Bool(..))
+import Prelude (Ordering(..), Bool(..), Int, ShowS, String, IO)
 import Prelude qualified
 import Unlifted.Levitation
+import Unlifted.Internal.List
+import System.IO qualified as IO
 
 -- * Standard Classes
+
+class Show (a :: TYPE r) where
+  showsPrec :: Int -> a -> ShowS
+  default showsPrec :: ShowRep r => Int -> a -> ShowS
+  showsPrec = showsPrecDef
+
+  show :: a -> String
+  default show :: ShowRep r => a -> String
+  show = showDef
+
+  showList :: List a -> ShowS
+  default showList :: ShowRep r => List a -> ShowS
+  showList = showListDef
+  {-# MINIMAL showsPrec | show #-}
+
+instance Prelude.Show a => Show (a :: Type) where
+  showsPrec = Prelude.showsPrec
+  show = Prelude.show
+  showList = Prelude.showList
+
+shows :: forall r (a :: TYPE r). Show a => a -> ShowS
+shows = showsPrec 0
+
+class ListRep r => ShowRep (r :: RuntimeRep) where
+  showsPrecDef :: forall (a :: TYPE r). Show a => Int -> a -> ShowS
+  showDef :: forall (a :: TYPE r). Show a => a -> String
+  showListDef :: forall (a :: TYPE r). Show a => List a -> ShowS
 
 -- ** Eq
 
@@ -169,7 +205,7 @@ instance Prelude.Functor f => Functor f where
 
 -- how do we write remotely polymorphic code for this? or do we bundle it in a one-off class?
 instance ListRep r => Functor (List @r) where
-  fmap f xs = case uncons# xs of 
+  fmap f xs = case uncons# xs of
 
 class IfRep r where
   ifThenElse :: forall (a :: TYPE r). Bool -> a -> a -> a
@@ -179,3 +215,13 @@ instance IfRep 'LiftedRep where
   ifThenElse False _ y = y
 
 -}
+
+
+class PrintRep r where
+  hPrint :: forall (a :: TYPE r). Show a => IO.Handle -> a -> IO ()
+
+instance PrintRep 'LiftedRep where
+  hPrint h x = IO.hPutStrLn h (show x)
+
+print :: forall r (a :: TYPE r). (PrintRep r, Show a) => a -> IO ()
+print = hPrint IO.stdout

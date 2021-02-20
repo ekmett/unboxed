@@ -63,3 +63,7 @@ instance Num Int# where
     | otherwise = 1
   fromInteger = integerToInt
   {-# INLINE fromInteger #-}
+
+instance Show Int# where
+  showsPrec d a = showsPrec d (I# a)
+  {-# INLINE showsPrec #-}

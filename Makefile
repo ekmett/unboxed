@@ -20,7 +20,7 @@ watch:
 	ghcid -p unlifted --color -c 'cabal repl unlifted --repl-options=-fno-code --repl-options=-fno-break-on-exception --repl-options=-fno-break-on-error --repl-options=-v1 --repl-options=-ferror-spans --repl-options=-j'
 
 repl:
-	cabal repl unlifted --repl-options=-fobject-code --repl-options=-v1 --repl-options=-ferror-spans --repl-options=-j
+	cabal repl unlifted --repl-options=-fno-it --repl-options=-interactive-print=print --repl-options=-fobject-code --repl-options=-v1 --repl-options=-ferror-spans --repl-options=-j
 
 lint:
 	find . -name "*.hs" -print | xargs hlint
