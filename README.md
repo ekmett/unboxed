@@ -4,7 +4,7 @@
 
 This is a small package exploring how to overloade Prelude typeclasses to work over multiple `RuntimeRep`s.
 
-The end result is that with enough extensions, including `NoImplicitPrelude`, and `RebindableSyntax`, importing `Unlifted.Prelude` will you to work with `Eq`, `Ord`, `Num`, etc. in any `TYPE r`, not just `TYPE 'LiftedRep`. This allows using numeric literals such as 3 in unlifted types such as `Int#`, or `Float#`.
+The end result is that with enough extensions, including `NoImplicitPrelude`, and `RebindableSyntax`, importing `Unlifted.Prelude` will allow you to work with `Eq`, `Ord`, `Num`, etc. in any `TYPE r`, not just `TYPE 'LiftedRep`. This allows using numeric literals such as 3 in unlifted types such as `Int#`, or `Float#`. If you are working with types of kind Type, this package will delegate to normal Prelude instances, so you don't have to provide duplicate definitions.
 
 In addition to overloading classes, some limited data types are also offered. Notably lists of lifted or unlifted values, and lifted and unlifted Maybes of lifted or unlifted values. When GHC 9.2 lands, hopefully with support for unlifted data types, then an unlifted list should be possible.
 
