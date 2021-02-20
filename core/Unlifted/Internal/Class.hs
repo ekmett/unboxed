@@ -21,6 +21,8 @@ module Unlifted.Internal.Class
   , Semigroup(..)
   -- * Monoid
   , Monoid(..)
+  -- * Functor
+  , Functor(..)
   -- * polykinded @hPrint@, @print@
   , PrintRep(hPrint), print
   ) where
@@ -194,33 +196,16 @@ infixl 7 /, `quot`, `rem`, `div`, `mod`
 
 -}
 
-{-
-
--- per runtimerep backpack modules:
--- data instance List# (a :: TYPE Rep) = Nil# | Cons# a (List# a)
--- newtype instance Maybe## (a :: TYPE Rep) = Maybe# (# (##) | a #)
--- data instance Maybe# (a :: TYPE Rep) = Nothing# | Just# a
+-- * Functors
 
 type Functor :: (TYPE r -> TYPE s) -> Constraint
-class Functor (f :: TYPE r -> TYPE s)
+class Functor (f :: TYPE r -> TYPE s) where
   fmap :: (a -> b) -> f a -> f b
 
-instance Prelude.Functor f => Functor f where
-  fmap = Prelude.f
+instance Prelude.Functor f => Functor (f :: Type -> Type) where
+  fmap = Prelude.fmap
 
--- how do we write remotely polymorphic code for this? or do we bundle it in a one-off class?
-instance ListRep r => Functor (List @r) where
-  fmap f xs = case uncons# xs of
-
-class IfRep r where
-  ifThenElse :: forall (a :: TYPE r). Bool -> a -> a -> a
-
-instance IfRep 'LiftedRep where
-  ifThenElse True x _ = x
-  ifThenElse False _ y = y
-
--}
-
+-- * Printing
 
 class PrintRep r where
   hPrint :: forall (a :: TYPE r). Show a => IO.Handle -> a -> IO ()

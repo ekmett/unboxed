@@ -84,12 +84,13 @@ library
     Unlifted.List
     Unlifted.Rep
     Unlifted.Rep.Internal.Int
+    Unlifted.Rep.Internal.Word
     Unlifted.Rep.Int
     Unlifted.Rep.Lifted
+    Unlifted.Rep.Word
   -- Unlifted.Rep.Unlifted
   -- Unlifted.Rep.Int8
   -- Unlifted.Rep.Float
-  -- Unlifted.Rep.Word
   reexported-modules:
     Unlifted.Levitation
     

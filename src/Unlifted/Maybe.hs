@@ -1,6 +1,7 @@
 {-# Language MagicHash #-}
 module Unlifted.Maybe
   ( MaybeRep(..)
+  , Maybe#(..)
   , MaybeRep#(..)
   ) where
 

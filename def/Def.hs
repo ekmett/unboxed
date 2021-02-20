@@ -2,6 +2,7 @@
 {-# Language UnboxedSums #-}
 {-# Language UnboxedTuples #-}
 {-# Language TypeFamilies #-}
+{-# Language TypeApplications #-}
 {-# Language PolyKinds #-}
 {-# Language DataKinds #-}
 {-# Language PatternSynonyms #-}
@@ -64,6 +65,10 @@ instance ListRep Rep where
   uncons# (a :# as) = Maybe# (# | (# a, as #) #)
   uncons# Nil = Maybe# (# (##) | #)
 
+instance Functor ListDef where
+  fmap _ Nil = Nil
+  fmap f (a :# as) = f a :# fmap f as
+
 instance Eq a => Prelude.Eq (ListDef a) where
   Nil == Nil = True
   a :# as == b :# bs = a == b && as == bs
@@ -86,6 +91,10 @@ data MaybeDef (a :: TYPE Rep)
   = Nothing
   | Just a
 
+instance Functor MaybeDef where
+  fmap _ Nothing = Nothing
+  fmap f (Just a) = Just (f a)
+
 instance Eq a => Prelude.Eq (MaybeDef a) where
   Nothing == Nothing = True
   Just a == Just b = a == b
@@ -99,7 +108,7 @@ instance Ord a => Prelude.Ord (MaybeDef a) where
 
 instance Show a => Prelude.Show (MaybeDef a) where
   showsPrec _ Nothing = showString "Nothing"
-  showsPrec d (Just a) = showParen (d < 11) $ showString "Just " . showsPrec d a
+  showsPrec d (Just a) = showParen (d >= 11) $ showString "Just " . showsPrec 11 a
 
 instance MaybeRep Rep where
   type Maybe = MaybeDef
@@ -120,9 +129,13 @@ pattern Nothing# = Maybe# (# (##) | #)
 pattern Just# :: forall (a :: TYPE Rep). a -> Maybe# a
 pattern Just# a = Maybe# (# | a #)
 
+instance Functor (Maybe# @Rep) where
+  fmap _ Nothing# = Nothing#
+  fmap f (Just# a) = Just# (f a)
+
 instance Show a => Show (Maybe# (a :: TYPE Rep)) where
   showsPrec _ Nothing# = showString "Nothing#"
-  showsPrec d (Just# a) = showParen (d < 11) $ showString "Just# " . showsPrec d a
+  showsPrec d (Just# a) = showParen (d >= 11) $ showString "Just# " . showsPrec 11 a
   show x = shows x ""
 
 -- this instance will probably not fire without a lot of help, because that body condition is harsh
