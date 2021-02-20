@@ -82,6 +82,7 @@ library
     Unlifted.Syntax
     Unlifted.Maybe
     Unlifted.List
+    Unlifted.Rep
     Unlifted.Rep.Internal.Int
     Unlifted.Rep.Int
     Unlifted.Rep.Lifted

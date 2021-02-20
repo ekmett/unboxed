@@ -1,7 +1,15 @@
+{-# Language NoImplicitPrelude #-}
 -- | this module is going to be a maintenance nightmare
 module Unlifted.Class 
   -- TODO: export everything individually
-  ( module Unlifted.Internal.Class
+  ( Eq(..)
+  , Ord(..)
+  , Num(..)
+  , Show(..)
+  , shows
+  , Semigroup(..)
+  , Monoid(..)
+  , print, hPrint
   ) where
 
 import Unlifted.Internal.Class

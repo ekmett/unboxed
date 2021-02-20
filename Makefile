@@ -10,6 +10,9 @@ build:
 install:
 	cabal install
 
+clean:
+	cabal clean
+
 docs:
 	@RESULT=`cabal haddock $(LIBRARY) 2>/dev/null | tail -n 2`; \
 	if [[ `echo $$RESULT | head -c 22` = "Documentation created:" ]]; then \
@@ -25,7 +28,7 @@ repl:
 lint:
 	find . -name "*.hs" -print | xargs hlint
 
-.PHONY: all build docs install watch repl lint
+.PHONY: all build clean docs install watch repl lint
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)

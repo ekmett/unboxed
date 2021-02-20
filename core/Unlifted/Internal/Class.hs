@@ -22,8 +22,7 @@ module Unlifted.Internal.Class
   -- * Monoid
   , Monoid(..)
   -- * polykinded @hPrint@, @print@
-  , PrintRep(hPrint)
-  , print
+  , PrintRep(hPrint), print
   ) where
 
 import Data.Kind (Constraint)
