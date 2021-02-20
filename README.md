@@ -10,7 +10,9 @@ In addition to overloading classes, some limited data types are also offered. No
 
 The key operation to allow this is `Lev` in `Unlifted.Levitation`. It can be used to adapt _any_ `TYPE r` to `Type` in negative position, by observing that in core, any constrained type is in Type and attaching a trivial constraint.
 
-This allows `ifThenElse` to work under `RebindableSyntax` at all `TYPE r` types, despite levity polymorphism not allowing its use in negative position.
+This allows `ifThenElse` to work under `RebindableSyntax` at all `TYPE r` types, despite levity polymorphism not allowing its use in negative position, _and_ for the `if` to be appropriately lazy.
+
+If you are going to explore the library using the `ghci`, I'd recommend running ghci with `-fno-it` to keep it from trying to bing the last variable, given it can't bind unboxed variables. Running with `-interactive-print print` will use whatever defininition of `print` is in scope, and the one in `Unlifted.Prelude` is sufficiently polymorphic to work with unlifted and unboxed values.
 
 There are a lot of classes in `base` that should be ported, and many hands make for light work, so please feel free to pitch in!
 
