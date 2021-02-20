@@ -4,13 +4,13 @@ LIBRARY=$(shell basename $(PWD))
 all: build
 
 build:
-	cabal build -v0
+	@cabal build -v0
 
 install:
-	cabal install
+	@cabal install
 
 clean:
-	cabal clean
+	@cabal clean
 
 docs:
 	@RESULT=`cabal haddock $(LIBRARY) 2>/dev/null | tail -n 2`; \
@@ -19,13 +19,13 @@ docs:
 	fi    
 
 watch:
-	ghcid -p unlifted --color -c 'cabal repl unlifted --repl-options=-fno-code --repl-options=-fno-break-on-exception --repl-options=-fno-break-on-error --repl-options=-v1 --repl-options=-ferror-spans --repl-options=-j'
+	@ghcid -p unlifted --color -c 'cabal repl unlifted --repl-options=-fno-code --repl-options=-fno-break-on-exception --repl-options=-fno-break-on-error --repl-options=-v1 --repl-options=-ferror-spans --repl-options=-j'
 
 repl:
-	cabal repl unlifted --repl-options=-fno-it --repl-options=-interactive-print=print --repl-options=-fobject-code --repl-options=-v1 --repl-options=-ferror-spans --repl-options=-j
+	@cabal repl unlifted --repl-options=-fno-it --repl-options=-interactive-print=print --repl-options=-fobject-code --repl-options=-v1 --repl-options=-ferror-spans --repl-options=-j
 
 lint:
-	find . -name "*.hs" -print | xargs hlint
+	@find . -name "*.hs" -print | xargs hlint
 
 .PHONY: all build clean docs install watch repl lint
 
