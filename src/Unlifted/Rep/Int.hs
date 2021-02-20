@@ -7,8 +7,6 @@ module Unlifted.Rep.Int
   , Maybe#(Just#, Nothing#)
   ) where
 
-import Unlifted.Internal.Class
-import Unlifted.Internal.List
 import Unlifted.Internal.Maybe
 import Unlifted.Rep.Internal.Int ()
 import Def.Int

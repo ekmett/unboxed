@@ -10,6 +10,7 @@
 {-# Language RebindableSyntax #-}
 {-# Language ImportQualifiedPost #-}
 {-# Language TypeSynonymInstances #-}
+{-# Language FlexibleContexts #-}
 
 module Def where
 
@@ -17,7 +18,8 @@ import Unlifted.Internal.Class
 import Unlifted.Internal.List
 import Unlifted.Internal.Maybe
 import GHC.Types
-import Prelude (otherwise, not, (++), ShowS)
+import Prelude (otherwise, not, (++), ShowS, (.), showString, showParen,($), (&&), (||))
+import Prelude qualified
 import System.IO qualified as IO
 
 import Rep
@@ -62,9 +64,42 @@ instance ListRep Rep where
   uncons# (a :# as) = Maybe# (# | (# a, as #) #)
   uncons# Nil = Maybe# (# (##) | #)
 
+instance Eq a => Prelude.Eq (ListDef a) where
+  Nil == Nil = True
+  a :# as == b :# bs = a == b && as == bs
+  _ == _ = False
+
+  Nil /= Nil = True
+  a :# as /= b :# bs = a /= b || as /= bs
+  _ /= _ = False
+
+instance Ord a => Prelude.Ord (ListDef a) where
+  compare Nil Nil = EQ
+  compare Nil (:#){} = LT
+  compare (:#){} Nil = GT
+  compare (a:#as) (b:#bs) = compare a b <> compare as bs
+
+instance Show a => Prelude.Show (ListDef a) where
+  showsPrec _ = showList
+
 data MaybeDef (a :: TYPE Rep)
   = Nothing
   | Just a
+
+instance Eq a => Prelude.Eq (MaybeDef a) where
+  Nothing == Nothing = True
+  Just a == Just b = a == b
+  _ == _ = False
+  
+instance Ord a => Prelude.Ord (MaybeDef a) where
+  compare Nothing  Nothing = EQ
+  compare Nothing  Just{} = LT
+  compare Just{}   Nothing = GT
+  compare (Just a) (Just b) = compare a b
+
+instance Show a => Prelude.Show (MaybeDef a) where
+  showsPrec _ Nothing = showString "Nothing"
+  showsPrec d (Just a) = showParen (d < 11) $ showString "Just " . showsPrec d a
 
 instance MaybeRep Rep where
   type Maybe = MaybeDef
@@ -84,6 +119,22 @@ pattern Nothing# = Maybe# (# (##) | #)
 
 pattern Just# :: forall (a :: TYPE Rep). a -> Maybe# a
 pattern Just# a = Maybe# (# | a #)
+
+-- this instance will probably not fire without a lot of help, because that body condition is harsh
+-- TODO: split ShowList into a separate class, even if this breaks compat with base
+instance (ListRep ('SumRep '[ 'TupleRep '[], Rep ]), Show a) => Show (Maybe# (a :: TYPE Rep)) where
+  showsPrec _ Nothing# = showString "Nothing#"
+  showsPrec d (Just# a) = showParen (d < 11) $ showString "Just# " . showsPrec d a
+  show x = shows x ""
+  showList = go shows where
+    go :: forall (a :: TYPE Rep). (Maybe# a -> ShowS) -> List (Maybe# a) -> ShowS
+    go showx l s = case uncons# l of
+      Maybe# (# (##) | #) -> "[]" ++ s
+      Maybe# (# | (# x, xs #) #) -> '[' : showx x (showl xs)
+        where 
+          showl l' = case uncons# l' of
+            Maybe# (# (##) | #) -> ']' : s
+            Maybe# (# | (# y, ys #) #) -> ',' : showx y (showl ys)
 
 {-# complete Nothing#, Just# :: Maybe# #-}
 
