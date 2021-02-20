@@ -75,7 +75,8 @@ library
     unlifted:def (Def as Def.Int8) requires (Rep as Rep.Int8),
     unlifted:def (Def as Def.Float) requires (Rep as Rep.Float)
   exposed-modules:
-    Unlifted
+    Unlifted.Prelude
+
     Unlifted.Class
     Unlifted.Combinators
     Unlifted.Syntax
