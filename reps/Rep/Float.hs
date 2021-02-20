@@ -1,4 +1,4 @@
 {-# Language DataKinds #-}
-module Rep.FloatRep where
+module Rep.Float where
 import GHC.Types
 type Rep = 'FloatRep

@@ -8,31 +8,46 @@
 {-# Language BangPatterns #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
-module IntRep
-  ( module Types.IntRep
-  ) where
+-- | exposes detailed names that can be used for RULES
+module Unlifted.Rep.Internal.Int where
 
+import Unlifted.Internal.Class
 import GHC.Prim
 import GHC.Integer
 import GHC.Types
-import GHC.Enum qualified as G
 import Prelude (otherwise)
 
-import Types.IntRep
+import Def.Int ()
+
+eqInt, neInt, ltInt, leInt, gtInt, geInt :: Int# -> Int# -> Bool
+eqInt x y = isTrue# (x ==# y)
+{-# INLINE [1] eqInt #-}
+neInt x y = isTrue# (x /=# y)
+{-# INLINE [1] neInt #-}
+ltInt x y = isTrue# (x <# y)
+{-# INLINE [1] ltInt #-}
+gtInt x y = isTrue# (x ># y)
+{-# INLINE [1] gtInt #-}
+leInt x y = isTrue# (x <=# y)
+{-# INLINE [1] leInt #-}
+geInt x y = isTrue# (x >=# y)
+{-# INLINE [1] geInt #-}
 
 instance Eq Int# where
-  x == y = isTrue# (x ==# y)
-  x /= y = isTrue# (x /=# y)
+  (==) = eqInt
+  (/=) = neInt
 
 instance Ord Int# where
-  x <= y = isTrue# (x <=# y)
-  x >= y = isTrue# (x >=# y)
-  x < y = isTrue# (x <# y)
-  x > y = isTrue# (x ># y)
+  (<=) = leInt
+  (>=) = geInt
+  (<) = ltInt
+  (>) = gtInt
 
+{-
 instance Bounded Int# where
-  minBound = i where !(I# i) = G.minBound
-  maxBound = i where !(I# i) = G.maxBound
+  minBound = case P.minBound of I# i -> i
+  maxBound = case P.maxBound of I# i -> i
+-}
 
 instance Num Int# where
   (+) = (+#)

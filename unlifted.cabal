@@ -37,39 +37,57 @@ common base
   ghc-options:
     -Wno-simplifiable-class-constraints -Wno-orphans
 
-library common
+library core
   import: base
-  hs-source-dirs: common
+  hs-source-dirs: core
   exposed-modules:
-    Common
+    Unlifted.Levitation
+    Unlifted.Internal.Class
+    Unlifted.Internal.Combinators
+    Unlifted.Internal.List
+    Unlifted.Internal.Maybe
+    Unlifted.Internal.Syntax
 
-library types
+-- DEFaults and DEFinitions
+library def
   import: base
-  build-depends: unlifted:{common}
-  hs-source-dirs: types
+  build-depends: unlifted:{core}
+  hs-source-dirs: def
   signatures: Rep
-  exposed-modules: Types
+  exposed-modules: Def
 
 library reps
   import: base
   hs-source-dirs: reps
   exposed-modules:
-    Rep.FloatRep,
-    Rep.IntRep,
-    Rep.Int8Rep,
-    Rep.WordRep
+    Rep.Float
+    Rep.Int
+    Rep.Int8
+    Rep.Word
 
 library
   import: base
-  build-depends: unlifted:{types, reps}
+  build-depends: unlifted:{def, core, reps}
   hs-source-dirs: src
   mixins:
-    unlifted:types (Types as Types.IntRep) requires (Rep as Rep.IntRep),
-    unlifted:types (Types as Types.Int8Rep) requires (Rep as Rep.Int8Rep),
-    unlifted:types (Types as Types.FloatRep) requires (Rep as Rep.FloatRep),
-    unlifted:types (Types as Types.WordRep) requires (Rep as Rep.WordRep)
+    unlifted:def (Def as Def.Int) requires (Rep as Rep.Int),
+    unlifted:def (Def as Def.Word) requires (Rep as Rep.Word),
+    unlifted:def (Def as Def.Int8) requires (Rep as Rep.Int8),
+    unlifted:def (Def as Def.Float) requires (Rep as Rep.Float)
   exposed-modules:
-    FloatRep,
-    IntRep,
-    Int8Rep,
-    WordRep
+    Unlifted
+    Unlifted.Class
+    Unlifted.Combinators
+    Unlifted.Syntax
+    Unlifted.Maybe
+    Unlifted.List
+    Unlifted.Rep.Internal.Int
+    Unlifted.Rep.Int
+    Unlifted.Rep.Lifted
+  -- Unlifted.Rep.Unlifted
+  -- Unlifted.Rep.Int8
+  -- Unlifted.Rep.Float
+  -- Unlifted.Rep.Word
+  reexported-modules:
+    Unlifted.Levitation
+    
