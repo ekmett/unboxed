@@ -17,7 +17,7 @@ import GHC.Integer
 import GHC.Types
 import Prelude qualified
 
-import Def.Word ()
+import WordDef ()
 
 eqWord, neWord, ltWord, leWord, gtWord, geWord :: Word# -> Word# -> Bool
 eqWord x y = isTrue# (eqWord# x y)

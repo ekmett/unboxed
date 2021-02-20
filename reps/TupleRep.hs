@@ -1,4 +1,4 @@
 {-# Language DataKinds #-}
-module Rep.Tuple where
+module TupleRep where
 import GHC.Types
 type Rep = 'TupleRep '[]

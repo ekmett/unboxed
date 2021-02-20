@@ -19,7 +19,7 @@ import Unlifted.Internal.Maybe
 import GHC.Prim
 import GHC.Types
 
-import Def.Unlifted
+import UnliftedDef
 
 instance Eq (MutableArray# s a) where
   x == y = isTrue# (sameMutableArray# x y)

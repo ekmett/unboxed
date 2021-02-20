@@ -12,6 +12,7 @@
 {-# Language ImportQualifiedPost #-}
 {-# Language TypeSynonymInstances #-}
 {-# Language FlexibleContexts #-}
+{-# Language FlexibleInstances #-}
 
 module Def where
 

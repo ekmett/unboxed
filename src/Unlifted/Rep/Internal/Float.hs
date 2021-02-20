@@ -17,8 +17,7 @@ import GHC.Integer
 import GHC.Types
 import Prelude (otherwise)
 
-
-import Def.Float ()
+import FloatDef ()
 
 eqFloat, neFloat, ltFloat, leFloat, gtFloat, geFloat :: Float# -> Float# -> Bool
 eqFloat x y = isTrue# (eqFloat# x y)

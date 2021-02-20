@@ -9,4 +9,4 @@ module Unlifted.Rep.Double
 
 import Unlifted.Internal.Maybe
 import Unlifted.Rep.Internal.Double ()
-import Def.Double
+import DoubleDef

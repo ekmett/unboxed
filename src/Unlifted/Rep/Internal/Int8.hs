@@ -18,7 +18,7 @@ import GHC.Integer
 import GHC.Types
 import Prelude (otherwise)
 
-import Def.Int8 ()
+import Int8Def ()
 
 eqInt8, neInt8, ltInt8, leInt8, gtInt8, geInt8 :: Int8# -> Int8# -> Bool
 eqInt8 x y = isTrue# (extendInt8# x ==# extendInt8# y)

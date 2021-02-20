@@ -1,4 +1,4 @@
 {-# Language DataKinds #-}
-module Rep.Float where
+module Int8Rep where
 import GHC.Types
-type Rep = 'FloatRep
+type Rep = 'Int8Rep

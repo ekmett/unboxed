@@ -9,4 +9,4 @@ module Unlifted.Rep.Int
 
 import Unlifted.Internal.Maybe
 import Unlifted.Rep.Internal.Int ()
-import Def.Int
+import IntDef

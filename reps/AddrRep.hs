@@ -1,4 +1,4 @@
 {-# Language DataKinds #-}
-module Rep.Int8 where
+module AddrRep where
 import GHC.Types
-type Rep = 'Int8Rep
+type Rep = 'AddrRep

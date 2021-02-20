@@ -9,4 +9,4 @@ module Unlifted.Rep.Word
 
 import Unlifted.Internal.Maybe
 import Unlifted.Rep.Internal.Word ()
-import Def.Word
+import WordDef

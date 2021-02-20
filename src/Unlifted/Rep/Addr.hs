@@ -19,7 +19,7 @@ import Unlifted.Internal.Maybe
 import GHC.Prim
 import GHC.Types
 
-import Def.Addr
+import AddrDef
 
 eqAddr, neAddr, ltAddr, leAddr, gtAddr, geAddr :: Addr# -> Addr# -> Bool
 eqAddr x y = isTrue# (eqAddr# x y)

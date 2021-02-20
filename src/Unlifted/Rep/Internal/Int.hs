@@ -18,7 +18,7 @@ import GHC.Types
 import Prelude (otherwise)
 import Prelude qualified
 
-import Def.Int ()
+import IntDef ()
 
 eqInt, neInt, ltInt, leInt, gtInt, geInt :: Int# -> Int# -> Bool
 eqInt x y = isTrue# (x ==# y)

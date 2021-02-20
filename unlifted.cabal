@@ -60,34 +60,34 @@ library reps
   import: base
   hs-source-dirs: reps
   exposed-modules:
-    Rep.Addr
-    Rep.Double
-    Rep.Float
-    Rep.Int
-    Rep.Int8
-    Rep.Int16
-    Rep.Int32
-    Rep.Int64
-    Rep.Word
-    Rep.Word8
-    Rep.Word16
-    Rep.Word32
-    Rep.Word64
-    Rep.Unlifted
-    Rep.Tuple
+    AddrRep
+    DoubleRep FloatRep
+    IntRep Int8Rep Int16Rep Int32Rep Int64Rep
+    LiftedRep
+    TupleRep
+    UnliftedRep
+    WordRep Word8Rep Word16Rep Word32Rep Word64Rep
 
 library
   import: base
   build-depends: unlifted:{def, core, reps}
   hs-source-dirs: src
   mixins:
-    unlifted:def (Def as Def.Addr) requires (Rep as Rep.Addr),
-    unlifted:def (Def as Def.Double) requires (Rep as Rep.Double),
-    unlifted:def (Def as Def.Float) requires (Rep as Rep.Float),
-    unlifted:def (Def as Def.Int) requires (Rep as Rep.Int),
-    unlifted:def (Def as Def.Int8) requires (Rep as Rep.Int8),
-    unlifted:def (Def as Def.Unlifted) requires (Rep as Rep.Unlifted),
-    unlifted:def (Def as Def.Word) requires (Rep as Rep.Word)
+    unlifted:def (Def as AddrDef)     requires (Rep as AddrRep),
+    unlifted:def (Def as DoubleDef)   requires (Rep as DoubleRep),
+    unlifted:def (Def as FloatDef)    requires (Rep as FloatRep),
+    unlifted:def (Def as IntDef)      requires (Rep as IntRep),
+    unlifted:def (Def as Int8Def)     requires (Rep as Int8Rep),
+    unlifted:def (Def as Int16Def)    requires (Rep as Int16Rep),
+    unlifted:def (Def as Int32Def)    requires (Rep as Int32Rep),
+    unlifted:def (Def as Int64Def)    requires (Rep as Int64Rep),
+    unlifted:def (Def as TupleDef)    requires (Rep as TupleRep),
+    unlifted:def (Def as UnliftedDef) requires (Rep as UnliftedRep),
+    unlifted:def (Def as WordDef)     requires (Rep as WordRep),
+    unlifted:def (Def as Word8Def)    requires (Rep as Word8Rep),
+    unlifted:def (Def as Word16Def)   requires (Rep as Word16Rep),
+    unlifted:def (Def as Word32Def)   requires (Rep as Word32Rep),
+    unlifted:def (Def as Word64Def)   requires (Rep as Word64Rep)
   exposed-modules:
     Unlifted.Prelude
     Unlifted.Class

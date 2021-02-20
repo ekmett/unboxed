@@ -9,4 +9,4 @@ module Unlifted.Rep.Tuple
 
 import Unlifted.Internal.Maybe
 import Unlifted.Rep.Internal.Tuple ()
-import Def.Tuple
+import TupleDef

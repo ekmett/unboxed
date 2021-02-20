@@ -17,7 +17,7 @@ import GHC.Integer
 import GHC.Types
 import Prelude (otherwise)
 
-import Def.Double ()
+import DoubleDef ()
 
 eqDouble, neDouble, ltDouble, leDouble, gtDouble, geDouble :: Double# -> Double# -> Bool
 eqDouble x y = isTrue# (x ==## y)

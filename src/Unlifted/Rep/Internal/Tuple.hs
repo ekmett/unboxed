@@ -16,7 +16,7 @@ import GHC.Integer
 import GHC.Types
 import Prelude qualified
 
-import Def.Tuple ()
+import TupleDef ()
 
 instance Eq (# #) where
   _ == _  = True

@@ -9,4 +9,4 @@ module Unlifted.Rep.Float
 
 import Unlifted.Internal.Maybe
 import Unlifted.Rep.Internal.Float ()
-import Def.Float
+import FloatDef
