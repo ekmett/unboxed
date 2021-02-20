@@ -2,7 +2,7 @@ cabal-version: 3.4
 name: unlifted
 version: 0
 synopsis: unlifted classes
-description: unlifted classes
+description: unlifted classes.
 homepage: https://github.com/ekmett/haskell
 license: BSD-2-Clause OR Apache-2.0
 license-file: LICENSE.md
