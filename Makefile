@@ -1,11 +1,10 @@
 PWD=$(shell pwd)
 LIBRARY=$(shell basename $(PWD))
 
-all:
-	build
+all: build
 
 build:
-	cabal build
+	cabal build -v0
 
 install:
 	cabal install
