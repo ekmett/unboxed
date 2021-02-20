@@ -4,7 +4,6 @@
 {-# Language KindSignatures #-}
 {-# Language DataKinds #-}
 {-# Language TypeSynonymInstances #-}
-{-# Language ImportQualifiedPost #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module Unlifted.Rep.Unlifted

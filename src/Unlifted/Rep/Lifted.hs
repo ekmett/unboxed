@@ -1,5 +1,4 @@
 {-# Language UnboxedSums #-}
-{-# Language UnboxedTuples #-}
 {-# Language KindSignatures #-}
 {-# Language PatternSynonyms #-}
 {-# Language MagicHash #-}

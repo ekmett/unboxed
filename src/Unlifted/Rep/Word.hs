@@ -1,6 +1,5 @@
 {-# Language MagicHash #-}
 {-# Language NoImplicitPrelude #-}
-{-# Language PatternSynonyms #-}
 module Unlifted.Rep.Word
   ( ListDef(Nil, (:#))
   , MaybeDef(Just, Nothing)

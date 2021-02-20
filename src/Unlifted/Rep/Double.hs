@@ -1,6 +1,5 @@
 {-# Language MagicHash #-}
 {-# Language NoImplicitPrelude #-}
-{-# Language PatternSynonyms #-}
 module Unlifted.Rep.Double
   ( ListDef(Nil, (:#))
   , MaybeDef(Just, Nothing)
