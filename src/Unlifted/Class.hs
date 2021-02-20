@@ -6,6 +6,9 @@ module Unlifted.Class
   , Bounded(..)
   , Num(..)
   , Fractional(..)
+  , Real(..)
+  , Enum(..)
+  , Integral(..)
   , Show(..), ShowList(..), shows
   , Semigroup(..)
   , Monoid(..)

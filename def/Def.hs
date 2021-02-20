@@ -3,6 +3,7 @@
 {-# Language UnboxedTuples #-}
 {-# Language TypeFamilies #-}
 {-# Language PolyKinds #-}
+{-# Language BangPatterns #-}
 {-# Language DataKinds #-}
 {-# Language PatternSynonyms #-}
 {-# Language RankNTypes #-}
@@ -58,6 +59,26 @@ instance FractionalRep Rep where
 
 instance RealRep Rep where
   realToFracDef x = fromRational (toRational x)
+
+instance EnumRep Rep where
+{-
+  enumFromDef x             = map toEnum [fromEnum x ..]
+  enumFromThenDef x y       = map toEnum [fromEnum x, fromEnum y ..]
+  enumFromToDef x y         = map toEnum [fromEnum x .. fromEnum y]
+  enumFromThenToDef x1 x2 y = map toEnum [fromEnum x1, fromEnum x2 .. fromEnum y]
+-}
+  succDef x = toEnum (fromEnum x + 1)
+  predDef x = toEnum (fromEnum x - 1)
+
+instance IntegralRep Rep where
+  n `quotDef` d          =  q  where !(# q, _ #) = quotRem n d
+  n `remDef` d           =  r  where !(# _, r #) = quotRem n d
+  n `divDef` d           =  q  where !(# q, _ #) = divMod n d
+  n `modDef` d           =  r  where !(# _, r #) = divMod n d
+  divModDef n d
+    | signum r == negate (signum d) = (# q - 1, r + d #)
+    | otherwise = qr
+    where !qr@(# q, r #) = quotRem n d
 
 data ListDef (a :: TYPE Rep)
   = Nil
