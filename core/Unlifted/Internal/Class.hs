@@ -15,6 +15,7 @@ module Unlifted.Internal.Class
   ( Eq(..), EqRep(..)
   , Ord(..), OrdRep(..)
   , Num(..), NumRep(..)
+  , Fractional(..), FractionalRep(..)
   , Bounded(..)
   -- , Enum(..)
   -- * Show
@@ -30,6 +31,7 @@ module Unlifted.Internal.Class
   ) where
 
 import Data.Kind (Constraint)
+import Data.Ratio (Rational)
 import GHC.Integer
 import GHC.Prim
 import GHC.Types (Type, RuntimeRep(..))
@@ -180,6 +182,28 @@ instance Prelude.Num a => Num (a :: Type) where
 class NumRep (r :: RuntimeRep) where
   negateDef :: forall (a :: TYPE r). Num a => a -> a
   minusDef :: forall (a :: TYPE r). Num a => a -> a -> a
+
+class Num a => Fractional (a :: TYPE r) where
+  (/) :: a -> a -> a
+  recip :: a -> a
+  fromRational :: Rational -> a
+
+  default (/) :: FractionalRep r => a -> a -> a
+  (/) = fractionalDef
+
+  default recip :: FractionalRep r => a -> a
+  recip = recipDef
+
+  {-# MINIMAL fromRational, (recip | (/)) #-}
+
+class FractionalRep (r :: RuntimeRep) where
+  fractionalDef :: forall (a :: TYPE r). Fractional a => a -> a -> a
+  recipDef :: forall (a :: TYPE r). Fractional a => a -> a
+
+instance Prelude.Fractional a => Fractional (a :: Type) where
+  (/) = (Prelude./)
+  recip = Prelude.recip
+  fromRational = Prelude.fromRational
 
 -- ** Semigroup
 

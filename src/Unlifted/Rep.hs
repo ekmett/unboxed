@@ -2,6 +2,7 @@ module Unlifted.Rep
   ( EqRep(..)
   , OrdRep(..)
   , NumRep(..)
+  , FractionalRep(..)
   , ShowRep(..)
   , ShowListRep(..)
   , PrintRep(..)

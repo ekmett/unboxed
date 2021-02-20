@@ -52,6 +52,10 @@ instance NumRep Rep where
   negateDef a = 0 - a
   minusDef a b = a + negate b
 
+instance FractionalRep Rep where
+  fractionalDef x y = x * recip y
+  recipDef x = 1 / x
+
 data ListDef (a :: TYPE Rep)
   = Nil
   | a :# ListDef a

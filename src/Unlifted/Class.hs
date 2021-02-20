@@ -5,6 +5,7 @@ module Unlifted.Class
   , Ord(..)
   , Bounded(..)
   , Num(..)
+  , Fractional(..)
   , Show(..), ShowList(..), shows
   , Semigroup(..)
   , Monoid(..)
