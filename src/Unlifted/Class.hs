@@ -5,6 +5,7 @@ module Unlifted.Class
   -- TODO: export everything individually
   ( Eq(..)
   , Ord(..)
+  , Bounded(..)
   , Num(..)
   , Show(..), ShowList(..), shows
   , Semigroup(..)

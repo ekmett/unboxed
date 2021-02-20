@@ -15,6 +15,7 @@ import Unlifted.Internal.Class
 import GHC.Prim
 import GHC.Integer
 import GHC.Types
+import Prelude qualified
 
 import Def.Word ()
 
@@ -42,11 +43,9 @@ instance Ord Word# where
   (<) = ltWord
   (>) = gtWord
 
-{-
 instance Bounded Word# where
-  minBound = case P.minBound of I# i -> i
-  maxBound = case P.maxBound of I# i -> i
--}
+  minBound = case Prelude.minBound of W# i -> i
+  maxBound = case Prelude.maxBound of W# i -> i
 
 instance Num Word# where
   (+) = plusWord#
@@ -88,8 +87,6 @@ instance Ord Char# where
   (<) = ltChar
   (>) = gtChar
 
-{-
 instance Bounded Char# where
   minBound = '\0'#
   maxBound = '\x10FFFF'#
--}

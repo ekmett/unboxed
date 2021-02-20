@@ -16,6 +16,7 @@ import GHC.Prim
 import GHC.Integer
 import GHC.Types
 import Prelude (otherwise)
+import Prelude qualified
 
 import Def.Int ()
 
@@ -43,11 +44,9 @@ instance Ord Int# where
   (<) = ltInt
   (>) = gtInt
 
-{-
 instance Bounded Int# where
-  minBound = case P.minBound of I# i -> i
-  maxBound = case P.maxBound of I# i -> i
--}
+  minBound = case Prelude.minBound of I# i -> i
+  maxBound = case Prelude.maxBound of I# i -> i
 
 instance Num Int# where
   (+) = (+#)

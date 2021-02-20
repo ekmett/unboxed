@@ -15,6 +15,7 @@ module Unlifted.Internal.Class
   ( Eq(..), EqRep(..)
   , Ord(..), OrdRep(..)
   , Num(..), NumRep(..)
+  , Bounded(..)
   -- * Show
   , Show(..), ShowList(..), ShowRep(..), ShowListRep(..), shows
   -- * Semigroup
@@ -138,6 +139,15 @@ class OrdRep (r :: RuntimeRep) where
   compareDef :: forall (a :: TYPE r). Ord a => a -> a -> Ordering
   ltDef, leDef, geDef, gtDef :: forall (a :: TYPE r). Ord a => a -> a -> Bool
   maxDef, minDef :: forall (a :: TYPE r). Ord a => a -> a -> a
+
+-- ** Bounded
+
+class Bounded (a :: TYPE r) where
+  minBound, maxBound :: Lev a
+
+instance Prelude.Bounded a => Bounded (a :: Type) where
+  minBound = Prelude.minBound
+  maxBound = Prelude.maxBound
 
 -- ** Num
 
