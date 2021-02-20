@@ -16,6 +16,7 @@ module Unlifted.Internal.Class
   , Ord(..), OrdRep(..)
   , Num(..), NumRep(..)
   , Bounded(..)
+  -- , Enum(..)
   -- * Show
   , Show(..), ShowList(..), ShowRep(..), ShowListRep(..), shows
   -- * Semigroup
