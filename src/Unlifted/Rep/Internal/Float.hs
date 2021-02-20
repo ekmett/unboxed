@@ -22,29 +22,29 @@ import Unlifted.Internal.Class
 
 import FloatDef ()
 
-eqFloat_, neFloat_, ltFloat_, leFloat_, gtFloat_, geFloat_ :: Float# -> Float# -> Bool
-eqFloat_ x y = isTrue# (eqFloat# x y)
-{-# INLINE [1] eqFloat_ #-}
-neFloat_ x y = isTrue# (neFloat# x y)
-{-# INLINE [1] neFloat_ #-}
-ltFloat_ x y = isTrue# (ltFloat# x y)
-{-# INLINE [1] ltFloat_ #-}
-gtFloat_ x y = isTrue# (gtFloat# x y)
-{-# INLINE [1] gtFloat_ #-}
-leFloat_ x y = isTrue# (leFloat# x y)
-{-# INLINE [1] leFloat_ #-}
-geFloat_ x y = isTrue# (geFloat# x y)
-{-# INLINE [1] geFloat_ #-}
+eqFloat, neFloat, ltFloat, leFloat, gtFloat, geFloat :: Float# -> Float# -> Bool
+eqFloat x y = isTrue# (eqFloat# x y)
+{-# INLINE [1] eqFloat #-}
+neFloat x y = isTrue# (neFloat# x y)
+{-# INLINE [1] neFloat #-}
+ltFloat x y = isTrue# (ltFloat# x y)
+{-# INLINE [1] ltFloat #-}
+gtFloat x y = isTrue# (gtFloat# x y)
+{-# INLINE [1] gtFloat #-}
+leFloat x y = isTrue# (leFloat# x y)
+{-# INLINE [1] leFloat #-}
+geFloat x y = isTrue# (geFloat# x y)
+{-# INLINE [1] geFloat #-}
 
 instance Eq Float# where
-  (==) = eqFloat_
-  (/=) = neFloat_
+  (==) = eqFloat
+  (/=) = neFloat
 
 instance Ord Float# where
-  (<=) = leFloat_
-  (>=) = geFloat_
-  (<) = ltFloat_
-  (>) = gtFloat_
+  (<=) = leFloat
+  (>=) = geFloat
+  (<) = ltFloat
+  (>) = gtFloat
 
 instance Num Float# where
   (+) = plusFloat#
