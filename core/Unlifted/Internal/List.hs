@@ -6,6 +6,7 @@
 {-# Language PolyKinds #-}
 {-# Language TypeFamilies #-}
 {-# Language RankNTypes #-}
+{-# OPTIONS_HADDOCK not-home #-}
 
 -- | Other 'ListRep' instances are defined via backpack
 module Unlifted.Internal.List 

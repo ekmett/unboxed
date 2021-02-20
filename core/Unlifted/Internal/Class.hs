@@ -9,6 +9,7 @@
 {-# Language RankNTypes #-}
 {-# Language ImportQualifiedPost #-}
 {-# Language UnboxedSums #-}
+{-# OPTIONS_HADDOCK not-home #-}
 
 module Unlifted.Internal.Class 
   ( Eq(..), EqRep(..)

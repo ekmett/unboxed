@@ -12,8 +12,8 @@ install:
 
 docs:
 	@RESULT=`cabal haddock $(LIBRARY) 2>/dev/null | tail -n 2`; \
-	if [[ `echo $$RESULT | head -c 22` = "Documentation created:" ]]; then \    
-		$(OPEN) `echo $$RESULT | tail -c +23`; \    
+	if [[ `echo $$RESULT | head -c 22` = "Documentation created:" ]]; then \
+		$(OPEN) `echo $$RESULT | tail -c +23`; \
 	fi    
 
 watch:

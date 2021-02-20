@@ -3,6 +3,7 @@
 {-# Language PolyKinds #-}
 {-# Language TypeFamilies #-}
 {-# Language RankNTypes #-}
+{-# OPTIONS_HADDOCK not-home #-}
 
 module Unlifted.Internal.Syntax where
 
