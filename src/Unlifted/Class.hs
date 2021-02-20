@@ -1,6 +1,4 @@
 {-# Language NoImplicitPrelude #-}
--- | Most of the instances are supplied by "Def"
--- 
 module Unlifted.Class 
   -- TODO: export everything individually
   ( Eq(..)
