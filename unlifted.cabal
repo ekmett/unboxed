@@ -61,6 +61,7 @@ library reps
   hs-source-dirs: reps
   exposed-modules:
     Rep.Addr
+    Rep.Double
     Rep.Float
     Rep.Int
     Rep.Int8
@@ -73,6 +74,7 @@ library
   hs-source-dirs: src
   mixins:
     unlifted:def (Def as Def.Addr) requires (Rep as Rep.Addr),
+    unlifted:def (Def as Def.Double) requires (Rep as Rep.Double),
     unlifted:def (Def as Def.Float) requires (Rep as Rep.Float),
     unlifted:def (Def as Def.Int) requires (Rep as Rep.Int),
     unlifted:def (Def as Def.Int8) requires (Rep as Rep.Int8),
@@ -80,18 +82,19 @@ library
     unlifted:def (Def as Def.Word) requires (Rep as Rep.Word)
   exposed-modules:
     Unlifted.Prelude
-
     Unlifted.Class
     Unlifted.Combinators
     Unlifted.Syntax
     Unlifted.Maybe
     Unlifted.List
     Unlifted.Rep
+    Unlifted.Rep.Internal.Double
     Unlifted.Rep.Internal.Float
     Unlifted.Rep.Internal.Int
     Unlifted.Rep.Internal.Int8
     Unlifted.Rep.Internal.Word
     Unlifted.Rep.Addr
+    Unlifted.Rep.Double
     Unlifted.Rep.Float
     Unlifted.Rep.Int
     Unlifted.Rep.Int8
