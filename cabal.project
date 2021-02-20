@@ -1,1 +1,3 @@
 packages: .
+
+allow-newer: ghc-lib-parser:base, polyparse:base

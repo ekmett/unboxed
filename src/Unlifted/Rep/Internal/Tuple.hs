@@ -17,25 +17,25 @@ import Prelude qualified
 
 import TupleDef ()
 
-instance Eq (# #) where
+instance Eq (##) where
   _ == _  = True
   _ /= _  = False
   
-instance Ord (# #) where
+instance Ord (##) where
   _ <= _ = True
   _ >= _ = True
   _ < _ = False
   _ > _ = False
   compare _ _ = Eq
-  min _ _ = (# #) 
-  max _ _ = (# #)
+  min _ _ = (##) 
+  max _ _ = (##)
 
-instance Bounded (# #) where
-  minBound = (# #) 
-  maxBound = (# #)
+instance Bounded (##) where
+  minBound = (##) 
+  maxBound = (##)
 
-instance Show (# #) where
-  showsPrec _ _ = showString "(# #)"
+instance Show (##) where
+  showsPrec _ _ = showString "(##)"
 
 instance Eq (Proxy# a) where
   _ == _  = True

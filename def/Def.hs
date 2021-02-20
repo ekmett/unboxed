@@ -2,15 +2,14 @@
 {-# Language UnboxedSums #-}
 {-# Language UnboxedTuples #-}
 {-# Language TypeFamilies #-}
-{-# Language TypeApplications #-}
 {-# Language PolyKinds #-}
 {-# Language DataKinds #-}
 {-# Language PatternSynonyms #-}
 {-# Language RankNTypes #-}
 {-# Language NoImplicitPrelude #-}
+{-# Language TypeApplications #-}
 {-# Language RebindableSyntax #-}
 {-# Language ImportQualifiedPost #-}
-{-# Language TypeSynonymInstances #-}
 {-# Language FlexibleContexts #-}
 {-# Language FlexibleInstances #-}
 
