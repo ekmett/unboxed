@@ -1,5 +1,4 @@
 {-# Language DataKinds #-}
-{-# Language KindSignatures #-}
 {-# Language NoImplicitPrelude #-}
 {-# Language PolyKinds #-}
 {-# Language TypeFamilies #-}

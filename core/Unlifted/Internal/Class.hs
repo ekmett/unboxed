@@ -1,10 +1,7 @@
 {-# Language DataKinds #-}
-{-# Language KindSignatures #-}
-{-# Language MagicHash #-}
 {-# Language FlexibleInstances #-}
 {-# Language NoImplicitPrelude #-}
 {-# Language RebindableSyntax #-}
-{-# Language TypeApplications #-}
 {-# Language StandaloneKindSignatures #-}
 {-# Language PolyKinds #-}
 {-# Language TypeFamilies #-}
@@ -12,9 +9,6 @@
 {-# Language RankNTypes #-}
 {-# Language ImportQualifiedPost #-}
 {-# Language UnboxedSums #-}
-{-# Language UnboxedTuples #-}
-{-# Language PatternSynonyms #-}
-{-# Language ViewPatterns #-}
 
 module Unlifted.Internal.Class 
   ( Eq(..), EqRep(..)
