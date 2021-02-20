@@ -60,20 +60,24 @@ library reps
   import: base
   hs-source-dirs: reps
   exposed-modules:
+    Rep.Addr
     Rep.Float
     Rep.Int
     Rep.Int8
     Rep.Word
+    Rep.Unlifted
 
 library
   import: base
   build-depends: unlifted:{def, core, reps}
   hs-source-dirs: src
   mixins:
+    unlifted:def (Def as Def.Addr) requires (Rep as Rep.Addr),
+    unlifted:def (Def as Def.Float) requires (Rep as Rep.Float),
     unlifted:def (Def as Def.Int) requires (Rep as Rep.Int),
-    unlifted:def (Def as Def.Word) requires (Rep as Rep.Word),
     unlifted:def (Def as Def.Int8) requires (Rep as Rep.Int8),
-    unlifted:def (Def as Def.Float) requires (Rep as Rep.Float)
+    unlifted:def (Def as Def.Unlifted) requires (Rep as Rep.Unlifted),
+    unlifted:def (Def as Def.Word) requires (Rep as Rep.Word)
   exposed-modules:
     Unlifted.Prelude
 
@@ -85,13 +89,15 @@ library
     Unlifted.Rep
     Unlifted.Rep.Internal.Float
     Unlifted.Rep.Internal.Int
+    Unlifted.Rep.Internal.Int8
     Unlifted.Rep.Internal.Word
+    Unlifted.Rep.Addr
     Unlifted.Rep.Float
     Unlifted.Rep.Int
+    Unlifted.Rep.Int8
     Unlifted.Rep.Lifted
+    Unlifted.Rep.Unlifted
     Unlifted.Rep.Word
-  -- Unlifted.Rep.Unlifted
-  -- Unlifted.Rep.Int8
   reexported-modules:
     Unlifted.Levitation
     
