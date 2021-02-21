@@ -6,7 +6,7 @@
 {-# Language TypeSynonymInstances #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
-module Unlifted.Rep.Unlifted
+module Unlifted.Rep.U
   ( ListDef(Nil, (:#))
   , MaybeDef(Just, Nothing)
   , Maybe#(Just#, Nothing#)
@@ -17,7 +17,7 @@ import Unlifted.Internal.Maybe
 import GHC.Prim
 import GHC.Types
 
-import UnliftedDef
+import U
 
 instance Eq (MutableArray# s a) where
   x == y = isTrue# (sameMutableArray# x y)

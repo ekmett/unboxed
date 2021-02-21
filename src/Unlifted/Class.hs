@@ -20,7 +20,12 @@ module Unlifted.Class
   ) where
 
 import Unlifted.Internal.Class
--- instances
-import Unlifted.Rep.Lifted () 
-import Unlifted.Rep.Int ()
-import Unlifted.Rep.Word ()
+-- official gathering point of instances
+import Unlifted.Rep.A ()
+import Unlifted.Rep.D ()
+import Unlifted.Rep.F ()
+import Unlifted.Rep.I ()
+import Unlifted.Rep.I8 ()
+import Unlifted.Rep.L ()
+import Unlifted.Rep.U ()
+import Unlifted.Rep.W ()

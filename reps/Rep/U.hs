@@ -1,4 +1,4 @@
 {-# Language DataKinds #-}
-module Int16Rep where
+module Rep.U where
 import GHC.Types
-type Rep = 'Int16Rep
+type Rep = 'UnliftedRep

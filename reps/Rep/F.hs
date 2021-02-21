@@ -1,4 +1,4 @@
 {-# Language DataKinds #-}
-module AddrRep where
+module Rep.F where
 import GHC.Types
-type Rep = 'AddrRep
+type Rep = 'FloatRep

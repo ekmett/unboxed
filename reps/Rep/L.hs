@@ -1,4 +1,4 @@
 {-# Language DataKinds #-}
-module LiftedRep where
+module Rep.L where
 import GHC.Types
 type Rep = 'LiftedRep

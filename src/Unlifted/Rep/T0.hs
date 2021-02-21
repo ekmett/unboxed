@@ -7,7 +7,11 @@
 {-# Language ImportQualifiedPost #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
-module Unlifted.Rep.Internal.Tuple where
+module Unlifted.Rep.T0
+  ( ListDef(Nil, (:#))
+  , MaybeDef(Just, Nothing)
+  , Maybe#(Just#, Nothing#)
+  ) where
 
 import Unlifted.Internal.Class
 import GHC.Prim
@@ -15,7 +19,7 @@ import GHC.Integer
 import GHC.Types
 import Prelude qualified
 
-import TupleDef ()
+import T0
 
 instance Eq (##) where
   _ == _  = True

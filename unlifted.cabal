@@ -61,34 +61,37 @@ library reps
   import: base
   hs-source-dirs: reps
   exposed-modules:
-    AddrRep
-    DoubleRep FloatRep
-    IntRep Int8Rep Int16Rep Int32Rep Int64Rep
-    LiftedRep
-    TupleRep
-    UnliftedRep
-    WordRep Word8Rep Word16Rep Word32Rep Word64Rep
+    Rep.A Rep.D Rep.F
+    Rep.I Rep.I8 Rep.I16 Rep.I32 Rep.I64
+    Rep.L Rep.U
+    Rep.W Rep.W8 Rep.W16 Rep.W32 Rep.W64
+    Nil
+
+library defs
+  import: base
+  build-depends: unlifted:{def, core, reps}
+  mixins:
+    unlifted:def (Def as A) requires (Rep as Rep.A),
+    unlifted:def (Def as D) requires (Rep as Rep.D),
+    unlifted:def (Def as F) requires (Rep as Rep.F),
+    unlifted:def (Def as I) requires (Rep as Rep.I),
+    unlifted:def (Def as I8) requires (Rep as Rep.I8),
+    unlifted:def (Def as I16) requires (Rep as Rep.I16),
+    unlifted:def (Def as I32) requires (Rep as Rep.I32),
+    unlifted:def (Def as I64) requires (Rep as Rep.I64),
+    unlifted:def (Def as U) requires (Rep as Rep.U),
+    unlifted:def (Def as W) requires (Rep as Rep.W),
+    unlifted:def (Def as W8) requires (Rep as Rep.W8),
+    unlifted:def (Def as W16) requires (Rep as Rep.W16),
+    unlifted:def (Def as W32) requires (Rep as Rep.W32),
+    unlifted:def (Def as W64) requires (Rep as Rep.W64)
+  reexported-modules:
+    A, D, F, I, I8, I16, I32, I64, U, W, W8, W16, W32, W64
 
 library
   import: base
-  build-depends: unlifted:{def, core, reps}
+  build-depends: unlifted:{defs, core}
   hs-source-dirs: src
-  mixins:
-    unlifted:def (Def as AddrDef)     requires (Rep as AddrRep),
-    unlifted:def (Def as DoubleDef)   requires (Rep as DoubleRep),
-    unlifted:def (Def as FloatDef)    requires (Rep as FloatRep),
-    unlifted:def (Def as IntDef)      requires (Rep as IntRep),
-    unlifted:def (Def as Int8Def)     requires (Rep as Int8Rep),
-    unlifted:def (Def as Int16Def)    requires (Rep as Int16Rep),
-    unlifted:def (Def as Int32Def)    requires (Rep as Int32Rep),
-    unlifted:def (Def as Int64Def)    requires (Rep as Int64Rep),
-    unlifted:def (Def as TupleDef)    requires (Rep as TupleRep),
-    unlifted:def (Def as UnliftedDef) requires (Rep as UnliftedRep),
-    unlifted:def (Def as WordDef)     requires (Rep as WordRep),
-    unlifted:def (Def as Word8Def)    requires (Rep as Word8Rep),
-    unlifted:def (Def as Word16Def)   requires (Rep as Word16Rep),
-    unlifted:def (Def as Word32Def)   requires (Rep as Word32Rep),
-    unlifted:def (Def as Word64Def)   requires (Rep as Word64Rep)
   exposed-modules:
     Unlifted.Prelude
     Unlifted.Class
@@ -97,19 +100,14 @@ library
     Unlifted.Maybe
     Unlifted.List
     Unlifted.Rep
-    Unlifted.Rep.Internal.Double
-    Unlifted.Rep.Internal.Float
-    Unlifted.Rep.Internal.Int
-    Unlifted.Rep.Internal.Int8
-    Unlifted.Rep.Internal.Word
-    Unlifted.Rep.Addr
-    Unlifted.Rep.Double
-    Unlifted.Rep.Float
-    Unlifted.Rep.Int
-    Unlifted.Rep.Int8
-    Unlifted.Rep.Lifted
-    Unlifted.Rep.Unlifted
-    Unlifted.Rep.Word
+    Unlifted.Rep.A
+    Unlifted.Rep.D
+    Unlifted.Rep.F
+    Unlifted.Rep.I
+    Unlifted.Rep.I8
+    Unlifted.Rep.L
+    Unlifted.Rep.U
+    Unlifted.Rep.W
   reexported-modules:
     Unlifted.Levitation
     

@@ -8,16 +8,21 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 -- | exposes detailed names that can be used for RULES
-module Unlifted.Rep.Internal.Int8 where
+module Unlifted.Rep.I8
+  ( ListDef(Nil, (:#))
+  , MaybeDef(Just, Nothing)
+  , Maybe#(Just#, Nothing#)
+  ) where
 
 import Unlifted.Internal.Class
+import Unlifted.Internal.Maybe
 import GHC.Int (Int8(..))
 import GHC.Prim
 import GHC.Integer
 import GHC.Types
 import Prelude (otherwise)
 
-import Int8Def ()
+import I8
 
 eqInt8, neInt8, ltInt8, leInt8, gtInt8, geInt8 :: Int8# -> Int8# -> Bool
 eqInt8 x y = isTrue# (extendInt8# x ==# extendInt8# y)

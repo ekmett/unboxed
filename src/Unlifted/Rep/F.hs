@@ -1,4 +1,3 @@
-{-# Language CPP #-}
 {-# Language NoImplicitPrelude #-}
 {-# Language RebindableSyntax #-}
 {-# Language MagicHash #-}
@@ -8,11 +7,8 @@
 {-# Language ImportQualifiedPost #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
--- #include "ieee-flpt.h"
-#include "MachDeps.h"
-
 -- | exposes detailed names that can be used for RULES
-module Unlifted.Rep.Internal.Float where
+module Unlifted.Rep.F where
 
 import GHC.Integer
 import GHC.Prim
@@ -20,7 +16,7 @@ import GHC.Types
 import Prelude (otherwise)
 import Unlifted.Internal.Class
 
-import FloatDef ()
+import F ()
 
 eqFloat, neFloat, ltFloat, leFloat, gtFloat, geFloat :: Float# -> Float# -> Bool
 eqFloat x y = isTrue# (eqFloat# x y)

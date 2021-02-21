@@ -8,15 +8,20 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 -- | exposes detailed names that can be used for RULES
-module Unlifted.Rep.Internal.Double where
+module Unlifted.Rep.D
+  ( ListDef(Nil, (:#))
+  , MaybeDef(Just, Nothing)
+  , Maybe#(Just#, Nothing#)
+  ) where
 
 import Unlifted.Internal.Class
+import Unlifted.Internal.Maybe
 import GHC.Prim
 import GHC.Integer
 import GHC.Types
 import Prelude (otherwise)
 
-import DoubleDef ()
+import D
 
 eqDouble, neDouble, ltDouble, leDouble, gtDouble, geDouble :: Double# -> Double# -> Bool
 eqDouble x y = isTrue# (x ==## y)

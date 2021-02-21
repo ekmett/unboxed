@@ -7,16 +7,20 @@
 {-# Language ImportQualifiedPost #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
--- | exposes detailed names that can be used for RULES
-module Unlifted.Rep.Internal.Word where
+module Unlifted.Rep.W
+  ( ListDef(Nil, (:#))
+  , MaybeDef(Just, Nothing)
+  , Maybe#(Just#, Nothing#)
+  ) where
 
+import Unlifted.Internal.Maybe
 import Unlifted.Internal.Class
 import GHC.Prim
 import GHC.Integer
 import GHC.Types
 import Prelude qualified
 
-import WordDef ()
+import W
 
 eqWord, neWord, ltWord, leWord, gtWord, geWord :: Word# -> Word# -> Bool
 eqWord x y = isTrue# (eqWord# x y)
@@ -74,7 +78,6 @@ leChar x y = isTrue# (leChar# x y)
 {-# INLINE [1] leChar #-}
 geChar x y = isTrue# (geChar# x y)
 {-# INLINE [1] geChar #-}
-
 
 instance Eq Char# where
   (==) = eqChar

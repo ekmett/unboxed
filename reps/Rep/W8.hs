@@ -1,4 +1,4 @@
 {-# Language DataKinds #-}
-module WordRep where
+module Rep.W8 where
 import GHC.Types
-type Rep = 'WordRep
+type Rep = 'Word8Rep

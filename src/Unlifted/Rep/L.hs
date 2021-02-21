@@ -3,7 +3,8 @@
 {-# Language PatternSynonyms #-}
 {-# Language MagicHash #-}
 {-# Language RankNTypes #-}
-module Unlifted.Rep.Lifted
+
+module Unlifted.Rep.L
   ( Maybe#(Nothing#, Just#)
   , pattern Nil
   , pattern (:#)
@@ -21,12 +22,8 @@ pattern Nothing# = Maybe# (# (##) | #)
 pattern Just# :: forall (a :: Type). a -> Maybe# a
 pattern Just# a = Maybe# (# | a #)
 
--- {-# COMPLETE Nothing#, Just# :: Maybe# #-}
-
 pattern Nil :: forall (a :: Type). List a
 pattern Nil = []
 
 pattern (:#) :: forall (a :: Type). a -> List a -> List a
 pattern x :# xs = x : xs
-
--- {-# COMPLETE Nil, (:#) :: [] #-}
