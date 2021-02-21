@@ -13,7 +13,7 @@ clean:
 	@cabal clean
 
 docs:
-	@RESULT=`cabal haddock $(LIBRARY) 2>/dev/null | tail -n 2`; \
+	@RESULT=`cabal haddock --haddock-hyperlink-source $(LIBRARY) 2>/dev/null | tail -n 2`; \
 	if [[ `echo $$RESULT | head -c 22` = "Documentation created:" ]]; then \
 		$(OPEN) `echo $$RESULT | tail -c +23`; \
 	fi    

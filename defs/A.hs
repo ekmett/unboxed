@@ -15,7 +15,6 @@ module A
   ) where
 
 import Unlifted.Internal.Class
-import Unlifted.Internal.Maybe
 import GHC.Prim
 import GHC.Types
 

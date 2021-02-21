@@ -15,7 +15,6 @@ module W
   , Char#
   ) where
 
-import Unlifted.Internal.Maybe
 import Unlifted.Internal.Class
 import GHC.Prim
 import GHC.Integer

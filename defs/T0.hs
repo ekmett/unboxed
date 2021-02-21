@@ -17,7 +17,6 @@ module T0
 import Unlifted.Internal.Class
 import GHC.Prim
 import GHC.Types
-import Prelude qualified
 import Prelude (showString)
 
 import Def.T0
