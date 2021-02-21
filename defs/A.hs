@@ -7,10 +7,11 @@
 {-# Language ImportQualifiedPost #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
-module Unlifted.Rep.A
-  ( ListDef(Nil, (:#))
-  , MaybeDef(Just, Nothing)
-  , Maybe#(Just#, Nothing#)
+module A
+  ( module Def.A
+  , eqAddr, neAddr, ltAddr, leAddr, gtAddr, geAddr
+  , Addr#
+  , StablePtr#
   ) where
 
 import Unlifted.Internal.Class
@@ -18,7 +19,7 @@ import Unlifted.Internal.Maybe
 import GHC.Prim
 import GHC.Types
 
-import A
+import Def.A
 
 eqAddr, neAddr, ltAddr, leAddr, gtAddr, geAddr :: Addr# -> Addr# -> Bool
 eqAddr x y = isTrue# (eqAddr# x y)

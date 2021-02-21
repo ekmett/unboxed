@@ -4,17 +4,16 @@
 {-# Language MagicHash #-}
 {-# Language RankNTypes #-}
 
-module Unlifted.Rep.L
-  ( Maybe#(Nothing#, Just#)
+module L 
+  ( pattern Nothing#
+  , pattern Just#
   , pattern Nil
   , pattern (:#)
-  , Maybe(Nothing, Just)
   ) where
 
 import Unlifted.Internal.Maybe hiding (Maybe)
 import Unlifted.Internal.List
 import GHC.Types (Type)
-import Prelude
 
 pattern Nothing# :: forall (a :: Type). Maybe# a
 pattern Nothing# = Maybe# (# (##) | #)

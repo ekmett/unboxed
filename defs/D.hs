@@ -8,10 +8,10 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 -- | exposes detailed names that can be used for RULES
-module Unlifted.Rep.D
-  ( ListDef(Nil, (:#))
-  , MaybeDef(Just, Nothing)
-  , Maybe#(Just#, Nothing#)
+module D
+  ( module Def.D
+  , eqDouble, neDouble, ltDouble, leDouble, gtDouble, geDouble
+  , Double#
   ) where
 
 import Unlifted.Internal.Class
@@ -21,7 +21,7 @@ import GHC.Integer
 import GHC.Types
 import Prelude (otherwise)
 
-import D
+import Def.D
 
 eqDouble, neDouble, ltDouble, leDouble, gtDouble, geDouble :: Double# -> Double# -> Bool
 eqDouble x y = isTrue# (x ==## y)

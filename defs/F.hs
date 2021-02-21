@@ -8,7 +8,11 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 -- | exposes detailed names that can be used for RULES
-module Unlifted.Rep.F where
+module F 
+  ( module Def.F
+  , eqFloat, neFloat, ltFloat, leFloat, gtFloat, geFloat
+  , Float#
+  ) where
 
 import GHC.Integer
 import GHC.Prim
@@ -16,7 +20,7 @@ import GHC.Types
 import Prelude (otherwise)
 import Unlifted.Internal.Class
 
-import F ()
+import Def.F
 
 eqFloat, neFloat, ltFloat, leFloat, gtFloat, geFloat :: Float# -> Float# -> Bool
 eqFloat x y = isTrue# (eqFloat# x y)

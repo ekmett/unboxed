@@ -7,10 +7,12 @@
 {-# Language ImportQualifiedPost #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
-module Unlifted.Rep.W
-  ( ListDef(Nil, (:#))
-  , MaybeDef(Just, Nothing)
-  , Maybe#(Just#, Nothing#)
+module W
+  ( module Def.W
+  , eqWord, neWord, ltWord, leWord, gtWord, geWord
+  , eqChar, neChar, ltChar, leChar, gtChar, geChar
+  , Word#
+  , Char#
   ) where
 
 import Unlifted.Internal.Maybe
@@ -20,7 +22,7 @@ import GHC.Integer
 import GHC.Types
 import Prelude qualified
 
-import W
+import Def.W
 
 eqWord, neWord, ltWord, leWord, gtWord, geWord :: Word# -> Word# -> Bool
 eqWord x y = isTrue# (eqWord# x y)
