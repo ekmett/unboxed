@@ -51,40 +51,8 @@ import System.IO qualified as IO
 
 -- * Standard Classes
 
-class Show (a :: TYPE r) where
-  showsPrec :: Int -> a -> ShowS
-  default showsPrec :: ShowRep r => Int -> a -> ShowS
-  showsPrec = showsPrecDef
-
-  show :: a -> String
-  default show :: ShowRep r => a -> String
-  show = showDef
-  {-# MINIMAL showsPrec | show #-}
-
--- this is split off from Show so we can Show (Maybe# a)
-class Show a => ShowList (a :: TYPE r) where
-  showList :: List a -> ShowS
-  default showList :: ShowListRep r => List a -> ShowS
-  showList = showListDef
-
-instance Prelude.Show a => Show (a :: Type) where
-  showsPrec = Prelude.showsPrec
-  show = Prelude.show
-
-instance Prelude.Show a => ShowList (a :: Type) where
-  showList = Prelude.showList
-
-shows :: forall r (a :: TYPE r). Show a => a -> ShowS
-shows = showsPrec 0
-
-class ShowRep (r :: RuntimeRep) where
-  showsPrecDef :: forall (a :: TYPE r). Show a => Int -> a -> ShowS
-  showDef :: forall (a :: TYPE r). Show a => a -> String
-
-class ListRep r => ShowListRep (r :: RuntimeRep) where
-  showListDef :: forall (a :: TYPE r). ShowList a => List a -> ShowS
-
 -- ** Eq
+
 
 class Eq (a :: TYPE r) where
   (==), (/=) :: a -> a -> Bool
@@ -496,7 +464,7 @@ instance Prelude.RealFloat a => RealFloat (a :: Type) where
   floatDigits = Prelude.floatDigits
   exponent = Prelude.exponent
   floatRange a = case Prelude.floatRange a of (b, c) -> (# b, c #)
-  decodeFloat a = case Prelude.decodeFloat a of (m, e) ->  (# m, e#)
+  decodeFloat a = case Prelude.decodeFloat a of (m, e) ->  (# m, e #)
   encodeFloat = Prelude.encodeFloat
   significand = Prelude.significand
   scaleFloat = Prelude.scaleFloat
@@ -531,6 +499,40 @@ class Semigroup a => Monoid (a :: TYPE r) where
 
 instance Prelude.Monoid a => Monoid a where
   mempty = Prelude.mempty
+
+class Show (a :: TYPE r) where
+  showsPrec :: Int -> a -> ShowS
+  default showsPrec :: ShowRep r => Int -> a -> ShowS
+  showsPrec = showsPrecDef
+
+  show :: a -> String
+  default show :: ShowRep r => a -> String
+  show = showDef
+  {-# MINIMAL showsPrec | show #-}
+
+-- this is split off from Show so we can Show (Maybe# a)
+class Show a => ShowList (a :: TYPE r) where
+  showList :: List a -> ShowS
+  default showList :: ShowListRep r => List a -> ShowS
+  showList = showListDef
+
+instance Prelude.Show a => Show (a :: Type) where
+  showsPrec = Prelude.showsPrec
+  show = Prelude.show
+
+instance Prelude.Show a => ShowList (a :: Type) where
+  showList = Prelude.showList
+
+shows :: forall r (a :: TYPE r). Show a => a -> ShowS
+shows = showsPrec 0
+
+class ShowRep (r :: RuntimeRep) where
+  showsPrecDef :: forall (a :: TYPE r). Show a => Int -> a -> ShowS
+  showDef :: forall (a :: TYPE r). Show a => a -> String
+
+class ListRep r => ShowListRep (r :: RuntimeRep) where
+  showListDef :: forall (a :: TYPE r). ShowList a => List a -> ShowS
+
 
 {-
 

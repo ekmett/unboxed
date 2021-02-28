@@ -41,6 +41,7 @@ common base
 library core
   import: base
   hs-source-dirs: core
+  build-depends: linear-base
   exposed-modules:
     Unlifted.Levitation
     Unlifted.Internal.Class
@@ -48,6 +49,8 @@ library core
     Unlifted.Internal.List
     Unlifted.Internal.Maybe
     Unlifted.Internal.Syntax
+    Unlifted.Internal.Linear.Ur
+    Unlifted.Internal.Linear
 
 -- DEFaults and DEFinitions
 library def
@@ -93,9 +96,6 @@ library defs
   exposed-modules: A D F I I8 T0 L U W
   -- TODO
   reexported-modules: I16, I32, I64, S0, W8, W16, W32, W64
-
-library cons
-
 
 library
   import: base

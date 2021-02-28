@@ -71,10 +71,10 @@ instance EnumRep Rep where
   predDef x = toEnum (fromEnum x - 1)
 
 instance IntegralRep Rep where
-  n `quotDef` d          =  q  where !(# q, _ #) = quotRem n d
-  n `remDef` d           =  r  where !(# _, r #) = quotRem n d
-  n `divDef` d           =  q  where !(# q, _ #) = divMod n d
-  n `modDef` d           =  r  where !(# _, r #) = divMod n d
+  n `quotDef` d =  q  where !(# q, _ #) = quotRem n d
+  n `remDef` d  =  r  where !(# _, r #) = quotRem n d
+  n `divDef` d  =  q  where !(# q, _ #) = divMod n d
+  n `modDef` d  =  r  where !(# _, r #) = divMod n d
   divModDef n d
     | signum r == negate (signum d) = (# q - 1, r + d #)
     | otherwise = qr
@@ -224,14 +224,20 @@ instance MaybeRep Rep where
   type Maybe = MaybeDef
   nothing = Nothing
   just = Just
+  just' x = Just x
   maybe n _ Nothing = n
   maybe _ j (Just a) = j a
+  mapMaybe _ Nothing = nothing
+  mapMaybe f (Just a) = just' (f a)
 
 instance MaybeRep# Rep where
   nothing# = Maybe# (# (##) | #)
   just# a = Maybe# (# | a #)
+  just'# a = Maybe# (# | a #)
   maybe# n _ (Maybe# (# (##) | #)) = n
   maybe# _ j (Maybe# (# | a #)) = j a
+  mapMaybe# _ (Maybe# (# (##) | #)) = nothing#
+  mapMaybe# f (Maybe# (# | a #)) = just'# (f a)
 
 pattern Nothing# :: forall (a :: TYPE Rep). Maybe# a
 pattern Nothing# = Maybe# (# (##) | #)
