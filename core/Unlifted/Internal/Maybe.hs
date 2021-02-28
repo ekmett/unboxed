@@ -71,6 +71,7 @@ instance MaybeRep 'LiftedRep where
 type Maybe# :: TYPE r -> TYPE ('SumRep '[ 'TupleRep '[],r])
 newtype Maybe# (a :: TYPE r) = Maybe# (# (##) | a #)
 
+-- blocked on ghc issue
 {-
 type instance RebindRep (Maybe# :: TYPE r -> TYPE ('SumRep '[ 'TupleRep '[], r])) r' = 'SumRep '[ 'TupleRep '[], r']
 type instance Rebind (Maybe# :: TYPE r -> TYPE ('SumRep '[ 'TupleRep '[], r])) r' = Maybe# @r'
