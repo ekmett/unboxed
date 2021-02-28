@@ -40,7 +40,7 @@ instance ListRep 'LiftedRep where
   uncons# [] = Maybe# (# (##) | #)
   uncons# (x:xs) = Maybe# (# | (# x, xs #) #)
 
--- type instance RebindRep [] r' = 'LiftedRep
--- type instance RebindRep ListFam r' = 'LiftedRep
+type instance RebindRep [] r' = 'LiftedRep
+type instance RebindRep ListFam r' = 'LiftedRep
 type instance Rebind [] r' = List @r'
 type instance Rebind ListFam r' = List @r'

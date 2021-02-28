@@ -36,8 +36,8 @@ type family Maybe = (c :: TYPE r -> Type) | c -> r where
 type MaybeFam :: forall r. TYPE r -> Type
 data family MaybeFam :: TYPE r -> Type
 
--- type instance RebindRep Prelude.Maybe r' = 'LiftedRep
--- type instance RebindRep MaybeFam r' = 'LiftedRep
+type instance RebindRep Prelude.Maybe r' = 'LiftedRep
+type instance RebindRep MaybeFam r' = 'LiftedRep
 type instance Rebind Prelude.Maybe r' = Maybe @r'
 type instance Rebind MaybeFam r' = Maybe @r'
 
