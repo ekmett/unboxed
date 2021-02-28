@@ -48,6 +48,7 @@ library core
     Unlifted.Internal.Combinators
     Unlifted.Internal.List
     Unlifted.Internal.Maybe
+    Unlifted.Internal.Rebind
     Unlifted.Internal.Syntax
     Unlifted.Internal.Linear.Ur
     Unlifted.Internal.Linear

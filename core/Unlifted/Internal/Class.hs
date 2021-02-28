@@ -1,14 +1,15 @@
+{-# Language ConstrainedClassMethods #-}
 {-# Language DataKinds #-}
+{-# Language DefaultSignatures #-}
 {-# Language FlexibleInstances #-}
+{-# Language ImportQualifiedPost #-}
 {-# Language NoImplicitPrelude #-}
+{-# Language PolyKinds #-}
+{-# Language RankNTypes #-}
 {-# Language RebindableSyntax #-}
 {-# Language StandaloneKindSignatures #-}
-{-# Language ConstrainedClassMethods #-}
-{-# Language PolyKinds #-}
 {-# Language TypeFamilies #-}
-{-# Language DefaultSignatures #-}
-{-# Language RankNTypes #-}
-{-# Language ImportQualifiedPost #-}
+{-# Language TypeOperators #-}
 {-# Language UnboxedSums #-}
 {-# Language UnboxedTuples #-}
 {-# OPTIONS_HADDOCK not-home #-}
@@ -47,6 +48,8 @@ import Prelude (Ordering(..), Bool(..), Int, ShowS, String, IO)
 import Prelude qualified
 import Unlifted.Levitation
 import Unlifted.Internal.List
+import Unlifted.Internal.Maybe
+import Unlifted.Internal.Rebind
 import System.IO qualified as IO
 
 -- * Standard Classes
@@ -543,12 +546,18 @@ infixl 7 /, `quot`, `rem`, `div`, `mod`
 
 -- * Functors
 
+{-
 type Functor :: (TYPE r -> TYPE s) -> Constraint
 class Functor (f :: TYPE r -> TYPE s) where
   fmap :: (a -> b) -> f a -> f b
 
 instance Prelude.Functor f => Functor (f :: Type -> Type) where
   fmap = Prelude.fmap
+-}
+
+
+class Functor (f :: TYPE r -> TYPE s) where
+  fmap :: forall (a :: TYPE r) r' (b :: TYPE r'). (a -> b) -> f a -> (f # b)
 
 -- * Printing
 

@@ -58,8 +58,13 @@ instance Bounded (Proxy# a) where
   minBound = proxy#
   maxBound = proxy#
 
+
+-- type instance Rebind Proxy# = Proxy#
+
+{-
 instance Functor Proxy# where
   fmap _ _ = proxy#
+-}
 
 instance Show (Proxy# a) where
   showsPrec _ _ = showString "proxy#"

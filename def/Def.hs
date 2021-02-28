@@ -162,24 +162,22 @@ instance RealFloatRep Rep where
     | x==0 && y==0     =  y     -- must be after the other double zero tests
     | otherwise        =  x + y -- x or y is a NaN, return a NaN (via +)
 
-data ListDef (a :: TYPE Rep)
-  = Nil
-  | a :# ListDef a
-
+data instance ListFam @Rep (a :: TYPE Rep) = Nil | a :# List a
 infixr 5 :#
 
 instance ListRep Rep where
-  type List = ListDef
-  cons# = (:#) 
-  nil# = Nil
+  cons = (:#) 
+  nil = Nil
   uncons# (a :# as) = Maybe# (# | (# a, as #) #)
   uncons# Nil = Maybe# (# (##) | #)
 
-instance Functor ListDef where
+{-
+instance Functor ListFam where
   fmap _ Nil = Nil
   fmap f (a :# as) = f a :# fmap f as
+-}
 
-instance Eq a => Prelude.Eq (ListDef a) where
+instance Eq a => Prelude.Eq (ListFam @Rep a) where
   Nil == Nil = True
   a :# as == b :# bs = a == b && as == bs
   _ == _ = False
@@ -188,40 +186,39 @@ instance Eq a => Prelude.Eq (ListDef a) where
   a :# as /= b :# bs = a /= b || as /= bs
   _ /= _ = False
 
-instance Ord a => Prelude.Ord (ListDef a) where
+instance Ord a => Prelude.Ord (ListFam @Rep a) where
   compare Nil Nil = EQ
   compare Nil (:#){} = LT
   compare (:#){} Nil = GT
   compare (a:#as) (b:#bs) = compare a b <> compare as bs
 
-instance ShowList a => Prelude.Show (ListDef a) where
+instance ShowList a => Prelude.Show (ListFam @Rep a) where
   showsPrec _ = showList
 
-data MaybeDef (a :: TYPE Rep)
-  = Nothing
-  | Just a
+data instance MaybeFam @Rep (a :: TYPE Rep) = Nothing | Just a
 
-instance Functor MaybeDef where
+{-
+instance Functor MaybeFam where
   fmap _ Nothing = Nothing
   fmap f (Just a) = Just (f a)
+-}
 
-instance Eq a => Prelude.Eq (MaybeDef a) where
+instance Eq a => Prelude.Eq (MaybeFam @Rep a) where
   Nothing == Nothing = True
   Just a == Just b = a == b
   _ == _ = False
   
-instance Ord a => Prelude.Ord (MaybeDef a) where
+instance Ord a => Prelude.Ord (MaybeFam @Rep a) where
   compare Nothing  Nothing = EQ
   compare Nothing  Just{} = LT
   compare Just{}   Nothing = GT
   compare (Just a) (Just b) = compare a b
 
-instance Show a => Prelude.Show (MaybeDef a) where
+instance Show a => Prelude.Show (MaybeFam @Rep a) where
   showsPrec _ Nothing = showString "Nothing"
   showsPrec d (Just a) = showParen (d >= 11) $ showString "Just " . showsPrec 11 a
 
 instance MaybeRep Rep where
-  type Maybe = MaybeDef
   nothing = Nothing
   just = Just
   just' x = Just x
@@ -245,9 +242,11 @@ pattern Nothing# = Maybe# (# (##) | #)
 pattern Just# :: forall (a :: TYPE Rep). a -> Maybe# a
 pattern Just# a = Maybe# (# | a #)
 
+{-
 instance Functor (Maybe# @Rep) where
   fmap _ Nothing# = Nothing#
   fmap f (Just# a) = Just# (f a)
+-}
 
 instance Show a => Show (Maybe# (a :: TYPE Rep)) where
   showsPrec _ Nothing# = showString "Nothing#"

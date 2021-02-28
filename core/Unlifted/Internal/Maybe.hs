@@ -6,6 +6,7 @@
 {-# Language PolyKinds #-}
 {-# Language RankNTypes #-}
 {-# Language StandaloneKindSignatures #-}
+{-# Language TypeApplications #-}
 {-# Language TypeFamilies #-}
 {-# Language TypeFamilyDependencies #-}
 {-# Language UnboxedSums #-}
@@ -13,24 +14,35 @@
 {-# Language UnliftedNewtypes #-}
 
 module Unlifted.Internal.Maybe
-  ( -- MaybeFam
-    MaybeRep(..)
+  ( MaybeFam
+  , Maybe
+  , MaybeRep(..)
   -- * Unlifted Maybe
   , Maybe#(..)
   , MaybeRep#(..)
   ) where
 
 import Unlifted.Levitation
+import Unlifted.Internal.Rebind
 
 import GHC.Types
 import Prelude qualified
 
--- data family MaybeFam :: TYPE r -> Type
+type Maybe :: forall r. TYPE r -> Type
+type family Maybe = (c :: TYPE r -> Type) | c -> r where
+  Maybe @'LiftedRep = Prelude.Maybe
+  Maybe @r = MaybeFam @r
+
+type MaybeFam :: forall r. TYPE r -> Type
+data family MaybeFam :: TYPE r -> Type
+
+-- type instance RebindRep Prelude.Maybe r' = 'LiftedRep
+-- type instance RebindRep MaybeFam r' = 'LiftedRep
+type instance Rebind Prelude.Maybe r' = Maybe @r'
+type instance Rebind MaybeFam r' = Maybe @r'
 
 type MaybeRep :: RuntimeRep -> Constraint
 class MaybeRep r where
-  -- Lifted @Maybe@ with a (possibly) unlifted argument
-  type Maybe = (c :: TYPE r -> Type) | c -> r
   nothing :: forall (a :: TYPE r). Maybe a
   just :: forall (a :: TYPE r). a -> Maybe a
   just' :: forall (a :: TYPE r). Lev a -> Maybe a
@@ -38,7 +50,6 @@ class MaybeRep r where
   mapMaybe :: forall (a :: TYPE r) r' (b :: TYPE r'). MaybeRep r' => (a -> b) -> Maybe a -> Maybe b
 
 instance MaybeRep 'LiftedRep where
-  type Maybe = Prelude.Maybe
   nothing = Prelude.Nothing
   just = Prelude.Just
   just' a = Prelude.Just a
@@ -59,6 +70,11 @@ instance MaybeRep 'LiftedRep where
 
 type Maybe# :: TYPE r -> TYPE ('SumRep '[ 'TupleRep '[],r])
 newtype Maybe# (a :: TYPE r) = Maybe# (# (##) | a #)
+
+{-
+type instance RebindRep (Maybe# :: TYPE r -> TYPE ('SumRep '[ 'TupleRep '[], r])) r' = 'SumRep '[ 'TupleRep '[], r']
+type instance Rebind (Maybe# :: TYPE r -> TYPE ('SumRep '[ 'TupleRep '[], r])) r' = Maybe# @r'
+-}
 
 type MaybeRep# :: RuntimeRep -> Constraint
 class MaybeRep# r where
