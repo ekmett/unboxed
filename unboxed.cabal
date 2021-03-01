@@ -64,11 +64,11 @@ library reps
   import: base
   hs-source-dirs: reps
   exposed-modules:
-    Rep.A Rep.D Rep.F
-    Rep.I Rep.I8 Rep.I16 Rep.I32 Rep.I64
-    Rep.L Rep.U
-    Rep.S0 Rep.T0
-    Rep.W Rep.W8 Rep.W16 Rep.W32 Rep.W64
+    Rep.Addr Rep.Double Rep.Float
+    Rep.Int Rep.Int8 Rep.Int16 Rep.Int32 Rep.Int64
+    Rep.Lifted Rep.Unlifted
+    Rep.Sum Rep.Tuple
+    Rep.Word Rep.Word8 Rep.Word16 Rep.Word32 Rep.Word64
     Nil
 
 library defs
@@ -76,26 +76,25 @@ library defs
   build-depends: unboxed:{def, core, reps}
   hs-source-dirs: defs
   mixins:
-    unboxed:def (Def as Def.A) requires (Rep as Rep.A),
-    unboxed:def (Def as Def.D) requires (Rep as Rep.D),
-    unboxed:def (Def as Def.F) requires (Rep as Rep.F),
-    unboxed:def (Def as Def.I) requires (Rep as Rep.I),
-    unboxed:def (Def as Def.I8) requires (Rep as Rep.I8),
-    unboxed:def (Def as I16) requires (Rep as Rep.I16),
-    unboxed:def (Def as I32) requires (Rep as Rep.I32),
-    unboxed:def (Def as I64) requires (Rep as Rep.I64),
-    unboxed:def (Def as Def.U) requires (Rep as Rep.U),
-    unboxed:def (Def as S0) requires (Rep as Rep.S0),
-    unboxed:def (Def as Def.T0) requires (Rep as Rep.T0),
-    unboxed:def (Def as Def.W) requires (Rep as Rep.W),
-    unboxed:def (Def as W8) requires (Rep as Rep.W8),
-    unboxed:def (Def as W16) requires (Rep as Rep.W16),
-    unboxed:def (Def as W32) requires (Rep as Rep.W32),
-    unboxed:def (Def as W64) requires (Rep as Rep.W64)
-  -- implemented
-  exposed-modules: A D F I I8 T0 L U W
+    unboxed:def (Def as Def.Addr) requires (Rep as Rep.Addr),
+    unboxed:def (Def as Def.Double) requires (Rep as Rep.Double),
+    unboxed:def (Def as Def.Float) requires (Rep as Rep.Float),
+    unboxed:def (Def as Def.Int) requires (Rep as Rep.Int),
+    unboxed:def (Def as Def.Int8) requires (Rep as Rep.Int8),
+    unboxed:def (Def as Int16) requires (Rep as Rep.Int16),
+    unboxed:def (Def as Int32) requires (Rep as Rep.Int32),
+    unboxed:def (Def as Int64) requires (Rep as Rep.Int64),
+    unboxed:def (Def as Def.Unlifted) requires (Rep as Rep.Unlifted),
+    unboxed:def (Def as Sum) requires (Rep as Rep.Sum),
+    unboxed:def (Def as Def.Tuple) requires (Rep as Rep.Tuple),
+    unboxed:def (Def as Def.Word) requires (Rep as Rep.Word),
+    unboxed:def (Def as Word8) requires (Rep as Rep.Word8),
+    unboxed:def (Def as Word16) requires (Rep as Rep.Word16),
+    unboxed:def (Def as Word32) requires (Rep as Rep.Word32),
+    unboxed:def (Def as Word64) requires (Rep as Rep.Word64)
+  exposed-modules: Addr Double Float Int Int8 Tuple Lifted Unlifted Word
   -- TODO
-  reexported-modules: I16, I32, I64, S0, W8, W16, W32, W64
+  reexported-modules: Int16, Int32, Int64, Sum, Word8, Word16, Word32, Word64
 
 library
   import: base
@@ -111,12 +110,21 @@ library
     Unboxed.Rep
   reexported-modules:
     Unboxed.Levitation,
-    A as Unboxed.Rep.A,
-    D as Unboxed.Rep.D,
-    F as Unboxed.Rep.F,
-    I as Unboxed.Rep.I,
-    I8 as Unboxed.Rep.I8,
-    L as Unboxed.Rep.L,
-    U as Unboxed.Rep.U,
-    W as Unboxed.Rep.W
+    Addr as Unboxed.Rep.Addr,
+    Double as Unboxed.Rep.Double,
+    Float as Unboxed.Rep.Float,
+    Int as Unboxed.Rep.Int,
+    Int8 as Unboxed.Rep.Int8,
+    Int16 as Unboxed.Rep.Int16,
+    Int32 as Unboxed.Rep.Int32,
+    Int64 as Unboxed.Rep.Int64,
+    Lifted as Unboxed.Rep.Lifted,
+    Unlifted as Unboxed.Rep.Unlifted,
+    Tuple as Unboxed.Rep.Tuple,
+    Sum as Unboxed.Rep.Sum,
+    Word as Unboxed.Rep.Word,
+    Word8 as Unboxed.Rep.Word8,
+    Word16 as Unboxed.Rep.Word16,
+    Word32 as Unboxed.Rep.Word32,
+    Word64 as Unboxed.Rep.Word64
 

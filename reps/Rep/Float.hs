@@ -1,4 +1,4 @@
 {-# Language DataKinds #-}
-module Rep.I64 where
+module Rep.Float where
 import GHC.Types
-type Rep = 'Int64Rep
+type Rep = 'FloatRep

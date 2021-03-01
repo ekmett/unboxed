@@ -1,4 +1,4 @@
 {-# Language DataKinds #-}
-module Rep.S0 where
+module Rep.Int64 where
 import GHC.Types
-type Rep = 'SumRep '[]
+type Rep = 'Int64Rep
