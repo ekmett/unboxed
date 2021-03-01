@@ -64,11 +64,11 @@ library reps
   import: base
   hs-source-dirs: reps
   exposed-modules:
-    Rep.Addr Rep.Double Rep.Float
-    Rep.Int Rep.Int8 Rep.Int16 Rep.Int32 Rep.Int64
-    Rep.Lifted Rep.Unlifted
-    Rep.Sum Rep.Tuple
-    Rep.Word Rep.Word8 Rep.Word16 Rep.Word32 Rep.Word64
+    AddrRep DoubleRep FloatRep
+    IntRep Int8Rep Int16Rep Int32Rep Int64Rep
+    LiftedRep UnliftedRep
+    SumRep TupleRep
+    WordRep Word8Rep Word16Rep Word32Rep Word64Rep
     Nil
 
 library defs
@@ -76,22 +76,22 @@ library defs
   build-depends: unboxed:{def, core, reps}
   hs-source-dirs: defs
   mixins:
-    unboxed:def (Def as Def.Addr) requires (Rep as Rep.Addr),
-    unboxed:def (Def as Def.Double) requires (Rep as Rep.Double),
-    unboxed:def (Def as Def.Float) requires (Rep as Rep.Float),
-    unboxed:def (Def as Def.Int) requires (Rep as Rep.Int),
-    unboxed:def (Def as Def.Int8) requires (Rep as Rep.Int8),
-    unboxed:def (Def as Int16) requires (Rep as Rep.Int16),
-    unboxed:def (Def as Int32) requires (Rep as Rep.Int32),
-    unboxed:def (Def as Int64) requires (Rep as Rep.Int64),
-    unboxed:def (Def as Def.Unlifted) requires (Rep as Rep.Unlifted),
-    unboxed:def (Def as Sum) requires (Rep as Rep.Sum),
-    unboxed:def (Def as Def.Tuple) requires (Rep as Rep.Tuple),
-    unboxed:def (Def as Def.Word) requires (Rep as Rep.Word),
-    unboxed:def (Def as Word8) requires (Rep as Rep.Word8),
-    unboxed:def (Def as Word16) requires (Rep as Rep.Word16),
-    unboxed:def (Def as Word32) requires (Rep as Rep.Word32),
-    unboxed:def (Def as Word64) requires (Rep as Rep.Word64)
+    unboxed:def (Def as Def.Addr) requires (Rep as AddrRep),
+    unboxed:def (Def as Def.Double) requires (Rep as DoubleRep),
+    unboxed:def (Def as Def.Float) requires (Rep as FloatRep),
+    unboxed:def (Def as Def.Int) requires (Rep as IntRep),
+    unboxed:def (Def as Def.Int8) requires (Rep as Int8Rep),
+    unboxed:def (Def as Int16) requires (Rep as Int16Rep),
+    unboxed:def (Def as Int32) requires (Rep as Int32Rep),
+    unboxed:def (Def as Int64) requires (Rep as Int64Rep),
+    unboxed:def (Def as Def.Unlifted) requires (Rep as UnliftedRep),
+    unboxed:def (Def as Sum) requires (Rep as SumRep),
+    unboxed:def (Def as Def.Tuple) requires (Rep as TupleRep),
+    unboxed:def (Def as Def.Word) requires (Rep as WordRep),
+    unboxed:def (Def as Word8) requires (Rep as Word8Rep),
+    unboxed:def (Def as Word16) requires (Rep as Word16Rep),
+    unboxed:def (Def as Word32) requires (Rep as Word32Rep),
+    unboxed:def (Def as Word64) requires (Rep as Word64Rep)
   exposed-modules: Addr Double Float Int Int8 Tuple Lifted Unlifted Word
   -- TODO
   reexported-modules: Int16, Int32, Int64, Sum, Word8, Word16, Word32, Word64

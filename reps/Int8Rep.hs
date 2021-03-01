@@ -1,4 +1,4 @@
 {-# Language DataKinds #-}
-module Rep.Sum where
+module Int8Rep where
 import GHC.Types
-type Rep = 'SumRep '[]
+type Rep = 'Int8Rep

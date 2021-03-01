@@ -1,4 +1,4 @@
 {-# Language DataKinds #-}
-module Rep.Float where
+module SumRep where
 import GHC.Types
-type Rep = 'FloatRep
+type Rep = 'SumRep '[]
