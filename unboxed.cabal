@@ -51,6 +51,12 @@ library core
     Unboxed.Internal.Syntax
     Unboxed.Internal.Linear.Ur
     Unboxed.Internal.Linear
+    AddrRep DoubleRep FloatRep
+    IntRep Int8Rep Int16Rep Int32Rep Int64Rep
+    LiftedRep UnliftedRep
+    SumRep TupleRep
+    WordRep Word8Rep Word16Rep Word32Rep Word64Rep
+    Nil
 
 -- DEFaults and DEFinitions
 library def
@@ -60,45 +66,9 @@ library def
   signatures: Rep
   exposed-modules: Def
 
-library reps
-  import: base
-  hs-source-dirs: reps
-  exposed-modules:
-    AddrRep DoubleRep FloatRep
-    IntRep Int8Rep Int16Rep Int32Rep Int64Rep
-    LiftedRep UnliftedRep
-    SumRep TupleRep
-    WordRep Word8Rep Word16Rep Word32Rep Word64Rep
-    Nil
-
-library defs
-  import: base
-  build-depends: def, core, reps
-  hs-source-dirs: defs
-  mixins:
-    def (Def as Def.Addr) requires (Rep as AddrRep),
-    def (Def as Def.Double) requires (Rep as DoubleRep),
-    def (Def as Def.Float) requires (Rep as FloatRep),
-    def (Def as Def.Int) requires (Rep as IntRep),
-    def (Def as Def.Int8) requires (Rep as Int8Rep),
-    def (Def as Int16) requires (Rep as Int16Rep),
-    def (Def as Int32) requires (Rep as Int32Rep),
-    def (Def as Int64) requires (Rep as Int64Rep),
-    def (Def as Def.Unlifted) requires (Rep as UnliftedRep),
-    def (Def as Sum) requires (Rep as SumRep),
-    def (Def as Def.Tuple) requires (Rep as TupleRep),
-    def (Def as Def.Word) requires (Rep as WordRep),
-    def (Def as Word8) requires (Rep as Word8Rep),
-    def (Def as Word16) requires (Rep as Word16Rep),
-    def (Def as Word32) requires (Rep as Word32Rep),
-    def (Def as Word64) requires (Rep as Word64Rep)
-  exposed-modules: Addr Double Float Int Int8 Tuple Lifted Unlifted Word
-  -- TODO
-  reexported-modules: Int16, Int32, Int64, Sum, Word8, Word16, Word32, Word64
-
 library
   import: base
-  build-depends: defs, core
+  build-depends: def, core
   hs-source-dirs: src
   exposed-modules:
     Unboxed.Prelude
@@ -108,23 +78,39 @@ library
     Unboxed.Maybe
     Unboxed.List
     Unboxed.Rep
+    Unboxed.Rep.Addr
+    Unboxed.Rep.Double
+    Unboxed.Rep.Float
+    Unboxed.Rep.Int
+    Unboxed.Rep.Int8
+    Unboxed.Rep.Tuple
+    Unboxed.Rep.Lifted
+    Unboxed.Rep.Unlifted
+    Unboxed.Rep.Word
+  mixins:
+    def (Def as Addr) requires (Rep as AddrRep),
+    def (Def as Double) requires (Rep as DoubleRep),
+    def (Def as Float) requires (Rep as FloatRep),
+    def (Def as Int) requires (Rep as IntRep),
+    def (Def as Int8) requires (Rep as Int8Rep),
+    def (Def as Unboxed.Rep.Int16) requires (Rep as Int16Rep),
+    def (Def as Unboxed.Rep.Int32) requires (Rep as Int32Rep),
+    def (Def as Unboxed.Rep.Int64) requires (Rep as Int64Rep),
+    def (Def as Unlifted) requires (Rep as UnliftedRep),
+    def (Def as Unboxed.Rep.Sum) requires (Rep as SumRep),
+    def (Def as Tuple) requires (Rep as TupleRep),
+    def (Def as Word) requires (Rep as WordRep),
+    def (Def as Unboxed.Rep.Word8) requires (Rep as Word8Rep),
+    def (Def as Unboxed.Rep.Word16) requires (Rep as Word16Rep),
+    def (Def as Unboxed.Rep.Word32) requires (Rep as Word32Rep),
+    def (Def as Unboxed.Rep.Word64) requires (Rep as Word64Rep)
   reexported-modules:
     Unboxed.Levitation,
-    Addr as Unboxed.Rep.Addr,
-    Double as Unboxed.Rep.Double,
-    Float as Unboxed.Rep.Float,
-    Int as Unboxed.Rep.Int,
-    Int8 as Unboxed.Rep.Int8,
-    Int16 as Unboxed.Rep.Int16,
-    Int32 as Unboxed.Rep.Int32,
-    Int64 as Unboxed.Rep.Int64,
-    Lifted as Unboxed.Rep.Lifted,
-    Unlifted as Unboxed.Rep.Unlifted,
-    Tuple as Unboxed.Rep.Tuple,
-    Sum as Unboxed.Rep.Sum,
-    Word as Unboxed.Rep.Word,
-    Word8 as Unboxed.Rep.Word8,
-    Word16 as Unboxed.Rep.Word16,
-    Word32 as Unboxed.Rep.Word32,
-    Word64 as Unboxed.Rep.Word64
-
+    Unboxed.Rep.Int16,
+    Unboxed.Rep.Int32,
+    Unboxed.Rep.Int64,
+    Unboxed.Rep.Sum,
+    Unboxed.Rep.Word8,
+    Unboxed.Rep.Word16,
+    Unboxed.Rep.Word32,
+    Unboxed.Rep.Word64
