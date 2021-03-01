@@ -19,6 +19,7 @@ module Def where
 import Unlifted.Internal.Class
 import Unlifted.Internal.List
 import Unlifted.Internal.Maybe
+import Unlifted.Internal.Rebind
 import GHC.Types
 import Prelude (otherwise, not, (++), ShowS, (.), showString, showParen,($), (&&), (||))
 import Prelude qualified
@@ -162,22 +163,28 @@ instance RealFloatRep Rep where
     | x==0 && y==0     =  y     -- must be after the other double zero tests
     | otherwise        =  x + y -- x or y is a NaN, return a NaN (via +)
 
-data instance ListFam @Rep (a :: TYPE Rep) = Nil | a :# List a
+data ListDef (a :: TYPE Rep) = Nil | a :# List a
 infixr 5 :#
 
+-- type instance RebindRep ListDef r' = 'LiftedRep
+type instance Rebind ListDef r' = ListR r'
+
+-- instance (f' ~ List @r') => Bind ListDef (f' :: TYPE r' -> Type) 
+
 instance ListRep Rep where
+  type ListR Rep = ListDef
   cons = (:#) 
   nil = Nil
   uncons# (a :# as) = Maybe# (# | (# a, as #) #)
   uncons# Nil = Maybe# (# (##) | #)
 
 {-
-instance Functor ListFam where
+instance Functor ListDef where
   fmap _ Nil = Nil
   fmap f (a :# as) = f a :# fmap f as
 -}
 
-instance Eq a => Prelude.Eq (ListFam @Rep a) where
+instance Eq a => Prelude.Eq (ListDef a) where
   Nil == Nil = True
   a :# as == b :# bs = a == b && as == bs
   _ == _ = False
@@ -186,39 +193,45 @@ instance Eq a => Prelude.Eq (ListFam @Rep a) where
   a :# as /= b :# bs = a /= b || as /= bs
   _ /= _ = False
 
-instance Ord a => Prelude.Ord (ListFam @Rep a) where
+instance Ord a => Prelude.Ord (ListDef a) where
   compare Nil Nil = EQ
   compare Nil (:#){} = LT
   compare (:#){} Nil = GT
   compare (a:#as) (b:#bs) = compare a b <> compare as bs
 
-instance ShowList a => Prelude.Show (ListFam @Rep a) where
+instance ShowList a => Prelude.Show (ListDef a) where
   showsPrec _ = showList
 
-data instance MaybeFam @Rep (a :: TYPE Rep) = Nothing | Just a
+data MaybeDef (a :: TYPE Rep) = Nothing | Just a
 
-{-
-instance Functor MaybeFam where
-  fmap _ Nothing = Nothing
-  fmap f (Just a) = Just (f a)
--}
+-- type instance RebindRep MaybeDef r' = 'LiftedRep
+type instance Rebind MaybeDef r' = MaybeR r'
 
-instance Eq a => Prelude.Eq (MaybeFam @Rep a) where
+-- instance (f' ~ Maybe @r') => Bind MaybeDef (f' :: TYPE r' -> Type) 
+
+instance Functor MaybeDef where
+  type FunctorRep MaybeDef = MaybeRep
+  fmap = mapMaybe 
+  -- fmap _ Nothing = nothing
+  -- fmap f (Just a) = just' (f a)
+
+instance Eq a => Prelude.Eq (MaybeDef a) where
   Nothing == Nothing = True
   Just a == Just b = a == b
   _ == _ = False
   
-instance Ord a => Prelude.Ord (MaybeFam @Rep a) where
+instance Ord a => Prelude.Ord (MaybeDef a) where
   compare Nothing  Nothing = EQ
   compare Nothing  Just{} = LT
   compare Just{}   Nothing = GT
   compare (Just a) (Just b) = compare a b
 
-instance Show a => Prelude.Show (MaybeFam @Rep a) where
+instance Show a => Prelude.Show (MaybeDef a) where
   showsPrec _ Nothing = showString "Nothing"
   showsPrec d (Just a) = showParen (d >= 11) $ showString "Just " . showsPrec 11 a
 
 instance MaybeRep Rep where
+  type MaybeR Rep = MaybeDef
   nothing = Nothing
   just = Just
   just' x = Just x

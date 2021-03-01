@@ -562,16 +562,18 @@ instance Prelude.Functor f => Functor (f :: Type -> Type) where
 
 class Functor (f :: TYPE r -> TYPE s) where
   type FunctorRep (f :: TYPE r -> TYPE s) :: RuntimeRep -> Constraint
-  fmap :: forall (a :: TYPE r) r' (b :: TYPE r') f'. Rebind f f' => (a -> b) -> f a -> f' b
+  -- fmap :: forall (a :: TYPE r) r' (b :: TYPE r') f'. Rebind f f' => (a -> b) -> f a -> f' b
+  fmap :: forall (a :: TYPE r) r' (b :: TYPE r'). (FunctorRep f r, FunctorRep f r') => (a -> b) -> f a -> f # b
 
 instance Functor Prelude.Maybe where
   type FunctorRep Prelude.Maybe = MaybeRep 
-  fmap :: forall (a :: Type) r' (b :: TYPE r') f'. Rebind Prelude.Maybe f' => (a -> b) -> Prelude.Maybe a -> f' b
-  fmap = mapMaybe @r'
-
-instance Functor MaybeFam where
-  type FunctorRep MaybeFam = MaybeRep 
   fmap = mapMaybe
+
+{-
+instance Functor MaybeDef where
+  type FunctorRep MaybeDef = MaybeRep 
+  fmap = mapMaybe
+-}
 
 -- * Printing
 
