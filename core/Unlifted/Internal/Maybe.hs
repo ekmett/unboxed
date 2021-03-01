@@ -18,6 +18,7 @@
 module Unlifted.Internal.Maybe
   ( -- MaybeFam
     Maybe
+  , MaybeD
   , MaybeRep(..)
   -- * Unlifted Maybe
   , Maybe#(..)
@@ -31,36 +32,26 @@ import GHC.Types
 import Prelude qualified
 
 -- type instance RebindRep Prelude.Maybe r = 'LiftedRep
-type instance Rebind Prelude.Maybe r = MaybeR r
+type instance Rebind Prelude.Maybe r' = Maybe @r'
+type instance Rebind (MaybeD @r) r' = Maybe @r'
 
-{-
 type Maybe :: forall r. TYPE r -> Type
-type family Maybe where -- = (c :: TYPE r -> Type) | c -> r where
+type family Maybe = (c :: TYPE r -> Type) | c -> r where
   Maybe @'LiftedRep = Prelude.Maybe
-  Maybe @r = MaybeFam @r
+  Maybe @r = MaybeD @r
 
-type MaybeFam :: forall r. TYPE r -> Type
-data family MaybeFam :: TYPE r -> Type
--}
-
--- instance (f' ~ Maybe @r') => Bind Prelude.Maybe (f' :: TYPE r' -> Type)
--- instance (f' ~ Maybe @r') => Bind MaybeFam (f' :: TYPE r' -> Type)
--- instance (f' ~ Maybe) => Bind Prelude.Maybe f'
--- instance (f' ~ Maybe) => Bind MaybeFam f'
+type MaybeD :: forall r. TYPE r -> Type
+data family MaybeD :: TYPE r -> Type
 
 type MaybeRep :: RuntimeRep -> Constraint
 class MaybeRep r where
-  type MaybeR r :: TYPE r -> Type
   nothing :: forall (a :: TYPE r). Maybe a
   just :: forall (a :: TYPE r). a -> Maybe a
   just' :: forall (a :: TYPE r). Lev a -> Maybe a
   maybe :: forall (a :: TYPE r) r' (b :: TYPE r'). Lev b -> (a -> b) -> Maybe a -> b
   mapMaybe :: forall (a :: TYPE r) r' (b :: TYPE r'). MaybeRep r' => (a -> b) -> Maybe @r a -> Maybe @r' b
 
-type Maybe (a :: TYPE r) = MaybeR r a
-
 instance MaybeRep 'LiftedRep where
-  type MaybeR 'LiftedRep = Prelude.Maybe
   nothing = Prelude.Nothing
   just = Prelude.Just
   just' a = Prelude.Just a
@@ -70,23 +61,9 @@ instance MaybeRep 'LiftedRep where
   mapMaybe _ Prelude.Nothing = nothing
 
 -- | Unlifted @Maybe@ with a (possibly) unlifted argument
---
--- returns an unlifted newtype wrapping an unboxed sum.
--- This has the benefit that it gives a shape that can be used at any 'RuntimeRep'.
---
--- I just can't attach pattern synonyms to it except at known 'RuntimeRep's, so it
--- is a bit noisy. The def mixin library fixes this by supplying pattern synonyms for
--- @Nothing#@ and @Just#@ at the 'RuntimeRep' in question, but they can't be used in
--- @uncons@ because the result 'RuntimeRep' is larger than the input 'RuntimeRep'.
 
 type Maybe# :: TYPE r -> TYPE ('SumRep '[ 'TupleRep '[],r])
 newtype Maybe# (a :: TYPE r) = Maybe# (# (##) | a #)
-
--- blocked on ghc issue
-{-
-type instance RebindRep (Maybe# :: TYPE r -> TYPE ('SumRep '[ 'TupleRep '[], r])) r' = 'SumRep '[ 'TupleRep '[], r']
-type instance Rebind (Maybe# :: TYPE r -> TYPE ('SumRep '[ 'TupleRep '[], r])) r' = Maybe# @r'
--}
 
 type MaybeRep# :: RuntimeRep -> Constraint
 class MaybeRep# r where

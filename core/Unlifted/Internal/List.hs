@@ -16,6 +16,7 @@
 -- | Other 'ListRep' instances are defined via backpack
 module Unlifted.Internal.List 
   ( List
+  , ListD
   , ListRep(..)
   ) where
 
@@ -23,40 +24,24 @@ import GHC.Types (Type, TYPE, RuntimeRep(..))
 import Unlifted.Internal.Maybe
 import Unlifted.Internal.Rebind
 
--- type instance RebindRep [] r = 'LiftedRep
-type instance Rebind [] r = ListR r
+type ListD :: forall r. TYPE r -> Type
+data family ListD :: TYPE r -> Type
 
-{-
 type List :: forall r. TYPE r -> Type
 type family List = (c :: TYPE r -> Type) | c -> r where
   List @'LiftedRep = []
-  List @r = ListFam @r
--}
+  List @r = ListD @r
 
--- instance (f' ~ List @r') => Bind [] (f' :: TYPE r' -> Type) 
--- instance (f' ~ List @r') => Bind ListFam (f' :: TYPE r' -> Type)
-
-{-
-type ListFam :: forall r. TYPE r -> Type
-data family ListFam :: TYPE r -> Type
--}
-
-type List (a :: TYPE r) = ListR r a
+type instance Rebind [] r = List @r
+type instance Rebind ListD r = List @r
 
 class ListRep r where
-  type ListR r :: TYPE r -> Type
   cons :: forall (a :: TYPE r). a -> List a -> List a
   nil :: forall (a :: TYPE r). List a
   uncons# :: forall (a :: TYPE r). List a -> Maybe# (# a, List a #)
 
 instance ListRep 'LiftedRep where
-  type ListR 'LiftedRep = []
   cons = (:)
   nil = []
   uncons# [] = Maybe# (# (##) | #)
   uncons# (x:xs) = Maybe# (# | (# x, xs #) #)
-
-{-
-type instance RebindRep [] r' = 'LiftedRep
-type instance Rebind [] r' = List @r'
--}

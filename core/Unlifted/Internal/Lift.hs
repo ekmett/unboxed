@@ -24,6 +24,8 @@ import Unlifted.Levitation
 import GHC.Types
 import Prelude qualified
 
+-- explicit Lev
+
 type LiftRep :: RuntimeRep -> Constraint
 class LiftRep r where
   data Lift :: TYPE r -> Type
@@ -58,3 +60,33 @@ instance LiftRep 'LiftedRep where
   lift' a = Lift a
   unlift (Lift a) = a
   applyLift (Lift a) f = f a
+
+{-
+class Liftable (a :: TYPE r) where
+  type Lifted a :: Type
+  lifted :: a -> Lifted a
+  lifted' :: Lev a -> Lifted a
+  unlifted :: Lifted a -> a
+  applyLifted :: (a -> b) -> Lifted a -> b
+
+instance Liftable Int# where
+  type Lifted Int# = Int
+  lifted = I#
+  lifted' x = I# x
+  unlifted (I# x) = x
+  applyLifted f (I# x) = f x
+
+newtype Lowered (a :: TYPE r) = Lowered a
+-- 
+instance Eq (Lifted a) => Eq (Lowered (a :: TYPE 'IntRep)) where
+  x == y = lifted x == lifted y
+  x /= y = lifted x /= lifted y
+
+instance Num (Lifted a) => Num (Lowered (a :: TYPE 'IntRep)) where
+  x + y = unlifted (lifted x + lifted y)
+
+deriving via Lowered Int# instance Num Int#
+
+newtype Foo# = Foo# Int#
+  deriving (Num, Eq, Ord) via Lowered Int#
+-}

@@ -19,7 +19,7 @@ module Def where
 import Unlifted.Internal.Class
 import Unlifted.Internal.List
 import Unlifted.Internal.Maybe
-import Unlifted.Internal.Rebind
+-- import Unlifted.Internal.Rebind
 import GHC.Types
 import Prelude (otherwise, not, (++), ShowS, (.), showString, showParen,($), (&&), (||))
 import Prelude qualified
@@ -163,28 +163,22 @@ instance RealFloatRep Rep where
     | x==0 && y==0     =  y     -- must be after the other double zero tests
     | otherwise        =  x + y -- x or y is a NaN, return a NaN (via +)
 
-data ListDef (a :: TYPE Rep) = Nil | a :# List a
+data instance ListD (a :: TYPE Rep) = Nil | a :# List a
 infixr 5 :#
 
--- type instance RebindRep ListDef r' = 'LiftedRep
-type instance Rebind ListDef r' = ListR r'
-
--- instance (f' ~ List @r') => Bind ListDef (f' :: TYPE r' -> Type) 
-
 instance ListRep Rep where
-  type ListR Rep = ListDef
   cons = (:#) 
   nil = Nil
   uncons# (a :# as) = Maybe# (# | (# a, as #) #)
   uncons# Nil = Maybe# (# (##) | #)
 
 {-
-instance Functor ListDef where
+instance Functor (ListD @Rep) where
   fmap _ Nil = Nil
   fmap f (a :# as) = f a :# fmap f as
 -}
 
-instance Eq a => Prelude.Eq (ListDef a) where
+instance Eq a => Prelude.Eq (ListD @Rep a) where
   Nil == Nil = True
   a :# as == b :# bs = a == b && as == bs
   _ == _ = False
@@ -193,45 +187,37 @@ instance Eq a => Prelude.Eq (ListDef a) where
   a :# as /= b :# bs = a /= b || as /= bs
   _ /= _ = False
 
-instance Ord a => Prelude.Ord (ListDef a) where
+instance Ord a => Prelude.Ord (ListD @Rep a) where
   compare Nil Nil = EQ
   compare Nil (:#){} = LT
   compare (:#){} Nil = GT
   compare (a:#as) (b:#bs) = compare a b <> compare as bs
 
-instance ShowList a => Prelude.Show (ListDef a) where
+instance ShowList a => Prelude.Show (ListD @Rep a) where
   showsPrec _ = showList
 
-data MaybeDef (a :: TYPE Rep) = Nothing | Just a
+data instance MaybeD (a :: TYPE Rep) = Nothing | Just a
 
--- type instance RebindRep MaybeDef r' = 'LiftedRep
-type instance Rebind MaybeDef r' = MaybeR r'
+instance Functor (MaybeD @Rep) where
+  type FunctorRep (MaybeD @Rep) = MaybeRep
+  fmap = mapMaybe
 
--- instance (f' ~ Maybe @r') => Bind MaybeDef (f' :: TYPE r' -> Type) 
-
-instance Functor MaybeDef where
-  type FunctorRep MaybeDef = MaybeRep
-  fmap = mapMaybe 
-  -- fmap _ Nothing = nothing
-  -- fmap f (Just a) = just' (f a)
-
-instance Eq a => Prelude.Eq (MaybeDef a) where
+instance Eq a => Prelude.Eq (MaybeD @Rep a) where
   Nothing == Nothing = True
   Just a == Just b = a == b
   _ == _ = False
   
-instance Ord a => Prelude.Ord (MaybeDef a) where
+instance Ord a => Prelude.Ord (MaybeD @Rep a) where
   compare Nothing  Nothing = EQ
   compare Nothing  Just{} = LT
   compare Just{}   Nothing = GT
   compare (Just a) (Just b) = compare a b
 
-instance Show a => Prelude.Show (MaybeDef a) where
+instance Show a => Prelude.Show (MaybeD @Rep a) where
   showsPrec _ Nothing = showString "Nothing"
   showsPrec d (Just a) = showParen (d >= 11) $ showString "Just " . showsPrec 11 a
 
 instance MaybeRep Rep where
-  type MaybeR Rep = MaybeDef
   nothing = Nothing
   just = Just
   just' x = Just x
@@ -261,7 +247,7 @@ instance Functor (Maybe# @Rep) where
   fmap f (Just# a) = Just# (f a)
 -}
 
-instance Show a => Show (Maybe# (a :: TYPE Rep)) where
+instance Show a => Show (Maybe# @Rep a) where
   showsPrec _ Nothing# = showString "Nothing#"
   showsPrec d (Just# a) = showParen (d >= 11) $ showString "Just# " . showsPrec 11 a
   show x = shows x ""
@@ -269,7 +255,7 @@ instance Show a => Show (Maybe# (a :: TYPE Rep)) where
 -- this instance will probably not fire without a lot of help, because that body condition is harsh
 -- We split ShowList into a separate class, even if this breaks compat with base because of this
 -- instance
-instance (ListRep ('SumRep '[ 'TupleRep '[], Rep ]), Show a) => ShowList (Maybe# (a :: TYPE Rep)) where
+instance (ListRep ('SumRep '[ 'TupleRep '[], Rep ]), Show a) => ShowList (Maybe# @Rep a) where
   showList = go shows where
     go :: forall (a :: TYPE Rep). (Maybe# a -> ShowS) -> List (Maybe# a) -> ShowS
     go showx l s = case uncons# l of
