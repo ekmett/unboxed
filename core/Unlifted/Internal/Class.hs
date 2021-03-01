@@ -1,13 +1,17 @@
 {-# Language ConstrainedClassMethods #-}
 {-# Language DataKinds #-}
 {-# Language DefaultSignatures #-}
+{-# Language FlexibleContexts #-}
 {-# Language FlexibleInstances #-}
 {-# Language ImportQualifiedPost #-}
 {-# Language NoImplicitPrelude #-}
 {-# Language PolyKinds #-}
 {-# Language RankNTypes #-}
 {-# Language RebindableSyntax #-}
+{-# Language ScopedTypeVariables #-}
+{-# Language InstanceSigs #-}
 {-# Language StandaloneKindSignatures #-}
+{-# Language TypeApplications #-}
 {-# Language TypeFamilies #-}
 {-# Language TypeOperators #-}
 {-# Language UnboxedSums #-}
@@ -557,7 +561,17 @@ instance Prelude.Functor f => Functor (f :: Type -> Type) where
 
 
 class Functor (f :: TYPE r -> TYPE s) where
-  fmap :: forall (a :: TYPE r) r' (b :: TYPE r'). (a -> b) -> f a -> (f # b)
+  type FunctorRep (f :: TYPE r -> TYPE s) :: RuntimeRep -> Constraint
+  fmap :: forall (a :: TYPE r) r' (b :: TYPE r') f'. Rebind f f' => (a -> b) -> f a -> f' b
+
+instance Functor Prelude.Maybe where
+  type FunctorRep Prelude.Maybe = MaybeRep 
+  fmap :: forall (a :: Type) r' (b :: TYPE r') f'. Rebind Prelude.Maybe f' => (a -> b) -> Prelude.Maybe a -> f' b
+  fmap = mapMaybe @r'
+
+instance Functor MaybeFam where
+  type FunctorRep MaybeFam = MaybeRep 
+  fmap = mapMaybe
 
 -- * Printing
 

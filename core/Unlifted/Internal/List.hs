@@ -1,13 +1,16 @@
 {-# Language DataKinds #-}
+{-# Language FlexibleInstances #-}
 {-# Language MagicHash #-}
-{-# Language UnboxedTuples #-}
+{-# Language MultiParamTypeClasses #-}
 {-# Language NoImplicitPrelude #-}
+{-# Language PolyKinds #-}
+{-# Language RankNTypes #-}
 {-# Language StandaloneKindSignatures #-}
 {-# Language TypeApplications #-}
-{-# Language TypeFamilyDependencies #-}
-{-# Language PolyKinds #-}
 {-# Language TypeFamilies #-}
-{-# Language RankNTypes #-}
+{-# Language TypeFamilyDependencies #-}
+{-# Language UnboxedTuples #-}
+{-# Language UndecidableInstances #-}
 {-# OPTIONS_HADDOCK not-home #-}
 
 -- | Other 'ListRep' instances are defined via backpack
@@ -26,6 +29,9 @@ type family List = (c :: TYPE r -> Type) | c -> r where
   List @'LiftedRep = []
   List @r = ListFam @r
 
+instance (f' ~ List @r') => Bind [] (f' :: TYPE r' -> Type) 
+instance (f' ~ List @r') => Bind ListFam (f' :: TYPE r' -> Type)
+
 type ListFam :: forall r. TYPE r -> Type
 data family ListFam :: TYPE r -> Type
 
@@ -40,7 +46,9 @@ instance ListRep 'LiftedRep where
   uncons# [] = Maybe# (# (##) | #)
   uncons# (x:xs) = Maybe# (# | (# x, xs #) #)
 
+{-
 type instance RebindRep [] r' = 'LiftedRep
 type instance RebindRep ListFam r' = 'LiftedRep
 type instance Rebind [] r' = List @r'
 type instance Rebind ListFam r' = List @r'
+-}

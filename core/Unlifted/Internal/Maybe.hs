@@ -3,6 +3,7 @@
 {-# Language FlexibleInstances #-}
 {-# Language ImportQualifiedPost #-}
 {-# Language MagicHash #-}
+{-# Language MultiParamTypeClasses #-}
 {-# Language PolyKinds #-}
 {-# Language RankNTypes #-}
 {-# Language StandaloneKindSignatures #-}
@@ -11,6 +12,7 @@
 {-# Language TypeFamilyDependencies #-}
 {-# Language UnboxedSums #-}
 {-# Language UnboxedTuples #-}
+{-# Language UndecidableInstances #-}
 {-# Language UnliftedNewtypes #-}
 
 module Unlifted.Internal.Maybe
@@ -29,17 +31,17 @@ import GHC.Types
 import Prelude qualified
 
 type Maybe :: forall r. TYPE r -> Type
-type family Maybe = (c :: TYPE r -> Type) | c -> r where
+type family Maybe where -- = (c :: TYPE r -> Type) | c -> r where
   Maybe @'LiftedRep = Prelude.Maybe
   Maybe @r = MaybeFam @r
 
 type MaybeFam :: forall r. TYPE r -> Type
 data family MaybeFam :: TYPE r -> Type
 
-type instance RebindRep Prelude.Maybe r' = 'LiftedRep
-type instance RebindRep MaybeFam r' = 'LiftedRep
-type instance Rebind Prelude.Maybe r' = Maybe @r'
-type instance Rebind MaybeFam r' = Maybe @r'
+-- instance (f' ~ Maybe @r') => Bind Prelude.Maybe (f' :: TYPE r' -> Type)
+-- instance (f' ~ Maybe @r') => Bind MaybeFam (f' :: TYPE r' -> Type)
+instance (f' ~ Maybe) => Bind Prelude.Maybe f'
+instance (f' ~ Maybe) => Bind MaybeFam f'
 
 type MaybeRep :: RuntimeRep -> Constraint
 class MaybeRep r where
@@ -47,7 +49,7 @@ class MaybeRep r where
   just :: forall (a :: TYPE r). a -> Maybe a
   just' :: forall (a :: TYPE r). Lev a -> Maybe a
   maybe :: forall (a :: TYPE r) r' (b :: TYPE r'). Lev b -> (a -> b) -> Maybe a -> b
-  mapMaybe :: forall (a :: TYPE r) r' (b :: TYPE r'). MaybeRep r' => (a -> b) -> Maybe a -> Maybe b
+  mapMaybe :: forall (a :: TYPE r) r' (b :: TYPE r'). MaybeRep r' => (a -> b) -> Maybe @r a -> Maybe @r' b
 
 instance MaybeRep 'LiftedRep where
   nothing = Prelude.Nothing
