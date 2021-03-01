@@ -1,6 +1,6 @@
 cabal-version: 3.4
 name: unboxed
-version: 0
+version: 0.2
 synopsis: unboxed classes
 description: unboxed classes.
 homepage: https://github.com/ekmett/haskell
