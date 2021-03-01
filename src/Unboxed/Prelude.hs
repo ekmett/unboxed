@@ -1,16 +1,16 @@
 -- eventually provide a Prelude alternative that is overloaded to allow unlifted operations where possible
 
-module Unlifted.Prelude
+module Unboxed.Prelude
   ( 
   -- * Classes
-    module Unlifted.Class
-  , module Unlifted.List
-  , module Unlifted.Maybe
+    module Unboxed.Class
+  , module Unboxed.List
+  , module Unboxed.Maybe
   -- * Automatically levitating if then else syntax
   , ifThenElse
   -- * Printing unlifted values
   , PrintRep(hPrint)
-  -- * Unlifted.Combinators
+  -- * Unboxed.Combinators
   , id
   , const
   -- * Standard Prelude types
@@ -22,12 +22,12 @@ module Unlifted.Prelude
   ) where
 
 
-import Unlifted.Class
-import Unlifted.Combinators
-import Unlifted.List
-import Unlifted.Maybe
-import Unlifted.Rep
-import Unlifted.Syntax
+import Unboxed.Class
+import Unboxed.Combinators
+import Unboxed.List
+import Unboxed.Maybe
+import Unboxed.Rep
+import Unboxed.Syntax
 import Prelude
   ( Bool(..)
   , (&&), (||), not, otherwise

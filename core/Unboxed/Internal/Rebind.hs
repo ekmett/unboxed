@@ -10,7 +10,7 @@
 {-# Language TypeApplications #-}
 {-# Language TypeFamilies #-}
 {-# Language TypeOperators #-}
-module Unlifted.Internal.Rebind 
+module Unboxed.Internal.Rebind 
   ( Rebind
   , type (#)
   ) where

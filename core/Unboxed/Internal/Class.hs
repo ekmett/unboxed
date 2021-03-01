@@ -18,7 +18,7 @@
 {-# Language UnboxedTuples #-}
 {-# OPTIONS_HADDOCK not-home #-}
 
-module Unlifted.Internal.Class
+module Unboxed.Internal.Class
   ( Eq(..), EqRep(..)
   , Ord(..), OrdRep(..)
   , Num(..), NumRep(..)
@@ -50,10 +50,10 @@ import GHC.Types (Type, RuntimeRep(..))
 import Numeric qualified
 import Prelude (Ordering(..), Bool(..), Int, ShowS, String, IO)
 import Prelude qualified
-import Unlifted.Levitation
-import Unlifted.Internal.List
-import Unlifted.Internal.Maybe
-import Unlifted.Internal.Rebind
+import Unboxed.Levitation
+import Unboxed.Internal.List
+import Unboxed.Internal.Maybe
+import Unboxed.Internal.Rebind
 import System.IO qualified as IO
 
 -- * Standard Classes

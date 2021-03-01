@@ -1,5 +1,5 @@
 {-# Language NoImplicitPrelude #-}
-module Unlifted.Class 
+module Unboxed.Class 
   -- TODO: export everything individually
   ( Eq(..)
   , Ord(..)
@@ -19,7 +19,7 @@ module Unlifted.Class
   , print, hPrint
   ) where
 
-import Unlifted.Internal.Class
+import Unboxed.Internal.Class
 -- official gathering point of instances
 import A ()
 import D ()

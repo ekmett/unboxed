@@ -11,8 +11,8 @@ module L
   , pattern (:#)
   ) where
 
-import Unlifted.Internal.Maybe hiding (Maybe)
-import Unlifted.Internal.List
+import Unboxed.Internal.Maybe hiding (Maybe)
+import Unboxed.Internal.List
 import GHC.Types (Type)
 
 pattern Nothing# :: forall (a :: Type). Maybe# a

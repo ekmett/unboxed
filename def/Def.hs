@@ -16,10 +16,10 @@
 
 module Def where
 
-import Unlifted.Internal.Class
-import Unlifted.Internal.List
-import Unlifted.Internal.Maybe
--- import Unlifted.Internal.Rebind
+import Unboxed.Internal.Class
+import Unboxed.Internal.List
+import Unboxed.Internal.Maybe
+-- import Unboxed.Internal.Rebind
 import GHC.Types
 import Prelude (otherwise, not, (++), ShowS, (.), showString, showParen,($), (&&), (||))
 import Prelude qualified

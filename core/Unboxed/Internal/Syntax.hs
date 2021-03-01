@@ -5,10 +5,10 @@
 {-# Language RankNTypes #-}
 {-# OPTIONS_HADDOCK not-home #-}
 
-module Unlifted.Internal.Syntax where
+module Unboxed.Internal.Syntax where
 
 import GHC.Types (TYPE, Bool(..))
-import Unlifted.Levitation
+import Unboxed.Levitation
 
 -- | Unfortunately there is no way to turn on just the numeric part of RebindableSyntax.
 --

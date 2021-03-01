@@ -15,18 +15,18 @@
 {-# Language UndecidableInstances #-}
 {-# Language UnliftedNewtypes #-}
 
-module Unlifted.Internal.Maybe
+module Unboxed.Internal.Maybe
   ( -- MaybeFam
     Maybe
   , MaybeD
   , MaybeRep(..)
-  -- * Unlifted Maybe
+  -- * Unboxed Maybe
   , Maybe#(..)
   , MaybeRep#(..)
   ) where
 
-import Unlifted.Levitation
-import Unlifted.Internal.Rebind
+import Unboxed.Levitation
+import Unboxed.Internal.Rebind
 
 import GHC.Types
 import Prelude qualified
@@ -60,7 +60,7 @@ instance MaybeRep 'LiftedRep where
   mapMaybe f (Prelude.Just a) = just' (f a)
   mapMaybe _ Prelude.Nothing = nothing
 
--- | Unlifted @Maybe@ with a (possibly) unlifted argument
+-- | Unboxed @Maybe@ with a (possibly) unlifted argument
 
 type Maybe# :: TYPE r -> TYPE ('SumRep '[ 'TupleRep '[],r])
 newtype Maybe# (a :: TYPE r) = Maybe# (# (##) | a #)

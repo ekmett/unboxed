@@ -18,7 +18,7 @@
 {-# Language NoLinearTypes #-}
 {-# Language NoImplicitPrelude #-}
 
-module Unlifted.Internal.Linear.Ur where
+module Unboxed.Internal.Linear.Ur where
 
 import GHC.Exts
 import Prelude qualified

@@ -18,7 +18,7 @@ import GHC.Integer
 import GHC.Prim
 import GHC.Types
 import Prelude (otherwise)
-import Unlifted.Internal.Class
+import Unboxed.Internal.Class
 
 import Def.F
 

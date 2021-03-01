@@ -4,10 +4,10 @@
 {-# Language TypeFamilies #-}
 {-# Language RankNTypes #-}
 
-module Unlifted.Internal.Combinators where
+module Unboxed.Internal.Combinators where
 
 import GHC.Types (TYPE)
-import Unlifted.Levitation
+import Unboxed.Levitation
 
 -- i don't want to levitate the argument. make a class?
 id :: forall r (a :: TYPE r). Lev a -> a

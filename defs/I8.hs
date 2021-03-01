@@ -14,7 +14,7 @@ module I8
   , Int8#
   ) where
 
-import Unlifted.Internal.Class
+import Unboxed.Internal.Class
 import GHC.Int (Int8(..))
 import GHC.Prim
 import GHC.Integer

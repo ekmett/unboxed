@@ -12,7 +12,7 @@
 {-# Language UnboxedTuples #-}
 {-# Language UnliftedNewtypes #-}
 
-module Unlifted.Internal.Lift
+module Unboxed.Internal.Lift
   ( LiftRep(..)
   , pureLift
   , mapLift
@@ -20,7 +20,7 @@ module Unlifted.Internal.Lift
   , bindLift
   ) where
 
-import Unlifted.Levitation
+import Unboxed.Levitation
 import GHC.Types
 import Prelude qualified
 

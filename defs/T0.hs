@@ -14,7 +14,7 @@ module T0
   , State#
   ) where
 
-import Unlifted.Internal.Class
+import Unboxed.Internal.Class
 import GHC.Prim
 import GHC.Types
 import Prelude (showString)

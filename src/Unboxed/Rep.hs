@@ -1,4 +1,4 @@
-module Unlifted.Rep
+module Unboxed.Rep
   ( EqRep(..)
   , OrdRep(..)
   , NumRep(..)
@@ -14,5 +14,5 @@ module Unlifted.Rep
   , PrintRep(..)
   ) where
 
-import Unlifted.Internal.Class
-import Unlifted.Class () 
+import Unboxed.Internal.Class
+import Unboxed.Class () 

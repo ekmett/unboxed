@@ -14,7 +14,7 @@ module A
   , StablePtr#
   ) where
 
-import Unlifted.Internal.Class
+import Unboxed.Internal.Class
 import GHC.Prim
 import GHC.Types
 

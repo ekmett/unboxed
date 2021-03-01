@@ -19,7 +19,7 @@
 {-# Language ImportQualifiedPost #-}
 {-# Language FunctionalDependencies #-}
 
-module Unlifted.Internal.Linear 
+module Unboxed.Internal.Linear 
   ( Consumable(..)
   , Ur(..)
   , UrRep(..)
@@ -34,9 +34,9 @@ import GHC.Exts
 -- import GHC.Prim
 import GHC.Types
 import Unsafe.Coerce
-import Unlifted.Levitation
-import Unlifted.Internal.Linear.Ur
--- import Unlifted.Internal.Maybe as Maybe
+import Unboxed.Levitation
+import Unboxed.Internal.Linear.Ur
+-- import Unboxed.Internal.Maybe as Maybe
 -- import Prelude qualified
 
 type Consumable :: TYPE r -> Constraint
@@ -59,7 +59,7 @@ instance UrRep 'LiftedRep where
   mapUr = toLinear2 coerce
 
 {-
-instance UrRep 'UnliftedRep where
+instance UrRep 'UnboxedRep where
   pureUr = Ur
   unUr (Ur a) = a
   bindUr (Ur a) f = f a

@@ -1,9 +1,9 @@
 {-# Language MagicHash #-}
-module Unlifted.Maybe
+module Unboxed.Maybe
   ( MaybeRep(..)
   , Maybe#(..)
   , MaybeRep#(..)
   ) where
 
-import Unlifted.Class ()
-import Unlifted.Internal.Maybe
+import Unboxed.Class ()
+import Unboxed.Internal.Maybe

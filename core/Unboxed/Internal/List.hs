@@ -14,15 +14,15 @@
 {-# OPTIONS_HADDOCK not-home #-}
 
 -- | Other 'ListRep' instances are defined via backpack
-module Unlifted.Internal.List 
+module Unboxed.Internal.List 
   ( List
   , ListD
   , ListRep(..)
   ) where
 
 import GHC.Types (Type, TYPE, RuntimeRep(..))
-import Unlifted.Internal.Maybe
-import Unlifted.Internal.Rebind
+import Unboxed.Internal.Maybe
+import Unboxed.Internal.Rebind
 
 type ListD :: forall r. TYPE r -> Type
 data family ListD :: TYPE r -> Type

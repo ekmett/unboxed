@@ -14,7 +14,7 @@ module D
   , Double#
   ) where
 
-import Unlifted.Internal.Class
+import Unboxed.Internal.Class
 import GHC.Prim
 import GHC.Integer
 import GHC.Types

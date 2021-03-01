@@ -19,7 +19,7 @@ module U
   , Weak#
   ) where
 
-import Unlifted.Internal.Class
+import Unboxed.Internal.Class
 import GHC.Prim
 import GHC.Types
 
