@@ -1,3 +1,14 @@
-:set -fno-it -interactive-print print
-:set -XRebindableSyntax -XMagicHash -XUnboxedTuples -XUnboxedSums -XUnliftedNewtypes -XNoImplicitPrelude
-:set -Wno-type-defaults -Wno-prepositive-qualified-module
+-- ghci binds 'it' to the last expression by default, but it assumes it lives in Type. this blocks overloaded printing
+:set -fno-it
+
+-- replace System.IO.print with whatever 'print' is in scope. We export a RuntimeRep polymorphic 'print' function.
+:set -interactive-print print
+
+-- we don't want standard Prelude definitions
+:set -XRebindableSyntax -XNoImplicitPrelude
+
+-- but you'll probably be working with unboxed types
+:set -XMagicHash -XUnboxedTuples -XUnboxedSums -XUnliftedNewtypes
+
+-- just to squelch some noise
+:set -Wno-type-defaults
