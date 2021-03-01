@@ -1,3 +1,7 @@
-0 [yyyy.mm.dd] unreleased
+0.2 [yyyy.mm.dd] unreleased
 -----------------
-* Repo created
+* Edward Kmett replaced it with a completely different library.
+
+0.1
+---
+* Carter Schonwald released a library.
