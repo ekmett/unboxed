@@ -147,6 +147,7 @@ library
 
   if flag(level1)
     build-depends: consdef
+    cpp-options: -DUNBOXED_LEVEL1
     mixins:
       consdef (Def.Tuple as Unboxed.Rep.Tuple1.Addr, Def.Cons as Reps.Addr) requires (H as AddrRep, T as NilReps),
       consdef (Def.Tuple as Unboxed.Rep.Tuple1.Double, Def.Cons as Reps.Double) requires (H as DoubleRep, T as NilReps),
@@ -185,6 +186,7 @@ library
   
 
   if flag(level1) && flag(level2)
+    cpp-options: -DUNBOXED_LEVEL2
     mixins:
       consdef (Def.Tuple as Unboxed.Rep.Tuple2.Addr.Addr, Def.Sum as Unboxed.Rep.Sum2.Addr.Addr, Def.Cons as Reps.Addr.Addr) requires (H as AddrRep, T as Reps.Addr),
       consdef (Def.Tuple as Unboxed.Rep.Tuple2.Double.Addr, Def.Sum as Unboxed.Rep.Sum2.Double.Addr, Def.Cons as Reps.Double.Addr) requires (H as DoubleRep, T as Reps.Addr),
