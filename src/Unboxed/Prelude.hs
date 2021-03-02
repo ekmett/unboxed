@@ -26,7 +26,6 @@ import Unboxed.Class
 import Unboxed.Combinators
 import Unboxed.List
 import Unboxed.Maybe
-import Unboxed.Rep
 import Unboxed.Syntax
 import Prelude
   ( Bool(..)

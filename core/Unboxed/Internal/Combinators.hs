@@ -7,7 +7,7 @@
 module Unboxed.Internal.Combinators where
 
 import GHC.Types (TYPE)
-import Unboxed.Levitation
+import Unboxed.Internal.Levitation
 
 -- i don't want to levitate the argument. make a class?
 id :: forall r (a :: TYPE r). Lev a -> a

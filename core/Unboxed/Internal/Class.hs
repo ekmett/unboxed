@@ -50,7 +50,7 @@ import GHC.Types (Type, RuntimeRep(..))
 import Numeric qualified
 import Prelude (Ordering(..), Bool(..), Int, ShowS, String, IO)
 import Prelude qualified
-import Unboxed.Levitation
+import Unboxed.Internal.Levitation
 import Unboxed.Internal.List
 import Unboxed.Internal.Maybe
 import Unboxed.Internal.Rebind

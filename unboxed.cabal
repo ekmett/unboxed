@@ -42,7 +42,7 @@ library core
   hs-source-dirs: core
   build-depends: linear-base
   exposed-modules:
-    Unboxed.Levitation
+    Unboxed.Internal.Levitation
     Unboxed.Internal.Class
     Unboxed.Internal.Combinators
     Unboxed.Internal.List
@@ -76,8 +76,8 @@ library
     Unboxed.Combinators
     Unboxed.Syntax
     Unboxed.Maybe
+    Unboxed.Levitation
     Unboxed.List
-    Unboxed.Rep
     Unboxed.Rep.Addr
     Unboxed.Rep.Double
     Unboxed.Rep.Float
@@ -105,7 +105,6 @@ library
     def (Def as Unboxed.Rep.Word32) requires (Rep as Word32Rep),
     def (Def as Unboxed.Rep.Word64) requires (Rep as Word64Rep)
   reexported-modules:
-    Unboxed.Levitation,
     Unboxed.Rep.Int16,
     Unboxed.Rep.Int32,
     Unboxed.Rep.Int64,

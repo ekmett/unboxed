@@ -1,6 +1,6 @@
 -- support for RebindableSyntax
 module Unboxed.Syntax 
-  ( module Unboxed.Internal.Syntax
+  ( ifThenElse
   ) where
 
 import Unboxed.Class ()

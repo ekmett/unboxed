@@ -1,21 +1,24 @@
 {-# Language NoImplicitPrelude #-}
 module Unboxed.Class 
   -- TODO: export everything individually
-  ( Eq(..)
-  , Ord(..)
+  ( Eq(..), EqRep
+  , Ord(..), OrdRep
   , Bounded(..)
-  , Num(..)
-  , Fractional(..)
-  , Real(..)
-  , Enum(..)
-  , Integral(..)
-  , RealFrac(..)
-  , Floating(..)
-  , RealFloat(..)
-  , Show(..), ShowList(..), shows
+  , Num(..), NumRep
+  , Fractional(..), FractionalRep
+  , Real(..), RealRep
+  , Enum(..), EnumRep
+  , Integral(..), IntegralRep
+  , RealFrac(..), RealFracRep
+  , Floating(..), FloatingRep
+  , RealFloat(..), RealFloatRep
+  , Show(..), ShowRep
+  , ShowList(..), ShowListRep
+  , shows
   , Semigroup(..)
   , Monoid(..)
   , Functor(..)
+  , PrintRep
   , print, hPrint
   ) where
 

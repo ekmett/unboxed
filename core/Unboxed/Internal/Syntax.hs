@@ -8,7 +8,7 @@
 module Unboxed.Internal.Syntax where
 
 import GHC.Types (TYPE, Bool(..))
-import Unboxed.Levitation
+import Unboxed.Internal.Levitation
 
 -- | Unfortunately there is no way to turn on just the numeric part of RebindableSyntax.
 --

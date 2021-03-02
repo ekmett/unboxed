@@ -25,7 +25,7 @@ module Unboxed.Internal.Maybe
   , MaybeRep#(..)
   ) where
 
-import Unboxed.Levitation
+import Unboxed.Internal.Levitation
 import Unboxed.Internal.Rebind
 
 import GHC.Types

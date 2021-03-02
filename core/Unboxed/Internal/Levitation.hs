@@ -4,7 +4,7 @@
 {-# Language RankNTypes #-}
 {-# Language PolyKinds #-}
 
-module Unboxed.Levitation 
+module Unboxed.Internal.Levitation 
   ( Lev
   ) where
 

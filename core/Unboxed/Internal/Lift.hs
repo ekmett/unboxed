@@ -20,7 +20,7 @@ module Unboxed.Internal.Lift
   , bindLift
   ) where
 
-import Unboxed.Levitation
+import Unboxed.Internal.Levitation
 import GHC.Types
 import Prelude qualified
 

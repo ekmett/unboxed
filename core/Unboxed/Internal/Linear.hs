@@ -34,7 +34,7 @@ import GHC.Exts
 -- import GHC.Prim
 import GHC.Types
 import Unsafe.Coerce
-import Unboxed.Levitation
+import Unboxed.Internal.Levitation
 import Unboxed.Internal.Linear.Ur
 -- import Unboxed.Internal.Maybe as Maybe
 -- import Prelude qualified
