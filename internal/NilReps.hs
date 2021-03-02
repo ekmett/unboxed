@@ -1,6 +1,6 @@
 {-# Language DataKinds #-}
 {-# Language StandaloneKindSignatures #-}
-module Nil where
+module NilReps where
 import GHC.Types
 type Reps :: [RuntimeRep]
 type Reps = '[]

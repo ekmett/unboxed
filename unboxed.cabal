@@ -51,12 +51,14 @@ library internal
     Unboxed.Internal.Syntax
     Unboxed.Internal.Linear.Ur
     Unboxed.Internal.Linear
+
     AddrRep DoubleRep FloatRep
     IntRep Int8Rep Int16Rep Int32Rep Int64Rep
     LiftedRep UnliftedRep
     SumRep TupleRep
     WordRep Word8Rep Word16Rep Word32Rep Word64Rep
-    Nil
+
+    NilReps
 
 -- DEFaults and DEFinitions
 library def
@@ -65,6 +67,12 @@ library def
   hs-source-dirs: def
   signatures: Rep
   exposed-modules: Def
+
+library consreps
+  import: base
+  hs-source-dirs: consreps
+  signatures: H T
+  exposed-modules: ConsReps
 
 library
   import: base
