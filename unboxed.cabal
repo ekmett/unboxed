@@ -79,9 +79,10 @@ library consdef
   build-depends: consreps, def
   hs-source-dirs: consdef
   mixins:
-    def (Def as Def.Tuple) requires (Rep as Tuple),
-    def (Def as Def.Sum) requires (Rep as Sum)
-  signatures: H T
+    consreps (Tuple as TupleCons, Sum as SumCons) requires (H as ConsDef.H, T as ConsDef.T),
+    def (Def as Def.Tuple) requires (Rep as TupleCons),
+    def (Def as Def.Sum) requires (Rep as SumCons)
+  signatures: ConsDef.H ConsDef.T
   reexported-modules: Def.Tuple, Def.Sum
 
 library consdefs
@@ -89,12 +90,12 @@ library consdefs
   build-depends: consdef, internal
   hs-source-dirs: consdefs
   mixins:
-    consdef(Def.Tuple as Tuple.Addr, Def.Sum as Sum.Addr) requires (H as Addr),
-    consdef(Def.Tuple as Tuple.Double, Def.Sum as Sum.Double) requires (H as Double),
-    consdef(Def.Tuple as Tuple.Float, Def.Sum as Sum.Float) requires (H as Float),
-    consdef(Def.Tuple as Tuple.Lifted, Def.Sum as Sum.Lifted) requires (H as Lifted),
-    consdef(Def.Tuple as Tuple.Unlifted, Def.Sum as Sum.Unlifted) requires (H as Unlifted)
-  signatures: T
+    consdef(Def.Tuple as Tuple.Addr, Def.Sum as Sum.Addr) requires (ConsDef.H as Addr, ConsDef.T as ConsDefs.T),
+    consdef(Def.Tuple as Tuple.Double, Def.Sum as Sum.Double) requires (ConsDef.H as Double, ConsDef.T as ConsDefs.T),
+    consdef(Def.Tuple as Tuple.Float, Def.Sum as Sum.Float) requires (ConsDef.H as Float, ConsDef.T as ConsDefs.T),
+    consdef(Def.Tuple as Tuple.Lifted, Def.Sum as Sum.Lifted) requires (ConsDef.H as Lifted, ConsDef.T as ConsDefs.T),
+    consdef(Def.Tuple as Tuple.Unlifted, Def.Sum as Sum.Unlifted) requires (ConsDef.H as Unlifted, ConsDef.T as ConsDefs.T)
+  signatures: ConsDefs.T
   reexported-modules:
     Tuple.Addr, Tuple.Double, Tuple.Float, Tuple.Lifted, Tuple.Unlifted,
     Sum.Addr, Sum.Double, Sum.Float, Sum.Lifted, Sum.Unlifted
@@ -142,7 +143,7 @@ library
       Tuple.Double as Unboxed.Rep.Tuple1.Double,
       Sum.Addr as Unboxed.Rep.Sum1.Addr,
       Sum.Double as Unboxed.Rep.Sum1.Double
-    ) requires (T as NilReps)
+    ) requires (ConsDefs.T as NilReps)
   reexported-modules:
     Unboxed.Rep.Int16,
     Unboxed.Rep.Int32,
