@@ -1,6 +1,9 @@
 {-# Language MagicHash #-}
+{-# Language NoImplicitPrelude #-}
 module Unboxed.Maybe
-  ( MaybeRep(..)
+  ( Maybe
+  , MaybeD
+  , MaybeRep(..)
   , Maybe#(..)
   , MaybeRep#(..)
   ) where

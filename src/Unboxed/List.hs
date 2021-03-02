@@ -1,5 +1,7 @@
 module Unboxed.List
-  ( ListRep(..)
+  ( List
+  , ListD
+  , ListRep(..)
   ) where
 
 import Unboxed.Class ()
