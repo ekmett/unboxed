@@ -21,6 +21,7 @@ module Unboxed.Internal.List
   ) where
 
 import GHC.Types (Type, TYPE, RuntimeRep(..))
+import Unboxed.Internal.Levitation
 import Unboxed.Internal.Maybe
 import Unboxed.Internal.Rebind
 
@@ -37,11 +38,13 @@ type instance Rebind ListD r = List @r
 
 class ListRep r where
   cons :: forall (a :: TYPE r). a -> List a -> List a
+  cons' :: forall (a :: TYPE r). Lev a -> List a -> List a
   nil :: forall (a :: TYPE r). List a
   uncons# :: forall (a :: TYPE r). List a -> Maybe# (# a, List a #)
 
 instance ListRep 'LiftedRep where
   cons = (:)
+  cons' x xs = x : xs
   nil = []
   uncons# [] = Maybe# (# (##) | #)
   uncons# (x:xs) = Maybe# (# | (# x, xs #) #)

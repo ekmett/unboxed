@@ -169,15 +169,10 @@ infixr 5 :#
 
 instance ListRep Rep where
   cons = (:#) 
+  cons' a as = a :# as
   nil = Nil
   uncons# (a :# as) = Maybe# (# | (# a, as #) #)
   uncons# Nil = Maybe# (# (##) | #)
-
-{-
-instance Functor (ListD @Rep) where
-  fmap _ Nil = Nil
-  fmap f (a :# as) = f a :# fmap f as
--}
 
 instance Eq a => Prelude.Eq (ListD @Rep a) where
   Nil == Nil = True
