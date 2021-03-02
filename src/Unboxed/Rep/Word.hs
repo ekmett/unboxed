@@ -8,7 +8,7 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module Unboxed.Rep.Word
-  ( module Word
+  ( module Def.Word
   , eqWord, neWord, ltWord, leWord, gtWord, geWord
   , eqChar, neChar, ltChar, leChar, gtChar, geChar
   , Word#
@@ -21,7 +21,7 @@ import GHC.Integer
 import GHC.Types
 import Prelude qualified
 
-import Word
+import Def.Word
 
 eqWord, neWord, ltWord, leWord, gtWord, geWord :: Word# -> Word# -> Bool
 eqWord x y = isTrue# (eqWord# x y)

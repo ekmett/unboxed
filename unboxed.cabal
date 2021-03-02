@@ -22,8 +22,11 @@ source-repository head
   type: git
   location: https://github.com/ekmett/unboxed
 
-common base
+common minimal
   default-language: Haskell2010
+
+common base
+  import: minimal
   build-depends:
     base >= 4.15 && < 5,
     ghc-prim
@@ -72,11 +75,34 @@ library consreps
   import: base
   hs-source-dirs: consreps
   signatures: H T
-  exposed-modules: ConsReps
+  exposed-modules: ConsReps Tuple Sum
+
+library consdef
+  import: minimal
+  build-depends: consreps, def
+  mixins:
+    def (Def as Def.Tuple) requires (Rep as Tuple),
+    def (Def as Def.Sum) requires (Rep as Sum)
+  signatures: H T
+  reexported-modules: Def.Tuple, Def.Sum
+
+library consdefs
+  import: minimal
+  build-depends: consdef, internal
+  mixins:
+    consdef(Def.Tuple as Tuple.Addr, Def.Sum as Sum.Addr) requires (H as Addr),
+    consdef(Def.Tuple as Tuple.Double, Def.Sum as Sum.Double) requires (H as Double),
+    consdef(Def.Tuple as Tuple.Float, Def.Sum as Sum.Float) requires (H as Float),
+    consdef(Def.Tuple as Tuple.Lifted, Def.Sum as Sum.Lifted) requires (H as Lifted),
+    consdef(Def.Tuple as Tuple.Unlifted, Def.Sum as Sum.Unlifted) requires (H as Unlifted)
+  signatures: T
+  reexported-modules:
+    Tuple.Addr, Tuple.Double, Tuple.Float, Tuple.Lifted, Tuple.Unlifted,
+    Sum.Addr, Sum.Double, Sum.Float, Sum.Lifted, Sum.Unlifted
 
 library
   import: base
-  build-depends: def, internal
+  build-depends: consdefs, def, internal
   hs-source-dirs: src
   exposed-modules:
     Unboxed.Prelude
@@ -96,22 +122,28 @@ library
     Unboxed.Rep.Unlifted
     Unboxed.Rep.Word
   mixins:
-    def (Def as Addr) requires (Rep as AddrRep),
-    def (Def as Double) requires (Rep as DoubleRep),
-    def (Def as Float) requires (Rep as FloatRep),
-    def (Def as Int) requires (Rep as IntRep),
-    def (Def as Int8) requires (Rep as Int8Rep),
+    def (Def as Def.Addr) requires (Rep as AddrRep),
+    def (Def as Def.Double) requires (Rep as DoubleRep),
+    def (Def as Def.Float) requires (Rep as FloatRep),
+    def (Def as Def.Int) requires (Rep as IntRep),
+    def (Def as Def.Int8) requires (Rep as Int8Rep),
     def (Def as Unboxed.Rep.Int16) requires (Rep as Int16Rep),
     def (Def as Unboxed.Rep.Int32) requires (Rep as Int32Rep),
     def (Def as Unboxed.Rep.Int64) requires (Rep as Int64Rep),
-    def (Def as Unlifted) requires (Rep as UnliftedRep),
+    def (Def as Def.Unlifted) requires (Rep as UnliftedRep),
     def (Def as Unboxed.Rep.Sum) requires (Rep as SumRep),
-    def (Def as Tuple) requires (Rep as TupleRep),
-    def (Def as Word) requires (Rep as WordRep),
+    def (Def as Def.Tuple) requires (Rep as TupleRep),
+    def (Def as Def.Word) requires (Rep as WordRep),
     def (Def as Unboxed.Rep.Word8) requires (Rep as Word8Rep),
     def (Def as Unboxed.Rep.Word16) requires (Rep as Word16Rep),
     def (Def as Unboxed.Rep.Word32) requires (Rep as Word32Rep),
-    def (Def as Unboxed.Rep.Word64) requires (Rep as Word64Rep)
+    def (Def as Unboxed.Rep.Word64) requires (Rep as Word64Rep),
+    consdefs (
+      Tuple.Addr as Unboxed.Rep.Tuple1.Addr,
+      Tuple.Double as Unboxed.Rep.Tuple1.Double,
+      Sum.Addr as Unboxed.Rep.Sum1.Addr,
+      Sum.Double as Unboxed.Rep.Sum1.Double
+    ) requires (T as NilReps)
   reexported-modules:
     Unboxed.Rep.Int16,
     Unboxed.Rep.Int32,
@@ -120,4 +152,8 @@ library
     Unboxed.Rep.Word8,
     Unboxed.Rep.Word16,
     Unboxed.Rep.Word32,
-    Unboxed.Rep.Word64
+    Unboxed.Rep.Word64,
+    Unboxed.Rep.Tuple1.Addr,
+    Unboxed.Rep.Tuple1.Double,
+    Unboxed.Rep.Sum1.Addr,
+    Unboxed.Rep.Sum1.Double

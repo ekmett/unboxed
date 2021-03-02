@@ -9,7 +9,7 @@
 
 -- | exposes detailed names that can be used for RULES
 module Unboxed.Rep.Int
-  ( module Int
+  ( module Def.Int
   , eqInt, neInt, ltInt, leInt, gtInt, geInt
   , Int#
   ) where
@@ -21,7 +21,7 @@ import GHC.Types
 import Prelude (otherwise)
 import Prelude qualified
 
-import Int
+import Def.Int
 
 eqInt, neInt, ltInt, leInt, gtInt, geInt :: Int# -> Int# -> Bool
 eqInt x y = isTrue# (x ==# y)

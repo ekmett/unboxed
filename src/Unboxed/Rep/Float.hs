@@ -9,7 +9,7 @@
 
 -- | exposes detailed names that can be used for RULES
 module Unboxed.Rep.Float
-  ( module Float
+  ( module Def.Float
   , eqFloat, neFloat, ltFloat, leFloat, gtFloat, geFloat
   , Float#
   ) where
@@ -20,7 +20,7 @@ import GHC.Types
 import Prelude (otherwise)
 import Unboxed.Internal.Class
 
-import Float
+import Def.Float
 
 eqFloat, neFloat, ltFloat, leFloat, gtFloat, geFloat :: Float# -> Float# -> Bool
 eqFloat x y = isTrue# (eqFloat# x y)

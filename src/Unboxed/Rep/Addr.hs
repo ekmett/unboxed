@@ -8,7 +8,7 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module Unboxed.Rep.Addr
-  ( module Addr
+  ( module Def.Addr
   , eqAddr, neAddr, ltAddr, leAddr, gtAddr, geAddr
   , Addr#
   , StablePtr#
@@ -18,7 +18,7 @@ import Unboxed.Internal.Class
 import GHC.Prim
 import GHC.Types
 
-import Addr
+import Def.Addr
 
 eqAddr, neAddr, ltAddr, leAddr, gtAddr, geAddr :: Addr# -> Addr# -> Bool
 eqAddr x y = isTrue# (eqAddr# x y)

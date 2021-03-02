@@ -9,7 +9,7 @@
 
 -- | exposes detailed names that can be used for RULES
 module Unboxed.Rep.Double
-  ( module Double
+  ( module Def.Double
   , eqDouble, neDouble, ltDouble, leDouble, gtDouble, geDouble
   , Double#
   ) where
@@ -20,7 +20,7 @@ import GHC.Integer
 import GHC.Types
 import Prelude (otherwise)
 
-import Double
+import Def.Double
 
 eqDouble, neDouble, ltDouble, leDouble, gtDouble, geDouble :: Double# -> Double# -> Bool
 eqDouble x y = isTrue# (x ==## y)

@@ -13,7 +13,7 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module Unboxed.Rep.Tuple
-  ( module Tuple
+  ( module Def.Tuple
   -- * Proxy#
   , Proxy#
   , proxy#
@@ -28,7 +28,7 @@ import GHC.Prim
 import GHC.Types
 import Prelude (showString)
 
-import Tuple
+import Def.Tuple
 
 instance Eq (# #) where
   _ == _  = True

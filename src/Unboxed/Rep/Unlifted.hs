@@ -7,7 +7,7 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module Unboxed.Rep.Unlifted
-  ( module Unlifted
+  ( module Def.Unlifted
   , MutableArray#
   , SmallMutableArray#
   , MutableByteArray#
@@ -23,7 +23,7 @@ import Unboxed.Internal.Class
 import GHC.Prim
 import GHC.Types
 
-import Unlifted
+import Def.Unlifted
 
 instance Eq (MutableArray# s a) where
   x == y = isTrue# (sameMutableArray# x y)

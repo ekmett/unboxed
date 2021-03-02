@@ -9,7 +9,7 @@
 
 -- | exposes detailed names that can be used for RULES
 module Unboxed.Rep.Int8 
-  ( module Int8
+  ( module Def.Int8
   , eqInt8, neInt8, ltInt8, leInt8, gtInt8, geInt8
   , Int8#
   ) where
@@ -21,7 +21,7 @@ import GHC.Integer
 import GHC.Types
 import Prelude (otherwise)
 
-import Int8
+import Def.Int8
 
 eqInt8, neInt8, ltInt8, leInt8, gtInt8, geInt8 :: Int8# -> Int8# -> Bool
 eqInt8 x y = isTrue# (extendInt8# x ==# extendInt8# y)
