@@ -37,9 +37,9 @@ common base
   ghc-options:
     -Wno-simplifiable-class-constraints -Wno-orphans
 
-library core
+library internal
   import: base
-  hs-source-dirs: core
+  hs-source-dirs: internal
   build-depends: linear-base
   exposed-modules:
     Unboxed.Internal.Levitation
@@ -61,14 +61,14 @@ library core
 -- DEFaults and DEFinitions
 library def
   import: base
-  build-depends: core
+  build-depends: internal
   hs-source-dirs: def
   signatures: Rep
   exposed-modules: Def
 
 library
   import: base
-  build-depends: def, core
+  build-depends: def, internal
   hs-source-dirs: src
   exposed-modules:
     Unboxed.Prelude
