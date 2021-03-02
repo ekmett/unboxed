@@ -25,12 +25,12 @@ source-repository head
 flag level1
   default: True
   manual: True
-  description: construct reps for singleton tuples (and sums)
+  description: construct reps for singleton tuples
 
 flag level2
-  default: True
+  default: False
   manual: True
-  description: construct reps for pairs and sums
+  description: construct reps for binary tuples and sums
 
 common minimal
   default-language: Haskell2010
