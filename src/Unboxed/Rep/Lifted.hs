@@ -26,3 +26,4 @@ pattern Nil = []
 
 pattern (:#) :: forall (a :: Type). a -> List a -> List a
 pattern x :# xs = x : xs
+

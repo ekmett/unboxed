@@ -13,13 +13,14 @@
 {-# Language ImportQualifiedPost #-}
 {-# Language FlexibleContexts #-}
 {-# Language FlexibleInstances #-}
+{-# Language StandaloneKindSignatures #-}
 
 module Def where
 
 import Unboxed.Internal.Class
 import Unboxed.Internal.List
 import Unboxed.Internal.Maybe
--- import Unboxed.Internal.Rebind
+import Unboxed.Internal.Rebind
 import GHC.Types
 import Prelude (otherwise, not, (++), ShowS, (.), showString, showParen,($), (&&), (||))
 import Prelude qualified
@@ -198,10 +199,6 @@ instance ShowList a => Prelude.Show (ListD @Rep a) where
 
 data instance MaybeD (a :: TYPE Rep) = Nothing | Just a
 
-instance Functor (MaybeD @Rep) where
-  type FunctorRep (MaybeD @Rep) = MaybeRep
-  fmap = mapMaybe
-
 instance Eq a => Prelude.Eq (MaybeD @Rep a) where
   Nothing == Nothing = True
   Just a == Just b = a == b
@@ -241,11 +238,22 @@ pattern Nothing# = Maybe# (# (##) | #)
 pattern Just# :: forall (a :: TYPE Rep). a -> Maybe# a
 pattern Just# a = Maybe# (# | a #)
 
-{-
+-- Maybe# can be made a monomorphic functor where the result rep must match the input rep
+-- not very satisfying, but the best we can do until richard allows type families inside
+-- TYPE.
+
+-- unfortunately ghc is not able to be talked into this, even with type family helpers
+type RebindMaybe# :: forall (r :: RuntimeRep). TYPE r -> TYPE ('SumRep '[ 'TupleRep '[], Rep ])
+type family RebindMaybe# where
+  RebindMaybe# @Rep = Maybe# @Rep
+  -- no otherwise
+
+type instance Rebind (Maybe# @Rep) r = RebindMaybe# @r
+
 instance Functor (Maybe# @Rep) where
+  type FunctorRep (Maybe# @Rep) = (~) Rep
   fmap _ Nothing# = Nothing#
   fmap f (Just# a) = Just# (f a)
--}
 
 instance Show a => Show (Maybe# @Rep a) where
   showsPrec _ Nothing# = showString "Nothing#"

@@ -16,6 +16,8 @@
 {-# Language TypeOperators #-}
 {-# Language UnboxedSums #-}
 {-# Language UnboxedTuples #-}
+{-# Language UndecidableInstances #-}
+{-# Language UndecidableSuperClasses #-}
 {-# OPTIONS_HADDOCK not-home #-}
 
 module Unboxed.Internal.Class
@@ -42,6 +44,7 @@ module Unboxed.Internal.Class
   , PrintRep(hPrint), print
   ) where
 
+import Data.Proxy
 import Data.Kind (Constraint)
 import Data.Ratio (Rational)
 import GHC.Integer
@@ -548,32 +551,27 @@ infixl 7 /, `quot`, `rem`, `div`, `mod`
 
 -}
 
--- * Functors
+class TrivialFunctorRep (r :: RuntimeRep)
+instance TrivialFunctorRep (r :: RuntimeRep)
 
-{-
-type Functor :: (TYPE r -> TYPE s) -> Constraint
-class Functor (f :: TYPE r -> TYPE s) where
-  fmap :: (a -> b) -> f a -> f b
-
-instance Prelude.Functor f => Functor (f :: Type -> Type) where
-  fmap = Prelude.fmap
--}
-
-
-class Functor (f :: TYPE r -> TYPE s) where
+class FunctorRep f r => Functor (f :: TYPE r -> TYPE s) where
   type FunctorRep (f :: TYPE r -> TYPE s) :: RuntimeRep -> Constraint
-  -- fmap :: forall (a :: TYPE r) r' (b :: TYPE r') f'. Rebind f f' => (a -> b) -> f a -> f' b
-  fmap :: forall (a :: TYPE r) r' (b :: TYPE r'). (FunctorRep f r, FunctorRep f r') => (a -> b) -> f a -> f # b
+  type FunctorRep (f :: TYPE r -> TYPE s) = (~) 'LiftedRep
+  fmap :: forall (a :: TYPE r) r' (b :: TYPE r'). FunctorRep f r' => (a -> b) -> f a -> f # b
+
+type instance Rebind Proxy r = (Proxy :: TYPE r -> Type)
+
+instance Functor Proxy where
+  type FunctorRep Proxy = TrivialFunctorRep
+  fmap _ _ = Proxy
 
 instance Functor Prelude.Maybe where
   type FunctorRep Prelude.Maybe = MaybeRep 
   fmap = mapMaybe
 
-{-
-instance Functor MaybeDef where
-  type FunctorRep MaybeDef = MaybeRep 
+instance (Maybe @r ~ MaybeD, MaybeRep r) => Functor (MaybeD @r) where
+  type FunctorRep (MaybeD @r) = MaybeRep 
   fmap = mapMaybe
--}
 
 -- * Printing
 
