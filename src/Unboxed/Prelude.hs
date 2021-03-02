@@ -4,6 +4,7 @@ module Unboxed.Prelude
   ( 
   -- * Classes
     module Unboxed.Class
+  , module Unboxed.Levitation
   , module Unboxed.List
   , module Unboxed.Maybe
   -- * Automatically levitating if then else syntax
@@ -24,6 +25,7 @@ module Unboxed.Prelude
 
 import Unboxed.Class
 import Unboxed.Combinators
+import Unboxed.Levitation
 import Unboxed.List
 import Unboxed.Maybe
 import Unboxed.Syntax
