@@ -130,7 +130,6 @@ library
     def (Def as Unboxed.Rep.Int32) requires (Rep as Int32Rep),
     def (Def as Unboxed.Rep.Int64) requires (Rep as Int64Rep),
     def (Def as Def.Unlifted) requires (Rep as UnliftedRep),
-    def (Def as Unboxed.Rep.Sum) requires (Rep as SumRep),
     def (Def as Def.Tuple) requires (Rep as TupleRep),
     def (Def as Def.Word) requires (Rep as WordRep),
     def (Def as Unboxed.Rep.Word8) requires (Rep as Word8Rep),
@@ -138,14 +137,13 @@ library
     def (Def as Unboxed.Rep.Word32) requires (Rep as Word32Rep),
     def (Def as Unboxed.Rep.Word64) requires (Rep as Word64Rep),
   reexported-modules:
-    Unboxed.Rep.Sum,
     Unboxed.Rep.Int16,
     Unboxed.Rep.Int32,
     Unboxed.Rep.Int64,
     Unboxed.Rep.Word8,
     Unboxed.Rep.Word16,
     Unboxed.Rep.Word32,
-    Unboxed.Rep.Word64,
+    Unboxed.Rep.Word64
 
   if flag(level1)
     build-depends: consdef
