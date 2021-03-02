@@ -557,7 +557,29 @@ instance TrivialFunctorRep (r :: RuntimeRep)
 class FunctorRep f r => Functor (f :: TYPE r -> TYPE s) where
   type FunctorRep (f :: TYPE r -> TYPE s) :: RuntimeRep -> Constraint
   type FunctorRep (f :: TYPE r -> TYPE s) = (~) 'LiftedRep
-  fmap :: forall (a :: TYPE r) r' (b :: TYPE r'). FunctorRep f r' => (a -> b) -> f a -> f # b
+  fmap :: forall (a :: TYPE r) rb (b :: TYPE rb). FunctorRep f rb => (a -> b) -> f a -> f # b
+
+{-
+  fmap' :: forall (a :: TYPE r) rb (b :: TYPE rb). FunctorRep f rb => (Lev a -> b) -> f a -> f # b
+  (<$) :: forall (a :: TYPE r) rb (b :: TYPE rb). FunctorRep f rb => b -> f a -> f # b
+  fmapConst' :: forall (a :: TYPE r) rb (b :: TYPE rb). FunctorRep f rb => Lev b -> f a -> f # b
+--  rebindFunctor :: Functor f :- Functor (Rebind f r)
+
+class Functor f => Applicative (f :: TYPE r -> TYPE s) where
+  pure :: forall (a :: TYPE r). a -> f a
+  pure' :: forall (a :: TYPE r). Lev a -> f a
+
+  -- liftA2 :: forall (a :: TYPE r) rb (b :: TYPE rb). (FunctorRep f rb, FunctorRep f rc) => (a -> b -> c) -> f a -> f b -> f c
+  -- liftA2 f ma mb = f <$> ma <*> mb
+
+  (<*>) :: forall (a :: TYPE r) rb (b :: TYPE rb). (FunctorRep f 'LiftedRep, FunctorRep f rb) => f # (a -> b) -> f a -> f # b
+  (<*) :: forall (a :: TYPE r) rb (b :: TYPE rb). FunctorRep f b => f a -> f # b -> f a
+  (*>) :: forall (a :: TYPE r) rb (b :: TYPE rb). FunctorRep f b => f a -> f # b -> f # b
+  m <* n = (<*>)
+
+--  rebindApplicative :: Applicative f :- Applicative (Rebind f r)
+-}
+
 
 type instance Rebind Proxy r = (Proxy :: TYPE r -> Type)
 
@@ -566,11 +588,11 @@ instance Functor Proxy where
   fmap _ _ = Proxy
 
 instance Functor Prelude.Maybe where
-  type FunctorRep Prelude.Maybe = MaybeRep 
+  type FunctorRep Prelude.Maybe = MaybeRep
   fmap = mapMaybe
 
 instance (Maybe @r ~ MaybeD, MaybeRep r) => Functor (MaybeD @r) where
-  type FunctorRep (MaybeD @r) = MaybeRep 
+  type FunctorRep (MaybeD @r) = MaybeRep
   fmap = mapMaybe
 
 -- * Printing

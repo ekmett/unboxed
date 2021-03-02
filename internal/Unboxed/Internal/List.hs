@@ -41,6 +41,8 @@ class ListRep r where
   cons' :: forall (a :: TYPE r). Lev a -> List a -> List a
   nil :: forall (a :: TYPE r). List a
   uncons# :: forall (a :: TYPE r). List a -> Maybe# (# a, List a #)
+  -- foldr :: forall (a :: TYPE r) rb (b :: TYPE rb). (a -> Lev b -> b) -> Lev b -> List a -> b
+  -- mapList :: forall (a :: TYPE r) rb (b :: TYPE rb). ListRep rb => (a -> b) -> List a -> List b
 
 instance ListRep 'LiftedRep where
   cons = (:)
@@ -48,3 +50,5 @@ instance ListRep 'LiftedRep where
   nil = []
   uncons# [] = Maybe# (# (##) | #)
   uncons# (x:xs) = Maybe# (# | (# x, xs #) #)
+  -- foldr f z (x:xs) = f x (foldr f z xs)
+  -- foldr _ z [] = z
