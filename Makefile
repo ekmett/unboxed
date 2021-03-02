@@ -7,7 +7,7 @@ build:
 	@cabal build -v0
 
 level2:
-	@cabal build -v1 -flevel2
+	@cabal build -v0 -flevel2
 
 install:
 	@cabal install
