@@ -87,7 +87,7 @@ library consdef
   mixins:
     def (Def as Def.Tuple) requires (Rep as Tuple),
     def (Def as Def.Sum) requires (Rep as Sum)
-  signatures: H T
+  -- signatures: H T
   reexported-modules: Def.Tuple, Def.Sum
 
 library consdefs
@@ -99,7 +99,7 @@ library consdefs
     consdef(Def.Tuple as Tuple.Float, Def.Sum as Sum.Float) requires (H as Float),
     consdef(Def.Tuple as Tuple.Lifted, Def.Sum as Sum.Lifted) requires (H as Lifted),
     consdef(Def.Tuple as Tuple.Unlifted, Def.Sum as Sum.Unlifted) requires (H as Unlifted)
-  signatures: T
+  -- signatures: T
   reexported-modules:
     Tuple.Addr, Tuple.Double, Tuple.Float, Tuple.Lifted, Tuple.Unlifted,
     Sum.Addr, Sum.Double, Sum.Float, Sum.Lifted, Sum.Unlifted
