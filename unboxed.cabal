@@ -101,7 +101,9 @@ library consdef
 
 library
   import: base
-  build-depends: def, internal
+  build-depends:
+    def,
+    internal
   hs-source-dirs: src
   exposed-modules:
     Unboxed.Prelude
