@@ -103,12 +103,13 @@ library
     Unboxed.Prelude
     Unboxed.Class
     Unboxed.Combinators
-    Unboxed.Internal.BigNat
-    Unboxed.Internal.Natural
     Unboxed.Syntax
     Unboxed.Maybe
+    Unboxed.Natural
     Unboxed.Levitation
     Unboxed.List
+    Unboxed.Internal.BigNat
+    Unboxed.Internal.Natural
     Unboxed.Rep.Addr
     Unboxed.Rep.Double
     Unboxed.Rep.Float
