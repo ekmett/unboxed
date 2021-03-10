@@ -28,7 +28,7 @@ watch-core:
 	@ghcid -p core --color -c 'cabal repl core --repl-options=-fno-code --repl-options=-fno-break-on-exception --repl-options=-fno-break-on-error --repl-options=-v1 --repl-options=-ferror-spans --repl-options=-Wno-prepositive-qualified-module --repl-options=-ignore-dot-ghci'
 
 repl:
-	@cabal repl unboxed --repl-options=-fno-it --repl-options=-interactive-print=print --repl-options=-fobject-code --repl-options=-v1 --repl-options=-ferror-spans
+	@cabal repl unboxed --repl-options=-fno-it --repl-options=-interactive-print=print --repl-options=-fobject-code --repl-options=-v1 --repl-options=-ferror-spans --repl-options=-fobject-code
 
 lint:
 	@find . -name "*.hs" -print | xargs hlint

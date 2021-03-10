@@ -22,11 +22,6 @@ source-repository head
   type: git
   location: https://github.com/ekmett/unboxed
 
-flag level1
-  default: True
-  manual: True
-  description: construct reps for singleton tuples
-
 flag level2
   default: False
   manual: True
@@ -39,6 +34,7 @@ common base
   import: minimal
   build-depends:
     base >= 4.15 && < 5,
+    ghc-bignum,
     ghc-prim
 
   -- enable warnings
@@ -101,14 +97,14 @@ library consdef
 
 library
   import: base
-  build-depends:
-    def,
-    internal
+  build-depends: consdef, def, internal
   hs-source-dirs: src
   exposed-modules:
     Unboxed.Prelude
     Unboxed.Class
     Unboxed.Combinators
+    Unboxed.Internal.BigNat
+    Unboxed.Internal.Natural
     Unboxed.Syntax
     Unboxed.Maybe
     Unboxed.Levitation
@@ -122,6 +118,33 @@ library
     Unboxed.Rep.Lifted
     Unboxed.Rep.Unlifted
     Unboxed.Rep.Word
+  reexported-modules:
+    Unboxed.Rep.Int16,
+    Unboxed.Rep.Int32,
+    Unboxed.Rep.Int64,
+    Unboxed.Rep.Word8,
+    Unboxed.Rep.Word16,
+    Unboxed.Rep.Word32,
+    Unboxed.Rep.Word64,
+    Unboxed.Rep.Tuple1.Addr,
+    Unboxed.Rep.Tuple1.Double,
+    Unboxed.Rep.Tuple1.Float,
+    Unboxed.Rep.Tuple1.Int,
+    Unboxed.Rep.Tuple1.Int8,
+    Unboxed.Rep.Tuple1.Int16,
+    Unboxed.Rep.Tuple1.Int32,
+    Unboxed.Rep.Tuple1.Int64,
+    Unboxed.Rep.Tuple1.Lifted,
+    Unboxed.Rep.Tuple1.Tuple0,
+    Unboxed.Rep.Tuple1.Unlifted,
+    Unboxed.Rep.Tuple1.Word,
+    Unboxed.Rep.Tuple1.Word8,
+    Unboxed.Rep.Tuple1.Word16,
+    Unboxed.Rep.Tuple1.Word32,
+    Unboxed.Rep.Tuple1.Word64,
+    Unboxed.Rep.Tuple2.Word.Unlifted,
+    Unboxed.Rep.Sum2.Word.Unlifted
+
   mixins:
     def (Def as Def.Addr) requires (Rep as AddrRep),
     def (Def as Def.Double) requires (Rep as DoubleRep),
@@ -138,56 +161,25 @@ library
     def (Def as Unboxed.Rep.Word16) requires (Rep as Word16Rep),
     def (Def as Unboxed.Rep.Word32) requires (Rep as Word32Rep),
     def (Def as Unboxed.Rep.Word64) requires (Rep as Word64Rep),
-  reexported-modules:
-    Unboxed.Rep.Int16,
-    Unboxed.Rep.Int32,
-    Unboxed.Rep.Int64,
-    Unboxed.Rep.Word8,
-    Unboxed.Rep.Word16,
-    Unboxed.Rep.Word32,
-    Unboxed.Rep.Word64
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Addr, Def.Cons as Reps.Addr) requires (H as AddrRep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Double, Def.Cons as Reps.Double) requires (H as DoubleRep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Float,  Def.Cons as Reps.Float) requires (H as FloatRep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Lifted, Def.Cons as Reps.Lifted) requires (H as LiftedRep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Unlifted, Def.Cons as Reps.Unlifted) requires (H as UnliftedRep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Tuple0, Def.Cons as Reps.Tuple0) requires (H as TupleRep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Int, Def.Cons as Reps.Int) requires (H as IntRep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Int8, Def.Cons as Reps.Int8) requires (H as Int8Rep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Int16, Def.Cons as Reps.Int16) requires (H as Int16Rep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Int32, Def.Cons as Reps.Int32) requires (H as Int32Rep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Int64, Def.Cons as Reps.Int64) requires (H as Int64Rep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Word, Def.Cons as Reps.Word) requires (H as WordRep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Word8, Def.Cons as Reps.Word8) requires (H as Word8Rep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Word16, Def.Cons as Reps.Word16) requires (H as Word16Rep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Word32, Def.Cons as Reps.Word32) requires (H as Word32Rep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple1.Word64, Def.Cons as Reps.Word64) requires (H as Word64Rep, T as NilReps),
+    consdef (Def.Tuple as Unboxed.Rep.Tuple2.Word.Unlifted, Def.Sum as Unboxed.Rep.Sum2.Word.Unlifted, Def.Cons as Reps.Word.Unlifted) requires (H as WordRep, T as Reps.Unlifted),
 
-  if flag(level1)
-    build-depends: consdef
-    cpp-options: -DUNBOXED_LEVEL1
-    mixins:
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Addr, Def.Cons as Reps.Addr) requires (H as AddrRep, T as NilReps),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Double, Def.Cons as Reps.Double) requires (H as DoubleRep, T as NilReps),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Float,  Def.Cons as Reps.Float) requires (H as FloatRep, T as NilReps),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Lifted, Def.Cons as Reps.Lifted) requires (H as LiftedRep, T as NilReps),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Unlifted, Def.Cons as Reps.Unlifted) requires (H as UnliftedRep, T as NilReps),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Tuple0, Def.Cons as Reps.Tuple0) requires (H as TupleRep, T as NilReps),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Int, Def.Cons as Reps.Int) requires (H as IntRep, T as NilReps),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Int8, Def.Cons as Reps.Int8) requires (H as Int8Rep, T as NilReps),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Int16, Def.Cons as Reps.Int16) requires (H as Int16Rep, T as NilReps),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Int32, Def.Cons as Reps.Int32) requires (H as Int32Rep, T as NilReps),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Int64, Def.Cons as Reps.Int64) requires (H as Int64Rep, T as NilReps),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Word, Def.Cons as Reps.Word) requires (H as WordRep, T as NilReps),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Word8, Def.Cons as Reps.Word8) requires (H as Word8Rep, T as NilReps),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Word16, Def.Cons as Reps.Word16) requires (H as Word16Rep, T as NilReps),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Word32, Def.Cons as Reps.Word32) requires (H as Word32Rep, T as NilReps),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple1.Word64, Def.Cons as Reps.Word64) requires (H as Word64Rep, T as NilReps),
-
-    reexported-modules:
-      Unboxed.Rep.Tuple1.Addr,
-      Unboxed.Rep.Tuple1.Double,
-      Unboxed.Rep.Tuple1.Float,
-      Unboxed.Rep.Tuple1.Int,
-      Unboxed.Rep.Tuple1.Int8,
-      Unboxed.Rep.Tuple1.Int16,
-      Unboxed.Rep.Tuple1.Int32,
-      Unboxed.Rep.Tuple1.Int64,
-      Unboxed.Rep.Tuple1.Lifted,
-      Unboxed.Rep.Tuple1.Tuple0,
-      Unboxed.Rep.Tuple1.Unlifted,
-      Unboxed.Rep.Tuple1.Word,
-      Unboxed.Rep.Tuple1.Word8,
-      Unboxed.Rep.Tuple1.Word16,
-      Unboxed.Rep.Tuple1.Word32,
-      Unboxed.Rep.Tuple1.Word64,
-  
-
-  if flag(level1) && flag(level2)
+  if flag(level2)
     cpp-options: -DUNBOXED_LEVEL2
     mixins:
       consdef (Def.Tuple as Unboxed.Rep.Tuple2.Addr.Addr, Def.Sum as Unboxed.Rep.Sum2.Addr.Addr, Def.Cons as Reps.Addr.Addr) requires (H as AddrRep, T as Reps.Addr),
@@ -269,7 +261,6 @@ library
       consdef (Def.Tuple as Unboxed.Rep.Tuple2.Int16.Unlifted, Def.Sum as Unboxed.Rep.Sum2.Int16.Unlifted, Def.Cons as Reps.Int16.Unlifted) requires (H as Int16Rep, T as Reps.Unlifted),
       consdef (Def.Tuple as Unboxed.Rep.Tuple2.Int32.Unlifted, Def.Sum as Unboxed.Rep.Sum2.Int32.Unlifted, Def.Cons as Reps.Int32.Unlifted) requires (H as Int32Rep, T as Reps.Unlifted),
       consdef (Def.Tuple as Unboxed.Rep.Tuple2.Int64.Unlifted, Def.Sum as Unboxed.Rep.Sum2.Int64.Unlifted, Def.Cons as Reps.Int64.Unlifted) requires (H as Int64Rep, T as Reps.Unlifted),
-      consdef (Def.Tuple as Unboxed.Rep.Tuple2.Word.Unlifted, Def.Sum as Unboxed.Rep.Sum2.Word.Unlifted, Def.Cons as Reps.Word.Unlifted) requires (H as WordRep, T as Reps.Unlifted),
       consdef (Def.Tuple as Unboxed.Rep.Tuple2.Word8.Unlifted, Def.Sum as Unboxed.Rep.Sum2.Word8.Unlifted, Def.Cons as Reps.Word8.Unlifted) requires (H as Word8Rep, T as Reps.Unlifted),
       consdef (Def.Tuple as Unboxed.Rep.Tuple2.Word16.Unlifted, Def.Sum as Unboxed.Rep.Sum2.Word16.Unlifted, Def.Cons as Reps.Word16.Unlifted) requires (H as Word16Rep, T as Reps.Unlifted),
       consdef (Def.Tuple as Unboxed.Rep.Tuple2.Word32.Unlifted, Def.Sum as Unboxed.Rep.Sum2.Word32.Unlifted, Def.Cons as Reps.Word32.Unlifted) requires (H as Word32Rep, T as Reps.Unlifted),
@@ -803,7 +794,6 @@ library
       Unboxed.Rep.Tuple2.Lifted.Unlifted,
       Unboxed.Rep.Tuple2.Tuple0.Unlifted,
       Unboxed.Rep.Tuple2.Unlifted.Unlifted,
-      Unboxed.Rep.Tuple2.Word.Unlifted,
       Unboxed.Rep.Tuple2.Word8.Unlifted,
       Unboxed.Rep.Tuple2.Word16.Unlifted,
       Unboxed.Rep.Tuple2.Word32.Unlifted,
