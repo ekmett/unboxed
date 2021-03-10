@@ -1,8 +1,7 @@
-{-# LANGUAGE MagicHash, UnboxedSums, ImportQualifiedPost, NoImplicitPrelude, RebindableSyntax, UnliftedNewtypes #-}
+{-# LANGUAGE MagicHash, UnboxedSums, ImportQualifiedPost, NoImplicitPrelude, RebindableSyntax, UnliftedNewtypes, LambdaCase #-}
 import Control.Exception
 import Criterion.Main
 import Criterion.Types
-import Criterion.Measurement.Types
 import Data.Functor
 import Data.Int
 import Data.List qualified as List
@@ -47,13 +46,13 @@ instance Show B# where
   show x = show (tointeger# x)
 
 add# :: B# -> B# -> B#
-add# x y = case x of
-  B# (# x | #) -> case y of
+add# = \case
+  B# (# x | #) -> \case
     B# (# y | #) -> case addIntC# x y of
       (# result, 0# #) -> B# (# result | #)
       _ -> B# (# | fromIntegral (I# x) + fromIntegral (I# y) #)
     B# (# | integer #) -> B# (# | fromIntegral (I# x) + integer #)
-  B# (# | integer #) -> case y of
+  B# (# | integer #) -> \case
     B# (# i | #) -> B# (# | fromIntegral (I# i) + integer #)
     B# (# | integer2 #) -> B# (# | integer + integer2 #)
 

@@ -973,8 +973,9 @@ library measurement
   exposed-modules: Whnf Internal
 
 benchmark bench-nat
+  import: minimal
   type: exitcode-stdio-1.0
   ghc-options: -O2
   main-is: nat.hs
-  build-depends: base, ghc-prim, unboxed, criterion, measurement, criterion-measurement
+  build-depends: base, ghc-prim, unboxed, criterion, measurement
   hs-source-dirs: bench
