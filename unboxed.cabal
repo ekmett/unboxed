@@ -964,3 +964,12 @@ library
       Unboxed.Rep.Tuple2.Word16.Word64,
       Unboxed.Rep.Tuple2.Word32.Word64,
       Unboxed.Rep.Tuple2.Word64.Word64
+
+benchmark bench-nat
+  import: base
+  type: exitcode-stdio-1.0
+  ghc-options: -O2
+  main-is: nat.hs
+  build-depends: unboxed, criterion, criterion-measurement
+  hs-source-dirs: bench
+  other-modules: Whnf
