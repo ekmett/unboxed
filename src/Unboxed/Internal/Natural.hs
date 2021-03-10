@@ -27,6 +27,8 @@ import Unboxed.Rep.Int ()
 import Unboxed.Rep.Tuple2.Word.Unlifted ()
 import Unboxed.Rep.Word ()
 
+-- #define CONSTANT_FOLDED INLINE
+-- #define CONSTANT_FOLDED NOINLINE
 #define CONSTANT_FOLDED INLINE[0]
 
 newtype Natural# = Natural# (# Word#, BigNat# #)

@@ -47,20 +47,20 @@ instance Show B# where
   show x = show (tointeger# x)
 
 add# :: B# -> B# -> B#
-add# (B# x) (B# y) = case x of
-  (# x | #) -> case y of
-    (# y | #) -> case addIntC# x y of
+add# x y = case x of
+  B# (# x | #) -> case y of
+    B# (# y | #) -> case addIntC# x y of
       (# result, 0# #) -> B# (# result | #)
       _ -> B# (# | fromIntegral (I# x) + fromIntegral (I# y) #)
-    (# | integer #) -> B# (# | fromIntegral (I# x) + integer #)
-  (# | integer #) -> case y of
-    (# i | #) -> B# (# | fromIntegral (I# i) + integer #)
-    (# | integer2 #) -> B# (# | integer + integer2 #)
+    B# (# | integer #) -> B# (# | fromIntegral (I# x) + integer #)
+  B# (# | integer #) -> case y of
+    B# (# i | #) -> B# (# | fromIntegral (I# i) + integer #)
+    B# (# | integer2 #) -> B# (# | integer + integer2 #)
 
 tointeger# :: B# -> Integer
-tointeger# (B# x) = case x of
-    (# x | #) -> fromIntegral $ I# x
-    (# | y #) -> y
+tointeger# x = case x of
+  B# (# x | #) -> fromIntegral $ I# x
+  B# (# | y #) -> y
 
 fromint# :: Integer -> B#
 fromint# x = if x <= fromIntegral (minBound::Int) || x >= fromIntegral (maxBound::Int)
