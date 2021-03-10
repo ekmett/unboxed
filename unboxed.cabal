@@ -970,7 +970,7 @@ library measurement
   ghc-options: -O2
   build-depends: criterion-measurement
   hs-source-dirs: measurement
-  exposed-modules: Whnf
+  exposed-modules: Whnf Internal
 
 benchmark bench-nat
   import: base
