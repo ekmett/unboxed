@@ -70,14 +70,14 @@ fromint# x = if x <= fromIntegral (minBound::Int) || x >= fromIntegral (maxBound
 main :: IO ()
 main = do
   defaultMain $ pure $ bgroup "add"
-    [ bench "B" (whnf add'B (fromint (-1000000)))
+    [ bench "B" (whnfL add'B (fromint (-1000000)))
     , bench "B#" (whnfB# add'B# (fromint# (-1000000)))
-    , bench "Int" (whnf add'Int (-1000000))
-    , bench "Integer" (whnf add'Integer (-1000000))
+    , bench "Int" (whnfL add'Int (-1000000))
+    , bench "Integer" (whnfL add'Integer (-1000000))
     ]
   defaultMain $ pure $ bgroup "sub"
-    [ bench "Int" (whnf sub'Int 1000000)
-    , bench "Integer" (whnf sub'Integer 1000000)
+    [ bench "Int" (whnfL sub'Int 1000000)
+    , bench "Integer" (whnfL sub'Integer 1000000)
     , bench "Natural#" (whnfN# sub'Natural# 1000000)
     ]
   where
