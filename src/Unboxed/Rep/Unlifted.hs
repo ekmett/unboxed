@@ -6,6 +6,8 @@
 {-# Language TypeSynonymInstances #-}
 {-# Language UnboxedTuples #-}
 {-# Language UnboxedSums #-}
+{-# Language ImportQualifiedPost #-}
+{-# Language UnliftedNewtypes #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module Unboxed.Rep.Unlifted
@@ -23,13 +25,13 @@ module Unboxed.Rep.Unlifted
   ) where
 
 import Control.Exception (throw, ArithException(Underflow))
-import Unboxed.Internal.Class
+import Data.Coerce
+import Def.Unlifted
 import GHC.Num.Integer
-import GHC.Num.BigNat
+import GHC.Num.BigNat qualified as GHC
 import GHC.Prim
 import GHC.Types
-
-import Def.Unlifted
+import Unboxed.Internal.Class
 
 instance Eq (MutableArray# s a) where
   x == y = isTrue# (sameMutableArray# x y)
@@ -63,47 +65,49 @@ instance Eq (StableName# a) where
   x == y = isTrue# (eqStableName# x y)
   {-# inline (==) #-}
 
+newtype BigNat# = BigNat# GHC.BigNat#
+
 instance Eq BigNat# where
-  (==) = bigNatEq
+  (==) = coerce GHC.bigNatEq
   {-# inline (==) #-}
-  (/=) = bigNatNe
+  (/=) = coerce GHC.bigNatNe
   {-# inline (/=) #-}
 
 instance Ord BigNat# where
-  (<=) = bigNatLe
+  (<=) = coerce GHC.bigNatLe
   {-# inline (<=) #-}
-  (>=) = bigNatGe
+  (>=) = coerce GHC.bigNatGe
   {-# inline (>=) #-}
-  (<) = bigNatLt
+  (<) = coerce GHC.bigNatLt
   {-# inline (<) #-}
-  (>) = bigNatGt
+  (>) = coerce GHC.bigNatGt
   {-# inline (>) #-}
-  compare = bigNatCompare
+  compare = coerce GHC.bigNatCompare
   {-# inline compare #-}
 
 instance Show BigNat# where
   showsPrec d x = showsPrec d (toInteger x)
 
 instance Num BigNat# where
-  (+) = bigNatAdd
+  (+) = coerce GHC.bigNatAdd
   {-# inline (+) #-}
 
-  x - y = case bigNatSub x y of
+  x - y = case coerce GHC.bigNatSub x y of
     (# (##) | #) -> throw Underflow
     (# | z #) -> z
   {-# inline (-) #-}
 
-  (*) = bigNatMul
+  (*) = coerce GHC.bigNatMul
   {-# inline (*) #-}
 
   negate x
-    | isTrue# (bigNatEqWord# x 0##) = x
+    | isTrue# (coerce GHC.bigNatEqWord# x 0##) = x
     | True = throw Underflow
   {-# inline negate #-}
 
   signum x
-    | isTrue# (bigNatEqWord# x 0##) = x
-    | True = bigNatOne# void#
+    | isTrue# (coerce GHC.bigNatEqWord# x 0##) = x
+    | True = coerce GHC.bigNatOne# void#
   {-# inline signum #-}
 
   abs x = x
@@ -111,26 +115,26 @@ instance Num BigNat# where
 
   fromInteger (IS i)
     | isTrue# (i <# 0#) = throw Underflow
-    | True              = bigNatFromAbsInt# i
+    | True              = coerce GHC.bigNatFromAbsInt# i
   fromInteger IN{} = throw Underflow
-  fromInteger (IP n) = n
+  fromInteger (IP n) = BigNat# n
   {-# inline fromInteger #-}
 
 instance Enum BigNat# where
-  fromEnum = bigNatToInt
+  fromEnum = coerce GHC.bigNatToInt
   {-# inline fromEnum #-}
 
   toEnum (I# i)
     | isTrue# (i <# 0#) = throw Underflow
-    | True              = bigNatFromAbsInt# i
+    | True              = coerce GHC.bigNatFromAbsInt# i
   {-# inline toEnum #-}
 
-  pred x = case bigNatSubWord# x 1## of
+  pred x = case coerce GHC.bigNatSubWord# x 1## of
     (# (##) | #) -> throw Underflow
     (# | z #) -> z
   {-# inline pred #-}
 
-  succ x = bigNatAddWord# x 1##
+  succ x = coerce GHC.bigNatAddWord# x 1##
   {-# inline succ #-}
 
   -- enumFromThenTo...
@@ -140,26 +144,26 @@ instance Real BigNat# where
   {-# inline toRational #-}
 
 instance Integral BigNat# where
-  quot = bigNatQuot
+  quot = coerce GHC.bigNatQuot
   {-# inline quot #-}
 
-  rem = bigNatRem
+  rem = coerce GHC.bigNatRem
   {-# inline rem #-}
 
-  div = bigNatQuot
+  div = coerce GHC.bigNatQuot
   {-# inline div #-}
 
-  mod = bigNatRem
+  mod = coerce GHC.bigNatRem
   {-# inline mod #-}
 
-  quotRem = bigNatQuotRem#
+  quotRem = coerce GHC.bigNatQuotRem#
   {-# inline quotRem #-}
 
-  divMod = bigNatQuotRem#
+  divMod = coerce GHC.bigNatQuotRem#
   {-# inline divMod #-}
 
-  toInteger bn
-    | isTrue# ((bigNatSize# bn ==# 1#) `andI#` (i# >=# 0#)) = IS i#
+  toInteger (BigNat# bn)
+    | isTrue# ((coerce GHC.bigNatSize# bn ==# 1#) `andI#` (i# >=# 0#)) = IS i#
     | True = IP bn
-    where i# = bigNatToInt# bn
+    where i# = coerce GHC.bigNatToInt# bn
   {-# inline toInteger #-}
