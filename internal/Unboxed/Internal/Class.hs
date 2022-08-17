@@ -4,6 +4,7 @@
 {-# Language FlexibleContexts #-}
 {-# Language FlexibleInstances #-}
 {-# Language ImportQualifiedPost #-}
+{-# Language ConstraintKinds #-}
 {-# Language NoImplicitPrelude #-}
 {-# Language PolyKinds #-}
 {-# Language RankNTypes #-}

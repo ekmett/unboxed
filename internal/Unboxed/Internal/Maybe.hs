@@ -3,6 +3,7 @@
 {-# Language FlexibleInstances #-}
 {-# Language ImportQualifiedPost #-}
 {-# Language MagicHash #-}
+{-# Language ConstraintKinds #-}
 {-# Language MultiParamTypeClasses #-}
 {-# Language PolyKinds #-}
 {-# Language RankNTypes #-}

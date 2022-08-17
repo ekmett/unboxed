@@ -3,6 +3,7 @@
 {-# Language PolyKinds #-}
 {-# Language TypeFamilies #-}
 {-# Language RankNTypes #-}
+{-# Language ConstraintKinds #-}
 
 module Unboxed.Internal.Combinators where
 

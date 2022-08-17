@@ -8,7 +8,7 @@ module Unboxed.Internal.Levitation
   ( Lev
   ) where
 
-import GHC.Types (TYPE, Type)
+import GHC.Types (TYPE, Type, Constraint)
 
 --------------------------------------------------------------------------------
 -- * Levitation by name
@@ -56,5 +56,5 @@ import GHC.Types (TYPE, Type)
 -- context.
 
 type Lev :: TYPE r -> Type
-type Lev (a :: TYPE r) = ()~() => a
+type Lev (a :: TYPE r) = (() :: Constraint) => a
 

@@ -3,6 +3,7 @@
 {-# Language MagicHash #-}
 {-# Language MultiParamTypeClasses #-}
 {-# Language NoImplicitPrelude #-}
+{-# Language ConstraintKinds #-}
 {-# Language PolyKinds #-}
 {-# Language RankNTypes #-}
 {-# Language StandaloneKindSignatures #-}

@@ -4,6 +4,7 @@
 {-# Language MagicHash #-}
 {-# Language TypeFamilies #-}
 {-# Language UnboxedTuples #-}
+{-# Language ConstraintKinds #-}
 {-# Language PolyKinds #-}
 {-# Language DataKinds #-}
 {-# Language GADTs #-}

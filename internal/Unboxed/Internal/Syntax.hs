@@ -2,6 +2,7 @@
 {-# Language NoImplicitPrelude #-}
 {-# Language PolyKinds #-}
 {-# Language TypeFamilies #-}
+{-# Language ConstraintKinds #-}
 {-# Language RankNTypes #-}
 {-# OPTIONS_HADDOCK not-home #-}
 
