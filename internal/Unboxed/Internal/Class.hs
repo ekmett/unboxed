@@ -49,7 +49,7 @@ import Data.Kind (Constraint)
 import Data.Ratio (Rational)
 import GHC.Integer
 import GHC.Prim
-import GHC.Types (Type, RuntimeRep(..))
+import GHC.Types (Type, RuntimeRep(..), LiftedRep)
 import Numeric qualified
 import Prelude (Ordering(..), Bool(..), Int, ShowS, String, IO)
 import Prelude qualified
@@ -556,7 +556,7 @@ instance TrivialFunctorRep (r :: RuntimeRep)
 
 class FunctorRep f r => Functor (f :: TYPE r -> TYPE s) where
   type FunctorRep (f :: TYPE r -> TYPE s) :: RuntimeRep -> Constraint
-  type FunctorRep (f :: TYPE r -> TYPE s) = (~) 'LiftedRep
+  type FunctorRep (f :: TYPE r -> TYPE s) = (~) LiftedRep
   fmap :: forall (a :: TYPE r) rb (b :: TYPE rb). FunctorRep f rb => (a -> b) -> f a -> f # b
 
 {-
@@ -572,7 +572,7 @@ class Functor f => Applicative (f :: TYPE r -> TYPE s) where
   -- liftA2 :: forall (a :: TYPE r) rb (b :: TYPE rb). (FunctorRep f rb, FunctorRep f rc) => (a -> b -> c) -> f a -> f b -> f c
   -- liftA2 f ma mb = f <$> ma <*> mb
 
-  (<*>) :: forall (a :: TYPE r) rb (b :: TYPE rb). (FunctorRep f 'LiftedRep, FunctorRep f rb) => f # (a -> b) -> f a -> f # b
+  (<*>) :: forall (a :: TYPE r) rb (b :: TYPE rb). (FunctorRep f LiftedRep, FunctorRep f rb) => f # (a -> b) -> f a -> f # b
   (<*) :: forall (a :: TYPE r) rb (b :: TYPE rb). FunctorRep f b => f a -> f # b -> f a
   (*>) :: forall (a :: TYPE r) rb (b :: TYPE rb). FunctorRep f b => f a -> f # b -> f # b
   m <* n = (<*>)
@@ -600,7 +600,7 @@ instance (Maybe @r ~ MaybeD, MaybeRep r) => Functor (MaybeD @r) where
 class PrintRep r where
   hPrint :: forall (a :: TYPE r). Show a => IO.Handle -> a -> IO ()
 
-instance PrintRep 'LiftedRep where
+instance PrintRep LiftedRep where
   hPrint h x = IO.hPutStrLn h (show x)
 
 print :: forall r (a :: TYPE r). (PrintRep r, Show a) => a -> IO ()

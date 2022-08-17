@@ -31,13 +31,13 @@ import Unboxed.Internal.Rebind
 import GHC.Types
 import Prelude qualified
 
--- type instance RebindRep Prelude.Maybe r = 'LiftedRep
+-- type instance RebindRep Prelude.Maybe r = 'BoxedRep 'Lifted
 type instance Rebind Prelude.Maybe r' = Maybe @r'
 type instance Rebind (MaybeD @r) r' = Maybe @r'
 
 type Maybe :: forall r. TYPE r -> Type
 type family Maybe = (c :: TYPE r -> Type) | c -> r where
-  Maybe @'LiftedRep = Prelude.Maybe
+  Maybe @('BoxedRep 'Lifted) = Prelude.Maybe
   Maybe @r = MaybeD @r
 
 type MaybeD :: forall r. TYPE r -> Type
@@ -51,7 +51,7 @@ class MaybeRep r where
   maybe :: forall (a :: TYPE r) r' (b :: TYPE r'). Lev b -> (a -> b) -> Maybe a -> b
   mapMaybe :: forall (a :: TYPE r) r' (b :: TYPE r'). MaybeRep r' => (a -> b) -> Maybe @r a -> Maybe @r' b
 
-instance MaybeRep 'LiftedRep where
+instance MaybeRep ('BoxedRep 'Lifted) where
   nothing = Prelude.Nothing
   just = Prelude.Just
   just' a = Prelude.Just a
@@ -73,7 +73,7 @@ class MaybeRep# r where
   maybe# :: forall (a :: TYPE r) r' (b :: TYPE r'). Lev b -> (a -> b) -> Maybe# a -> b
   mapMaybe# :: forall (a :: TYPE r) r' (b :: TYPE r'). MaybeRep# r' => (a -> b) -> Maybe# a -> Maybe# b
 
-instance MaybeRep# 'LiftedRep where
+instance MaybeRep# ('BoxedRep 'Lifted) where
   nothing# = Maybe# (# (##) | #)
   just# a = Maybe# (# | a #)
   just'# a = Maybe# (# | a #)

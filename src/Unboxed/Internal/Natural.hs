@@ -80,7 +80,7 @@ isNullBigNat# n = coerce GHC.bigNatSize# n ==# 0#
 isNullBigNat :: BigNat# -> Bool
 isNullBigNat n = isTrue# (isNullBigNat# n)
 
-nullBigNat# :: Void# -> BigNat# 
+nullBigNat# :: (# #) -> BigNat# 
 nullBigNat# = coerce GHC.bigNatZero#
 
 pattern Small :: BigNat#

@@ -20,7 +20,7 @@ module Unboxed.Internal.List
   , ListRep(..)
   ) where
 
-import GHC.Types (Type, TYPE, RuntimeRep(..))
+import GHC.Types (Type, TYPE, RuntimeRep(..), Levity(..))
 import Unboxed.Internal.Levitation
 import Unboxed.Internal.Maybe
 import Unboxed.Internal.Rebind
@@ -30,7 +30,7 @@ data family ListD :: TYPE r -> Type
 
 type List :: forall r. TYPE r -> Type
 type family List = (c :: TYPE r -> Type) | c -> r where
-  List @'LiftedRep = []
+  List @('BoxedRep 'Lifted) = []
   List @r = ListD @r
 
 type instance Rebind [] r = List @r
@@ -44,7 +44,7 @@ class ListRep r where
   -- foldr :: forall (a :: TYPE r) rb (b :: TYPE rb). (a -> Lev b -> b) -> Lev b -> List a -> b
   -- mapList :: forall (a :: TYPE r) rb (b :: TYPE rb). ListRep rb => (a -> b) -> List a -> List b
 
-instance ListRep 'LiftedRep where
+instance ListRep ('BoxedRep 'Lifted) where
   cons = (:)
   cons' x xs = x : xs
   nil = []

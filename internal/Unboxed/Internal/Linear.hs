@@ -52,7 +52,7 @@ class UrRep r where
   bindUr :: forall (a :: TYPE r) rb (b :: TYPE rb). Ur a %1 -> (a %1 -> Ur b) %1 -> Ur b
   mapUr :: forall (a :: TYPE r) rb (b :: TYPE rb). (a -> b) %1 -> Ur a %1 -> Ur b
 
-instance UrRep 'LiftedRep where
+instance UrRep ('BoxedRep 'Lifted) where
   pureUr = Ur
   extractUr (Ur a) = a
   bindUr (Ur a) f = f a
@@ -107,11 +107,11 @@ class STRep r where
 class FunRep r where
   (.) :: forall (a :: TYPE r) rb (b :: TYPE rb) rc (c :: TYPE rc). (Lev b -> c) -> (a -> b) -> a -> c
 
-instance FunRep 'LiftedRep where
+instance FunRep ('BoxedRep 'Lifted) where
   (.) f g a = f (g a)
 -}
 
-instance STRep 'LiftedRep where
+instance STRep ('BoxedRep 'Lifted) where
   runST :: forall (a :: Type). (forall s. ST s a) %1 -> a
   runST m = toLinear go (P m) where
     go :: P a -> a
@@ -120,19 +120,19 @@ instance STRep 'LiftedRep where
 
   pureST a = ST \s -> (# s, a #)
 
-  bindST :: forall (a :: TYPE 'LiftedRep) rb (b :: TYPE rb) s. ST s a %1 -> (a %1 -> ST s b) %1 -> ST s b
+  bindST :: forall (a :: Type) rb (b :: TYPE rb) s. ST s a %1 -> (a %1 -> ST s b) %1 -> ST s b
   bindST f0 k0 = ST (\s -> toLinear3 go f0 k0 s) where
     go :: ST s a -> (a %1 -> ST s b) -> State# s -> (# State# s, b #)
     go f k s = case unST f s of
       (# s', a #) -> unST (k a) s'
 
-  fmapST :: forall (a :: TYPE 'LiftedRep) rb (b :: TYPE rb) s. STRep rb => (a %1 -> b) %1 -> ST s a %1 -> ST s b
+  fmapST :: forall (a :: Type) rb (b :: TYPE rb) s. STRep rb => (a %1 -> b) %1 -> ST s a %1 -> ST s b
   fmapST f0 m0 = ST (\s -> toLinear3 go f0 m0 s) where
     go :: (a %1 -> b) -> ST s a -> State# s -> (# State# s, b #)
     go f m s = case unST m s of
       (# s', a #) -> mkSTRes s' (f a)
 
-  mkSTRes :: forall (b :: TYPE 'LiftedRep) s. State# s -> Lev b -> (# State# s, b #)
+  mkSTRes :: forall (b :: Type) s. State# s -> Lev b -> (# State# s, b #)
   mkSTRes s a = (# s , a #)
 
 -- class Functor (f :: TYPE r -> TYPE s) where

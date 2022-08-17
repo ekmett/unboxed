@@ -33,7 +33,7 @@ common minimal
 common base
   import: minimal
   build-depends:
-    base >= 4.15 && < 5,
+    base >= 4.16.2 && < 5,
     ghc-bignum,
     ghc-prim
 

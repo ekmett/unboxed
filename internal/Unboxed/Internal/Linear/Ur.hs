@@ -61,4 +61,4 @@ instance Prelude.Applicative Ur where
 
 instance Prelude.Monad Ur where
   Ur a >>= f = f a
-  _ >> n = n
+  (>>) = (Prelude.*>)

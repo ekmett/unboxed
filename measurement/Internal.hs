@@ -8,12 +8,11 @@
 {-# OPTIONS_GHC -fno-full-laziness #-}
 module Internal where
 
-import Criterion.Measurement.Types
 import GHC.Types
 import Data.Int
 
 whnf'N#
-  :: forall (a :: TYPE ('TupleRep '[ 'WordRep, 'UnliftedRep ])) b.
+  :: forall (a :: TYPE ('TupleRep '[ 'WordRep, UnliftedRep ])) b.
      (a -> b) -> a -> (Int64 -> IO ())
 whnf'N# f x = go where
   go n
@@ -21,7 +20,7 @@ whnf'N# f x = go where
     | otherwise = f x `seq` go (n-1)
 {-# NOINLINE whnf'N# #-}
 
-whnf'B# :: forall (a :: TYPE ('SumRep '[ 'IntRep, 'LiftedRep ])) b.
+whnf'B# :: forall (a :: TYPE ('SumRep '[ 'IntRep, LiftedRep ])) b.
   (a -> b) -> a -> (Int64 -> IO ())
 whnf'B# f x = go where
   go n
